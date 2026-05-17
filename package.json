@@ -26,6 +26,12 @@
     "electron:build": "vite build && electron-builder --mac",
     "electron:build:win": "vite build && electron-builder --win",
     "electron:build:linux": "vite build && electron-builder --linux",
+    "electron:build:linux:dir": "vite build && electron-builder --linux dir",
+    "electron:build:linux:arm64:dir": "vite build && electron-builder --linux dir --arm64",
+    "stage:local-ai": "node scripts/stage-local-ai-binary.js",
+    "package:linux:deb": "node scripts/package-linux-deb.js",
+    "package:linux:deb:arm64": "node scripts/package-linux-deb.js --arch arm64",
+    "package:linux:deb:x64": "node scripts/package-linux-deb.js --arch x64",
     "electron:build:all": "vite build && electron-builder --mac --win --linux"
   },
   "build": {
@@ -39,6 +45,15 @@
     "files": [
       "dist/**/*",
       "electron/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "build/local-ai",
+        "to": "local-ai",
+        "filter": [
+          "**/*"
+        ]
+      }
     ],
     "mac": {
       "category": "public.app-category.graphics-design",
@@ -56,6 +71,7 @@
     },
     "win": {
       "icon": "public/banner.png",
+      "signAndEditExecutable": false,
       "target": [
         {
           "target": "nsis",

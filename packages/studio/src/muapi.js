@@ -90,6 +90,9 @@ export async function generateI2I(apiKey, params) {
         if (imageField === 'images_list') payload.images_list = imagesList;
         else payload[imageField] = imagesList[0];
     }
+    if (modelInfo?.swapField && params.swap_url) {
+        payload[modelInfo.swapField] = params.swap_url;
+    }
     if (params.aspect_ratio) payload.aspect_ratio = params.aspect_ratio;
     if (params.resolution) payload.resolution = params.resolution;
     if (params.quality) payload.quality = params.quality;

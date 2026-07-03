@@ -1,835 +1,912 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { generateImage } from "../muapi.js";
 
-// Layout Definition: Tabs -> Sub-categories -> Options
+// All options sourced from live studio with correct category mapping
+// Images downloaded locally to /assets/influencer_studio/
 const TABS_CONFIG = {
   face: {
     label: "Face",
     subcategories: [
       {
-        id: "species",
-        label: "Species",
+        id: "character_type",
+        label: "Character Type",
         options: [
-          { id: "human", label: "Human", img: "/assets/influencer/option_human_49.webp", promptVal: "human features" },
-          { id: "elf", label: "Elf", img: "/assets/influencer/option_elf_64.webp", promptVal: "elf with pointed ears" },
-          { id: "alien", label: "Alien", img: "/assets/influencer/option_alien_7.webp", promptVal: "alien creature" },
-          { id: "amphibian", label: "Amphibian", img: "/assets/influencer/option_amphibian_10.webp", promptVal: "amphibian humanoid" },
-          { id: "reptile", label: "Reptile", img: "/assets/influencer/option_reptile_50.webp", promptVal: "reptilian creature" },
-          { id: "mantis", label: "Mantis", img: "/assets/influencer/option_mantis_12.webp", promptVal: "mantis hybrid character" },
-          { id: "bee", label: "Bee", img: "/assets/influencer/option_bee_2.webp", promptVal: "bee insect hybrid character" },
-          { id: "octopus", label: "Octopus", img: "/assets/influencer/option_octopus_3.webp", promptVal: "aquatic octopus hybrid" },
-          { id: "crocodile", label: "Crocodile", img: "/assets/influencer/option_crocodile_4.webp", promptVal: "crocodile humanoid" },
-          { id: "iguana", label: "Iguana", img: "/assets/influencer/option_iguana_5.webp", promptVal: "iguana humanoid" },
-          { id: "lizard", label: "Lizard", img: "/assets/influencer/option_lizard_6.webp", promptVal: "lizard humanoid" },
-          { id: "beetle", label: "Beetle", img: "/assets/influencer/option_beetle_8.webp", promptVal: "beetle humanoid" },
-          { id: "ant", label: "Ant", img: "/assets/influencer/option_ant_1.webp", promptVal: "ant hybrid character" },
-        ]
+          { id: "human", label: "Human", img: "/assets/influencer_studio/character_type_human.webp", promptVal: "human features" },
+          { id: "elf", label: "Elf", img: "/assets/influencer_studio/character_type_elf.webp", promptVal: "elf with pointed ears" },
+          { id: "alien", label: "Alien", img: "/assets/influencer_studio/character_type_alien.webp", promptVal: "alien creature" },
+          { id: "amphibian", label: "Amphibian", img: "/assets/influencer_studio/character_type_amphibian.webp", promptVal: "amphibian humanoid" },
+          { id: "reptile", label: "Reptile", img: "/assets/influencer_studio/character_type_reptile.webp", promptVal: "reptilian creature" },
+          { id: "mantis", label: "Mantis", img: "/assets/influencer_studio/character_type_mantis.webp", promptVal: "mantis hybrid character" },
+          { id: "bee", label: "Bee", img: "/assets/influencer_studio/character_type_bee.webp", promptVal: "bee insect hybrid character" },
+          { id: "octopus", label: "Octopus", img: "/assets/influencer_studio/character_type_octopus.webp", promptVal: "aquatic octopus hybrid" },
+          { id: "crocodile", label: "Crocodile", img: "/assets/influencer_studio/character_type_crocodile.webp", promptVal: "crocodile humanoid" },
+          { id: "iguana", label: "Iguana", img: "/assets/influencer_studio/character_type_iguana.webp", promptVal: "iguana humanoid" },
+          { id: "lizard", label: "Lizard", img: "/assets/influencer_studio/character_type_lizard.webp", promptVal: "lizard humanoid" },
+          { id: "rhinoceros_beetle", label: "Beetle", img: "/assets/influencer_studio/character_type_rhinoceros_beetle.webp", promptVal: "rhinoceros beetle humanoid" },
+          { id: "ant", label: "Ant", img: "/assets/influencer_studio/character_type_ant.webp", promptVal: "ant hybrid character" },
+        ],
       },
       {
         id: "gender",
         label: "Gender",
         options: [
-          { id: "female", label: "Female", img: "/assets/influencer/option_female_13.webp", promptVal: "female" },
-          { id: "male", label: "Male", img: "/assets/influencer/option_male_14.webp", promptVal: "male" },
-          { id: "non_binary", label: "Non-Binary", img: "/assets/influencer/option_non_binary_17.webp", promptVal: "non-binary character" },
-          { id: "trans_man", label: "Trans Man", img: "/assets/influencer/option_trans_man_15.webp", promptVal: "transgender man" },
-          { id: "trans_woman", label: "Trans Woman", img: "/assets/influencer/option_trans_woman_16.webp", promptVal: "transgender woman" }
-        ]
+          { id: "female", label: "Female", img: "/assets/influencer_studio/gender_female.webp", promptVal: "female" },
+          { id: "male", label: "Male", img: "/assets/influencer_studio/gender_male.webp", promptVal: "male" },
+          { id: "non_binary", label: "Non-binary", img: "/assets/influencer_studio/gender_non_binary.webp", promptVal: "non-binary character" },
+          { id: "trans_man", label: "Trans Man", img: "/assets/influencer_studio/gender_trans_man.webp", promptVal: "transgender man" },
+          { id: "trans_woman", label: "Trans Woman", img: "/assets/influencer_studio/gender_trans_woman.webp", promptVal: "transgender woman" },
+        ],
       },
       {
-        id: "ethnicity",
-        label: "Ethnicity / Vibe",
+        id: "ethnicity_origin_base",
+        label: "Ethnicity / Origin",
         options: [
-          { id: "african", label: "African", img: "/assets/influencer/option_african_18.webp", promptVal: "african heritage" },
-          { id: "asian", label: "Asian", img: "/assets/influencer/option_asian_19.webp", promptVal: "east asian heritage" },
-          { id: "european", label: "European", img: "/assets/influencer/option_european_20.webp", promptVal: "european heritage" },
-          { id: "indian", label: "Indian", img: "/assets/influencer/option_indian_21.webp", promptVal: "south asian indian heritage" },
-          { id: "middle_eastern", label: "Middle Eastern", img: "/assets/influencer/option_middle_eastern_22.webp", promptVal: "middle eastern heritage" },
-          { id: "mixed", label: "Mixed", img: "/assets/influencer/option_mixed_23.webp", promptVal: "multiracial mixed heritage" }
-        ]
+          { id: "african", label: "African", img: "/assets/influencer_studio/ethnicity_origin_base_african.webp", promptVal: "african heritage" },
+          { id: "asian", label: "Asian", img: "/assets/influencer_studio/ethnicity_origin_base_recreate_in_east_asian_supermodel__korea.webp", promptVal: "East Asian supermodel, Korean K-Pop Idol phenotype" },
+          { id: "european", label: "European", img: "/assets/influencer_studio/ethnicity_origin_base_scandinavian_supermodel.webp", promptVal: "Scandinavian Supermodel" },
+          { id: "indian", label: "Indian", img: "/assets/influencer_studio/ethnicity_origin_base_indian.webp", promptVal: "south asian indian heritage" },
+          { id: "middle_eastern", label: "Middle Eastern", img: "/assets/influencer_studio/ethnicity_origin_base_middle_eastern.webp", promptVal: "middle eastern heritage" },
+          { id: "mixed", label: "Mixed", img: "/assets/influencer_studio/ethnicity_origin_base_mixed.webp", promptVal: "multiracial mixed heritage" },
+        ],
       },
       {
         id: "eye_color",
         label: "Eye Color",
         options: [
-          { id: "blue", label: "Blue", img: "/assets/influencer/option_blue_33.webp", promptVal: "striking blue eyes" },
-          { id: "brown", label: "Brown", img: "/assets/influencer/option_brown_29.webp", promptVal: "warm brown eyes" },
-          { id: "green", label: "Green", img: "/assets/influencer/option_green_27.webp", promptVal: "emerald green eyes" },
-          { id: "amber", label: "Amber", img: "/assets/influencer/option_amber_34.webp", promptVal: "amber eyes" },
-          { id: "grey", label: "Grey", img: "/assets/influencer/option_grey_36.webp", promptVal: "grey eyes" },
-          { id: "red", label: "Red", img: "/assets/influencer/option_red_35.webp", promptVal: "red eyes" },
-          { id: "purple", label: "Purple", img: "/assets/influencer/option_purple_26.webp", promptVal: "violet eyes" },
-          { id: "black", label: "Black", img: "/assets/influencer/option_black_25.webp", promptVal: "black eyes" },
-          { id: "deep_brown", label: "Deep Brown", img: "/assets/influencer/option_deep_brown_32.webp", promptVal: "deep brown eyes" },
-          { id: "white", label: "White", img: "/assets/influencer/option_white_28.webp", promptVal: "white eyes" },
-          { id: "mixed_colors", label: "Heterochromia", img: "/assets/influencer/option_mixed_colors_24.webp", promptVal: "heterochromia eyes" },
-          { id: "black_solid_void", label: "Solid Void", img: "/assets/influencer/option_black__solid_void__30.webp", promptVal: "solid black void eyes" },
-          { id: "white_blind_empty", label: "Blind Empty", img: "/assets/influencer/option_white__blind_empty__31.webp", promptVal: "blind empty white eyes" }
-        ]
+          { id: "eye_blue", label: "Blue", img: "/assets/influencer_studio/eye_color_eye_blue.webp", promptVal: "striking blue eyes" },
+          { id: "eye_brown", label: "Brown", img: "/assets/influencer_studio/eye_color_eye_brown.webp", promptVal: "warm brown eyes" },
+          { id: "eye_green", label: "Green", img: "/assets/influencer_studio/eye_color_eye_green.webp", promptVal: "emerald green eyes" },
+          { id: "eye_amber", label: "Amber", img: "/assets/influencer_studio/eye_color_eye_amber.webp", promptVal: "amber eyes" },
+          { id: "eye_grey", label: "Grey", img: "/assets/influencer_studio/eye_color_eye_grey.webp", promptVal: "grey eyes" },
+          { id: "eye_red", label: "Red", img: "/assets/influencer_studio/eye_color_eye_red.webp", promptVal: "red eyes" },
+          { id: "eye_purple", label: "Purple", img: "/assets/influencer_studio/eye_color_eye_purple.webp", promptVal: "violet purple eyes" },
+          { id: "eye_black", label: "Black", img: "/assets/influencer_studio/eye_color_eye_black.webp", promptVal: "black eyes" },
+          { id: "eye_deep_brown", label: "Deep Brown", img: "/assets/influencer_studio/eye_color_eye_deep_brown.webp", promptVal: "deep dark brown eyes" },
+          { id: "eye_white", label: "White", img: "/assets/influencer_studio/eye_color_eye_white.webp", promptVal: "white eyes" },
+          { id: "eye_black_void", label: "Solid Black Void", img: "/assets/influencer_studio/eye_color_eye_black_void.webp", promptVal: "solid black void eyes" },
+          { id: "eye_white_void", label: "Blind / Empty", img: "/assets/influencer_studio/eye_color_eye_white_void.webp", promptVal: "blind empty white eyes" },
+        ],
       },
       {
-        id: "ears_horns",
-        label: "Ears & Horns",
+        id: "eyes_type",
+        label: "Eye Type",
         options: [
-          { id: "normal_ears", label: "Normal Ears", img: "/assets/influencer/option_human_63.webp", promptVal: "normal ears" },
-          { id: "elf_ears", label: "Elf Ears", img: "/assets/influencer/option_elf_64.webp", promptVal: "pointed elf ears" },
-          { id: "no_ears", label: "No Ears", img: "/assets/influencer/option_no_ears_65.webp", promptVal: "no ears visible" },
-          { id: "wing_ears", label: "Wing Ears", img: "/assets/influencer/option_wing_ears_66.webp", promptVal: "wing-like ears" },
-          { id: "small_horns", label: "Small Horns", img: "/assets/influencer/option_small_horns_67.webp", promptVal: "small horns on forehead" },
-          { id: "big_horns", label: "Big Horns", img: "/assets/influencer/option_big_horns_68.webp", promptVal: "large horns curving backward" },
-          { id: "antlers", label: "Antlers", img: "/assets/influencer/option_antlers_69.webp", promptVal: "deer antlers" }
-        ]
+          { id: "eyes_human", label: "Human", img: "/assets/influencer_studio/eyes_type_eyes_human.webp", promptVal: "normal human eyes" },
+          { id: "eyes_reptile", label: "Reptile", img: "/assets/influencer_studio/eyes_type_eyes_reptile.webp", promptVal: "reptile slit-pupil eyes" },
+          { id: "eyes_mechanical", label: "Mechanical", img: "/assets/influencer_studio/eyes_type_eyes_mechanical.webp", promptVal: "mechanical cyborg eyes" },
+        ],
       },
       {
-        id: "eye_details",
+        id: "eyes_details",
         label: "Eye Features",
         options: [
-          { id: "normal_eyes", label: "Normal Eyes", img: "/assets/influencer/option_blue_33.webp", promptVal: "standard eyes" },
-          { id: "different_eye_colors", label: "Heterochromia Vibe", img: "/assets/influencer/option_different_eye_colors_52.webp", promptVal: "different eye colors" },
-          { id: "blind_eye", label: "Blind Eye", img: "/assets/influencer/option_blind_eye_53.webp", promptVal: "one cloudy blind eye" },
-          { id: "scarred_eye", label: "Scarred Eye", img: "/assets/influencer/option_scarred_eye_54.webp", promptVal: "scar running across one eye" },
-          { id: "glowing_eye", label: "Glowing Eye", img: "/assets/influencer/option_glowing_eye_55.webp", promptVal: "glowing magical eyes" }
-        ]
+          { id: "eyes_different_colors", label: "Heterochromia", img: "/assets/influencer_studio/eyes_details_eyes_different_colors.webp", promptVal: "heterochromia different eye colors" },
+          { id: "eyes_blind", label: "Blind Eye", img: "/assets/influencer_studio/eyes_details_eyes_blind.webp", promptVal: "one cloudy blind eye" },
+          { id: "eyes_scarred", label: "Scarred Eye", img: "/assets/influencer_studio/eyes_details_eyes_scarred.webp", promptVal: "scar running across one eye" },
+          { id: "eyes_glowing", label: "Glowing Eye", img: "/assets/influencer_studio/eyes_details_eyes_glowing.webp", promptVal: "glowing magical eyes" },
+        ],
       },
       {
-        id: "mouth_teeth",
+        id: "mouth",
         label: "Mouth & Teeth",
         options: [
-          { id: "normal_mouth", label: "Normal Mouth", img: "/assets/influencer/option_human_63.webp", promptVal: "standard mouth" },
-          { id: "small_mouth", label: "Small Mouth", img: "/assets/influencer/option_small_mouth_56.webp", promptVal: "small delicate mouth" },
-          { id: "large_mouth", label: "Large Mouth", img: "/assets/influencer/option_large_mouth_57.webp", promptVal: "wide expressive mouth" },
-          { id: "no_teeth", label: "No Teeth", img: "/assets/influencer/option_no_teeth_58.webp", promptVal: "no visible teeth" },
-          { id: "different_teeth", label: "Unique Teeth", img: "/assets/influencer/option_different_teeth_59.webp", promptVal: "unusual tooth structure" },
-          { id: "sharp_teeth", label: "Sharp Teeth", img: "/assets/influencer/option_sharp_teeth_60.webp", promptVal: "sharp predatory fangs" }
-        ]
+          { id: "mouth_small", label: "Small Mouth", img: "/assets/influencer_studio/mouth_mouth_small.webp", promptVal: "small delicate mouth" },
+          { id: "mouth_large", label: "Large Mouth", img: "/assets/influencer_studio/mouth_mouth_large.webp", promptVal: "wide expressive mouth" },
+          { id: "mouth_no_teeth", label: "No Teeth", img: "/assets/influencer_studio/mouth_mouth_no_teeth.webp", promptVal: "no visible teeth" },
+          { id: "mouth_different_teeth", label: "Unique Teeth", img: "/assets/influencer_studio/mouth_mouth_different_teeth.webp", promptVal: "unusual tooth structure" },
+          { id: "mouth_sharp_teeth", label: "Sharp Teeth", img: "/assets/influencer_studio/mouth_mouth_sharp_teeth.webp", promptVal: "sharp predatory fangs" },
+          { id: "mouth_forked_tongue", label: "Forked Tongue", img: "/assets/influencer_studio/mouth_mouth_forked_tongue.webp", promptVal: "reptilian forked tongue" },
+          { id: "mouth_two_tongues", label: "Two Tongues", img: "/assets/influencer_studio/mouth_mouth_two_tongues.webp", promptVal: "two separate tongues" },
+        ],
       },
       {
-        id: "tongue",
-        label: "Tongue",
+        id: "ears",
+        label: "Ears",
         options: [
-          { id: "normal_tongue", label: "Normal", img: "/assets/influencer/option_human_63.webp", promptVal: "normal tongue" },
-          { id: "forked_tongue", label: "Forked", img: "/assets/influencer/option_forked_tongue_61.webp", promptVal: "reptilian forked tongue" },
-          { id: "two_tongues", label: "Two Tongues", img: "/assets/influencer/option_two_tongues_62.webp", promptVal: "two separate tongues" }
-        ]
-      }
-    ]
+          { id: "ears_human", label: "Human", img: "/assets/influencer_studio/ears_ears_human.webp", promptVal: "normal human ears" },
+          { id: "ears_elf", label: "Elf Ears", img: "/assets/influencer_studio/ears_ears_elf.webp", promptVal: "pointed elf ears" },
+          { id: "ears_no", label: "No Ears", img: "/assets/influencer_studio/ears_ears_no.webp", promptVal: "no visible ears" },
+        ],
+      },
+      {
+        id: "horns",
+        label: "Horns",
+        options: [
+          { id: "small_horns", label: "Small Horns", img: "/assets/influencer_studio/horns_small_horns.webp", promptVal: "small horns on forehead" },
+          { id: "big_horns", label: "Big Horns", img: "/assets/influencer_studio/horns_big_horns.webp", promptVal: "large curved horns" },
+          { id: "antlers", label: "Antlers", img: "/assets/influencer_studio/horns_antlers.webp", promptVal: "deer antlers on head" },
+        ],
+      },
+      {
+        id: "skin_conditions",
+        label: "Skin Conditions",
+        options: [
+          { id: "condition_vitiligo", label: "Vitiligo", img: "/assets/influencer_studio/skin_conditions_condition_vitiligo.webp", promptVal: "vitiligo skin condition" },
+          { id: "condition_pigmentation", label: "Pigmentation", img: "/assets/influencer_studio/skin_conditions_condition_pigmentation.webp", promptVal: "hyperpigmentation" },
+          { id: "condition_freckles", label: "Freckles", img: "/assets/influencer_studio/skin_conditions_condition_freckles.webp", promptVal: "freckled skin" },
+          { id: "condition_birthmarks", label: "Birthmarks", img: "/assets/influencer_studio/skin_conditions_condition_birthmarks.webp", promptVal: "visible birthmarks" },
+          { id: "condition_scars", label: "Scars", img: "/assets/influencer_studio/skin_conditions_condition_scars.webp", promptVal: "scarred skin" },
+          { id: "condition_burns", label: "Burns", img: "/assets/influencer_studio/skin_conditions_condition_burns.webp", promptVal: "burn marks on skin" },
+          { id: "condition_albinism", label: "Albinism", img: "/assets/influencer_studio/skin_conditions_condition_albinism.webp", promptVal: "albinism pale white skin" },
+          { id: "condition_cracked", label: "Cracked Skin", img: "/assets/influencer_studio/skin_conditions_condition_cracked.webp", promptVal: "cracked dry skin texture" },
+          { id: "condition_wrinkled", label: "Wrinkled", img: "/assets/influencer_studio/skin_conditions_condition_wrinkled.webp", promptVal: "wrinkled aged skin" },
+        ],
+      },
+    ],
   },
   body: {
     label: "Body",
     subcategories: [
       {
-        id: "skin_patterns",
-        label: "Skin Patterns & Texture",
+        id: "face_skin_material",
+        label: "Face Skin Material",
         options: [
-          { id: "human_skin", label: "Human", img: "/assets/influencer/option_human_skin_70.webp", promptVal: "smooth skin textures" },
-          { id: "scales", label: "Scales", img: "/assets/influencer/option_scales_71.webp", promptVal: "shimmering scales" },
-          { id: "fur", label: "Fur", img: "/assets/influencer/option_fur_72.webp", promptVal: "covered in soft fine fur" },
-          { id: "amphibian_skin", label: "Amphibian", img: "/assets/influencer/option_amphibian_skin_73.webp", promptVal: "smooth moist amphibian skin" },
-          { id: "fish_skin", label: "Fish Skin", img: "/assets/influencer/option_fish_skin_74.webp", promptVal: "iridescent fish scales skin" },
-          { id: "metallic", label: "Metallic", img: "/assets/influencer/option_metallic_75.webp", promptVal: "polished reflective metallic skin" },
-          { id: "solid", label: "Solid Color", img: "/assets/influencer/option_solid_76.webp", promptVal: "solid artificial skin tone" },
-          { id: "stripes", label: "Stripes", img: "/assets/influencer/option_stripes_77.webp", promptVal: "exotic striped skin patterns" },
-          { id: "spots", label: "Spots", img: "/assets/influencer/option_spots_78.webp", promptVal: "dappled spots skin pattern" },
-          { id: "chess_pattern", label: "Chess Pattern", img: "/assets/influencer/option_chess_pattern_79.webp", promptVal: "checkerboard skin markings" },
-          { id: "veins_visible", label: "Veins Visible", img: "/assets/influencer/option_veins_visible_80.webp", promptVal: "translucent skin with visible neon veins" },
-          { id: "giraffe_pattern", label: "Giraffe Pattern", img: "/assets/influencer/option_giraffe_pattern_81.webp", promptVal: "giraffe print skin markings" },
-          { id: "cowhide_pattern", label: "Cowhide Pattern", img: "/assets/influencer/option_cowhide_pattern_82.webp", promptVal: "black and white cowhide skin markings" }
-        ]
+          { id: "face_skin_human", label: "Human Skin", img: "/assets/influencer_studio/face_skin_material_face_skin_human.webp", promptVal: "smooth human skin" },
+          { id: "face_skin_scales", label: "Scales", img: "/assets/influencer_studio/face_skin_material_face_skin_scales.webp", promptVal: "shimmering scales" },
+          { id: "face_skin_fur", label: "Fur", img: "/assets/influencer_studio/face_skin_material_face_skin_fur.webp", promptVal: "soft fur covered face" },
+          { id: "face_skin_amphibian", label: "Amphibian", img: "/assets/influencer_studio/face_skin_material_face_skin_amphibian.webp", promptVal: "smooth moist amphibian skin" },
+          { id: "face_skin_fish", label: "Fish Skin", img: "/assets/influencer_studio/face_skin_material_face_skin_fish.webp", promptVal: "iridescent fish scale skin" },
+          { id: "face_skin_metallic", label: "Metallic", img: "/assets/influencer_studio/face_skin_material_face_skin_metallic.webp", promptVal: "polished metallic skin" },
+        ],
       },
       {
-        id: "body_shape",
-        label: "Body Build",
+        id: "face_surface_pattern",
+        label: "Skin Pattern",
         options: [
-          { id: "normal", label: "Standard", img: "/assets/influencer/option_human_skin_70.webp", promptVal: "average build" },
-          { id: "slim", label: "Slim", img: "/assets/influencer/option_slim_83.webp", promptVal: "slim slender physique" },
-          { id: "lean", label: "Lean", img: "/assets/influencer/option_lean_84.webp", promptVal: "lean toned physique" },
-          { id: "athletic", label: "Athletic", img: "/assets/influencer/option_athletic_85.webp", promptVal: "fit athletic body build" },
-          { id: "muscular", label: "Muscular", img: "/assets/influencer/option_muscular_86.webp", promptVal: "strong muscular body build" },
-          { id: "curvy", label: "Curvy", img: "/assets/influencer/option_curvy_87.webp", promptVal: "curvy body build" },
-          { id: "heavy", label: "Heavy", img: "/assets/influencer/option_heavy_88.webp", promptVal: "robust heavier body build" },
-          { id: "skinny", label: "Skinny", img: "/assets/influencer/option_skinny_89.webp", promptVal: "very thin skinny body build" }
-        ]
+          { id: "face_pattern_solid", label: "Solid Color", img: "/assets/influencer_studio/face_surface_pattern_face_pattern_solid.webp", promptVal: "solid color skin" },
+          { id: "face_pattern_stripes", label: "Stripes", img: "/assets/influencer_studio/face_surface_pattern_face_pattern_stripes.webp", promptVal: "exotic striped skin pattern" },
+          { id: "face_pattern_spots", label: "Spots", img: "/assets/influencer_studio/face_surface_pattern_face_pattern_spots.webp", promptVal: "dappled spotted skin" },
+          { id: "face_pattern_chess", label: "Chess Pattern", img: "/assets/influencer_studio/face_surface_pattern_face_pattern_chess.webp", promptVal: "checkerboard skin pattern" },
+          { id: "face_pattern_veins", label: "Veins Visible", img: "/assets/influencer_studio/face_surface_pattern_face_pattern_veins.webp", promptVal: "translucent skin with neon veins" },
+          { id: "face_pattern_gradient", label: "Gradient", img: "/assets/influencer_studio/face_surface_pattern_face_pattern_gradient.webp", promptVal: "gradient skin coloring" },
+          { id: "face_pattern_giraffe", label: "Giraffe Pattern", img: "/assets/influencer_studio/face_surface_pattern_face_pattern_giraffe.webp", promptVal: "giraffe print skin markings" },
+        ],
+      },
+      {
+        id: "body_type",
+        label: "Body Type",
+        options: [
+          { id: "body_slim", label: "Slim", img: "/assets/influencer_studio/body_type_body_slim.webp", promptVal: "slim slender physique" },
+          { id: "body_lean", label: "Lean", img: "/assets/influencer_studio/body_type_body_lean.webp", promptVal: "lean toned physique" },
+          { id: "body_athletic", label: "Athletic", img: "/assets/influencer_studio/body_type_body_athletic.webp", promptVal: "fit athletic body" },
+          { id: "body_muscular", label: "Muscular", img: "/assets/influencer_studio/body_type_body_muscular.webp", promptVal: "strong muscular build" },
+          { id: "body_curvy", label: "Curvy", img: "/assets/influencer_studio/body_type_body_curvy.webp", promptVal: "curvy body type" },
+          { id: "body_heavy", label: "Heavy", img: "/assets/influencer_studio/body_type_body_heavy.webp", promptVal: "heavy set build" },
+          { id: "body_skinny", label: "Skinny", img: "/assets/influencer_studio/body_type_body_skinny.webp", promptVal: "very skinny thin build" },
+        ],
       },
       {
         id: "left_arm",
-        label: "Left Arm Style",
+        label: "Left Arm",
         options: [
-          { id: "normal_arm", label: "Normal", img: "/assets/influencer/option_normal_arm_90.webp", promptVal: "normal left arm" },
-          { id: "cute_arm", label: "Stylized", img: "/assets/influencer/option_cute_arm_91.webp", promptVal: "cute organic left arm design" },
-          { id: "robotic_arm", label: "Robotic", img: "/assets/influencer/option_robotic_arm_92.webp", promptVal: "robotic cybernetic left arm" },
-          { id: "prosthetic_arm", label: "Prosthetic", img: "/assets/influencer/option_prosthetic_arm_93.webp", promptVal: "sleek prosthetic left arm" },
-          { id: "mechanical_arm", label: "Mechanical", img: "/assets/influencer/option_mechanical_arm_94.webp", promptVal: "intricate mechanical left arm" },
-          { id: "none", label: "None", img: "/assets/influencer/option_none_95.webp", promptVal: "missing left arm" }
-        ]
+          { id: "left_arm_normal", label: "Normal", img: "/assets/influencer_studio/left_arm_left_arm_normal.webp", promptVal: "normal left arm" },
+          { id: "left_arm_cute", label: "Cute Prosthetic", img: "/assets/influencer_studio/left_arm_make_left_arm_stylish_pink_prosthetic_wi.webp", promptVal: "stylish pink prosthetic left arm with cute stickers" },
+          { id: "left_arm_robotic", label: "Robotic", img: "/assets/influencer_studio/left_arm_left_arm_robotic.webp", promptVal: "robotic left arm" },
+          { id: "left_arm_prosthetic", label: "Prosthetic", img: "/assets/influencer_studio/left_arm_left_arm_prosthetic.webp", promptVal: "prosthetic left arm" },
+          { id: "left_arm_mechanical", label: "Mechanical", img: "/assets/influencer_studio/left_arm_left_arm_mechanical.webp", promptVal: "mechanical left arm" },
+          { id: "left_arm_none", label: "None", img: "/assets/influencer_studio/left_arm_left_arm_none.webp", promptVal: "no left arm" },
+        ],
       },
       {
         id: "right_arm",
-        label: "Right Arm Style",
+        label: "Right Arm",
         options: [
-          { id: "normal_arm", label: "Normal", img: "/assets/influencer/option_normal_arm_96.webp", promptVal: "normal right arm" },
-          { id: "cute_arm", label: "Stylized", img: "/assets/influencer/option_cute_arm_97.webp", promptVal: "cute organic right arm design" },
-          { id: "robotic_arm", label: "Robotic", img: "/assets/influencer/option_robotic_arm_98.webp", promptVal: "robotic cybernetic right arm" },
-          { id: "prosthetic_arm", label: "Prosthetic", img: "/assets/influencer/option_prosthetic_arm_99.webp", promptVal: "sleek prosthetic right arm" },
-          { id: "mechanical_arm", label: "Mechanical", img: "/assets/influencer/option_mechanical_arm_100.webp", promptVal: "intricate mechanical right arm" },
-          { id: "none", label: "None", img: "/assets/influencer/option_none_101.webp", promptVal: "missing right arm" }
-        ]
+          { id: "right_arm_normal", label: "Normal", img: "/assets/influencer_studio/right_arm_right_arm_normal.webp", promptVal: "normal right arm" },
+          { id: "right_arm_cute", label: "Cute Prosthetic", img: "/assets/influencer_studio/right_arm_make_right_arm_stylish_pink_prosthetic_w.webp", promptVal: "stylish pink prosthetic right arm with cute stickers" },
+          { id: "right_arm_robotic", label: "Robotic", img: "/assets/influencer_studio/right_arm_right_arm_robotic.webp", promptVal: "robotic right arm" },
+          { id: "right_arm_prosthetic", label: "Prosthetic", img: "/assets/influencer_studio/right_arm_right_arm_prosthetic.webp", promptVal: "prosthetic right arm" },
+          { id: "right_arm_mechanical", label: "Mechanical", img: "/assets/influencer_studio/right_arm_right_arm_mechanical.webp", promptVal: "mechanical right arm" },
+          { id: "right_arm_none", label: "None", img: "/assets/influencer_studio/right_arm_right_arm_none.webp", promptVal: "no right arm" },
+        ],
       },
       {
         id: "left_leg",
-        label: "Left Leg Style",
+        label: "Left Leg",
         options: [
-          { id: "normal_leg", label: "Normal", img: "/assets/influencer/option_normal_leg_102.webp", promptVal: "normal left leg" },
-          { id: "cute_leg", label: "Stylized", img: "/assets/influencer/option_cute_leg_103.webp", promptVal: "cute organic left leg design" },
-          { id: "robotic_leg", label: "Robotic", img: "/assets/influencer/option_robotic_leg_104.webp", promptVal: "robotic cybernetic left leg" },
-          { id: "prosthetic_leg", label: "Prosthetic", img: "/assets/influencer/option_prosthetic_leg_105.webp", promptVal: "sleek prosthetic left leg" },
-          { id: "mechanical_leg", label: "Mechanical", img: "/assets/influencer/option_mechanical_leg_106.webp", promptVal: "intricate mechanical left leg" },
-          { id: "none", label: "None", img: "/assets/influencer/option_none_107.webp", promptVal: "missing left leg" }
-        ]
+          { id: "left_leg_normal", label: "Normal", img: "/assets/influencer_studio/left_leg_left_leg_normal.webp", promptVal: "normal left leg" },
+          { id: "left_leg_cute", label: "Cute Prosthetic", img: "/assets/influencer_studio/left_leg_make_left_leg_stylish_pink_prosthetic_wi.webp", promptVal: "stylish pink prosthetic left leg with cute stickers" },
+          { id: "left_leg_robotic", label: "Robotic", img: "/assets/influencer_studio/left_leg_left_leg_robotic.webp", promptVal: "robotic left leg" },
+          { id: "left_leg_prosthetic", label: "Prosthetic", img: "/assets/influencer_studio/left_leg_left_leg_prosthetic.webp", promptVal: "prosthetic left leg" },
+          { id: "left_leg_mechanical", label: "Mechanical", img: "/assets/influencer_studio/left_leg_left_leg_mechanical.webp", promptVal: "mechanical left leg" },
+          { id: "left_leg_none", label: "None", img: "/assets/influencer_studio/left_leg_left_leg_none.webp", promptVal: "no left leg" },
+        ],
       },
       {
         id: "right_leg",
-        label: "Right Leg Style",
+        label: "Right Leg",
         options: [
-          { id: "normal_leg", label: "Normal", img: "/assets/influencer/option_normal_leg_108.webp", promptVal: "normal right leg" },
-          { id: "cute_leg", label: "Stylized", img: "/assets/influencer/option_cute_leg_109.webp", promptVal: "cute organic right leg design" },
-          { id: "robotic_leg", label: "Robotic", img: "/assets/influencer/option_robotic_leg_110.webp", promptVal: "robotic cybernetic right leg" },
-          { id: "prosthetic_leg", label: "Prosthetic", img: "/assets/influencer/option_prosthetic_leg_111.webp", promptVal: "sleek prosthetic right leg" },
-          { id: "mechanical_leg", label: "Mechanical", img: "/assets/influencer/option_mechanical_leg_112.webp", promptVal: "intricate mechanical right leg" },
-          { id: "none", label: "None", img: "/assets/influencer/option_none_113.webp", promptVal: "missing right leg" }
-        ]
-      }
-    ]
+          { id: "right_leg_normal", label: "Normal", img: "/assets/influencer_studio/right_leg_right_leg_normal.webp", promptVal: "normal right leg" },
+          { id: "right_leg_cute", label: "Cute Prosthetic", img: "/assets/influencer_studio/right_leg_make_right_leg_stylish_pink_prosthetic_w.webp", promptVal: "stylish pink prosthetic right leg with cute stickers" },
+          { id: "right_leg_robotic", label: "Robotic", img: "/assets/influencer_studio/right_leg_right_leg_robotic.webp", promptVal: "robotic right leg" },
+          { id: "right_leg_prosthetic", label: "Prosthetic", img: "/assets/influencer_studio/right_leg_right_leg_prosthetic.webp", promptVal: "prosthetic right leg" },
+          { id: "right_leg_mechanical", label: "Mechanical", img: "/assets/influencer_studio/right_leg_right_leg_mechanical.webp", promptVal: "mechanical right leg" },
+          { id: "right_leg_none", label: "None", img: "/assets/influencer_studio/right_leg_right_leg_none.webp", promptVal: "no right leg" },
+        ],
+      },
+    ],
   },
   style: {
     label: "Style",
     subcategories: [
       {
-        id: "hair_style",
+        id: "hair",
         label: "Hair / Head Growth",
         options: [
-          { id: "long_hair", label: "Long Hair", img: "/assets/influencer/option_long_hair_116.webp", promptVal: "long styled haircut" },
-          { id: "short_hair", label: "Short Hair", img: "/assets/influencer/option_short_hair_115.webp", promptVal: "short modern hair" },
-          { id: "bald", label: "Bald", img: "/assets/influencer/option_bald_114.webp", promptVal: "bald head" },
-          { id: "afro", label: "Afro", img: "/assets/influencer/option_afro_117.webp", promptVal: "afro hair" },
-          { id: "punk_hairstyle", label: "Punk Style", img: "/assets/influencer/option_punk_hairstyle_118.webp", promptVal: "punk haircut" },
-          { id: "fur", label: "Fur Style", img: "/assets/influencer/option_fur_119.webp", promptVal: "fur elements" },
-          { id: "tentacles", label: "Tentacles", img: "/assets/influencer/option_tentacles_120.webp", promptVal: "tentacle strands" },
-          { id: "spines", label: "Spines", img: "/assets/influencer/option_spines_121.webp", promptVal: "spiky spines" }
-        ]
+          { id: "hair_bald", label: "Bald", img: "/assets/influencer_studio/hair_hair_bald.webp", promptVal: "bald head" },
+          { id: "hair_short", label: "Short Hair", img: "/assets/influencer_studio/hair_hair_short.webp", promptVal: "short hair" },
+          { id: "hair_long", label: "Long Hair", img: "/assets/influencer_studio/hair_hair_long.webp", promptVal: "long flowing hair" },
+          { id: "hair_afro", label: "Afro", img: "/assets/influencer_studio/hair_hair_afro.webp", promptVal: "afro hairstyle" },
+          { id: "hair_punk", label: "Punk", img: "/assets/influencer_studio/hair_hair_punk.webp", promptVal: "punk mohawk hairstyle" },
+          { id: "hair_fur", label: "Fur / Mane", img: "/assets/influencer_studio/hair_hair_fur.webp", promptVal: "fur mane on head" },
+          { id: "hair_tentacles", label: "Tentacles", img: "/assets/influencer_studio/hair_hair_tentacles.webp", promptVal: "tentacles as hair" },
+          { id: "hair_spines", label: "Spines", img: "/assets/influencer_studio/hair_hair_spines.webp", promptVal: "spines as hair" },
+        ],
       },
       {
-        id: "skin_details",
-        label: "Skin Details",
+        id: "accessories",
+        label: "Accessories & Markings",
         options: [
-          { id: "freckles", label: "Freckles", img: "/assets/influencer/freckles_39.webp", promptVal: "freckled skin" },
-          { id: "vitiligo", label: "Vitiligo", img: "/assets/influencer/vitiligo_37.webp", promptVal: "vitiligo skin patterns" },
-          { id: "pigmentation", label: "Pigmentation", img: "/assets/influencer/pigmentation_38.webp", promptVal: "pigmented skin spots" },
-          { id: "birthmarks", label: "Birthmarks", img: "/assets/influencer/birthmarks_40.webp", promptVal: "skin birthmarks" },
-          { id: "scars", label: "Scars", img: "/assets/influencer/scars_41.webp", promptVal: "healed scars" },
-          { id: "burns", label: "Burns", img: "/assets/influencer/burns_42.webp", promptVal: "burn skin textures" },
-          { id: "albinism", label: "Albinism", img: "/assets/influencer/albinism_43.webp", promptVal: "albinism pale skin tone" },
-          { id: "cracked_dry_skin", label: "Cracked / Dry", img: "/assets/influencer/cracked___dry_skin_44.webp", promptVal: "cracked dry skin" },
-          { id: "wrinkled_skin", label: "Wrinkled", img: "/assets/influencer/wrinkled_skin_45.webp", promptVal: "wrinkled aging skin" }
-        ]
+          { id: "accessory_tattoos", label: "Tattoos", img: "/assets/influencer_studio/accessories_accessory_tattoos.webp", promptVal: "covered in tattoos" },
+          { id: "accessory_piercing", label: "Piercings", img: "/assets/influencer_studio/accessories_accessory_piercing.webp", promptVal: "multiple piercings" },
+          { id: "accessory_scarification", label: "Scarification", img: "/assets/influencer_studio/accessories_accessory_scarification.webp", promptVal: "ritual scarification marks" },
+          { id: "accessory_symbols", label: "Symbols / Markings", img: "/assets/influencer_studio/accessories_accessory_symbols.webp", promptVal: "symbolic tribal markings" },
+          { id: "accessory_cyber", label: "Cyber Markings", img: "/assets/influencer_studio/accessories_accessory_cyber.webp", promptVal: "cyberpunk circuit markings" },
+        ],
       },
       {
-        id: "body_marks",
-        label: "Markings & Details",
+        id: "rendering_style",
+        label: "Rendering Style",
         options: [
-          { id: "tattoos", label: "Tattoos", img: "/assets/influencer/option_tattoos_122.webp", promptVal: "tattoos on body" },
-          { id: "piercing", label: "Piercings", img: "/assets/influencer/option_piercing_123.webp", promptVal: "metallic body piercings" },
-          { id: "scarification", label: "Scarification", img: "/assets/influencer/option_scarification_124.webp", promptVal: "scarification skin markings" },
-          { id: "symbols_markings", label: "Symbols / Markings", img: "/assets/influencer/option_symbols___markings_125.webp", promptVal: "symbolic markings" },
-          { id: "cyber_markings", label: "Cyber Markings", img: "/assets/influencer/option_cyber_markings_126.webp", promptVal: "cybernetic markings" }
-        ]
+          { id: "style_hyper_realistic", label: "Hyper-Realistic", img: "/assets/influencer_studio/character_type_human.webp", promptVal: "hyper-realistic 8k photograph" },
+          { id: "style_anime", label: "Anime", img: "/assets/influencer_studio/character_type_elf.webp", promptVal: "anime art style" },
+          { id: "style_cartoon", label: "Cartoon", img: "/assets/influencer_studio/character_type_mantis.webp", promptVal: "cartoon illustration style" },
+          { id: "style_2d_illustration", label: "2D Illustration", img: "/assets/influencer_studio/character_type_alien.webp", promptVal: "2D flat illustration style" },
+        ],
       },
-      {
-        id: "art_style",
-        label: "Art Style & Camera",
-        options: [
-          { id: "hyper_realistic", label: "Hyper-Realistic", img: "/assets/influencer/option_hyper_realistic_127.webp", promptVal: "photorealistic, hyper-detailed skin pores, real photo, 8k resolution, shot on 35mm film" },
-          { id: "anime", label: "Anime / Cel Shaded", img: "/assets/influencer/option_anime_128.webp", promptVal: "digital anime illustration, key art style, clean linework" },
-          { id: "cartoon", label: "3D Cartoon", img: "/assets/influencer/option_cartoon_129.webp", promptVal: "3D cartoon movie style render, soft lighting, Pixar vibe" },
-          { id: "2d_illustration", label: "2D Illustration", img: "/assets/influencer/option_2d_illustration_130.webp", promptVal: "flat 2D illustration design, vector graphic style, concept art" }
-        ]
-      }
-    ]
-  }
+    ],
+  },
 };
 
-export default function AiInfluencerStudio({ apiKey }) {
-  const PERSIST_KEY = "hg_ai_influencer_studio_persistent_v2";
+export default function AiInfluencerStudio({ onGenerate, isGenerating: externalIsGenerating }) {
+  const [activeTab, setActiveTab] = useState("face");
 
-  // Active section selections state
-  const [selections, setSelections] = useState({
-    species: "human",
-    gender: "female",
-    ethnicity: "asian",
-    eye_color: "blue",
-    ears_horns: "normal_ears",
-    eye_details: "normal_eyes",
-    mouth_teeth: "normal_mouth",
-    tongue: "normal_tongue",
-
-    skin_patterns: "human_skin",
-    body_shape: "normal",
-    left_arm: "normal_arm",
-    right_arm: "normal_arm",
-    left_leg: "normal_leg",
-    right_leg: "normal_leg",
-
-    hair_style: "long_hair",
-    skin_details: "",
-    body_marks: "",
-    art_style: "hyper_realistic"
-  });
-
-  const [activeTab, setActiveTab] = useState("face"); // 'face' | 'body' | 'style'
-  const [activeSubcategory, setActiveSubcategory] = useState("species");
-  const [customDetail, setCustomDetail] = useState("in the streets of Tokyo at sunset, casual chic clothes, cinematic back-lighting");
-  const [aspectRatio, setAspectRatio] = useState("3:4"); // Default 3:4 aspect ratio
-  const [selectedModel, setSelectedModel] = useState("nano-banana-pro");
-  const [isArDropdownOpen, setIsArDropdownOpen] = useState(false);
-  const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
-
-  // Generation status
-  const [generating, setGenerating] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const [generateError, setGenerateError] = useState(null);
-  const [fullscreenUrl, setFullscreenUrl] = useState(null);
-
-  // History gallery
-  const [history, setHistory] = useState([]);
-
-  const timerRef = useRef(null);
-  const pendingRequestId = useRef(null);
-
-  // Auto-focus first subcategory when tab changes
-  useEffect(() => {
-    const config = TABS_CONFIG[activeTab];
-    if (config && config.subcategories.length > 0) {
-      setActiveSubcategory(config.subcategories[0].id);
-    }
-  }, [activeTab]);
-
-  // Load history from localStorage
-  useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem(PERSIST_KEY) || "[]");
-      if (Array.isArray(saved)) {
-        setHistory(saved);
-      }
-    } catch (_) {}
-  }, []);
-
-  const saveHistory = useCallback((items) => {
-    setHistory(items);
-    try {
-      localStorage.setItem(PERSIST_KEY, JSON.stringify(items));
-    } catch (_) {}
-  }, []);
-
-  // Timer helpers
-  const startTimer = () => {
-    setElapsedTime(0);
-    timerRef.current = setInterval(() => setElapsedTime((t) => t + 1), 1000);
-  };
-  const stopTimer = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  };
-  useEffect(() => () => stopTimer(), []);
-
-  // Handle selected option clicks
-  const selectOption = (subId, optId) => {
-    const isOptional = ["skin_details", "body_marks"].includes(subId);
-    setSelections(prev => ({
-      ...prev,
-      [subId]: prev[subId] === optId && isOptional ? "" : optId
-    }));
-  };
-
-  // Select a random image from each section/subcategory
-  const handleShuffle = () => {
-    const nextSelections = { ...selections };
-    Object.keys(TABS_CONFIG).forEach(tabKey => {
-      TABS_CONFIG[tabKey].subcategories.forEach(sub => {
-        const options = sub.options;
-        const randomOpt = options[Math.floor(Math.random() * options.length)];
-        
-        // Some sections are optional (e.g. skin_details, body_marks might end up empty)
-        const isOptional = ["skin_details", "body_marks"].includes(sub.id);
-        if (isOptional && Math.random() < 0.25) {
-          nextSelections[sub.id] = "";
-        } else {
-          nextSelections[sub.id] = randomOpt.id;
+  // Initialize with first option in each subcategory
+  const [selectedOptions, setSelectedOptions] = useState(() => {
+    const initial = {};
+    Object.keys(TABS_CONFIG).forEach((tabKey) => {
+      TABS_CONFIG[tabKey].subcategories.forEach((sub) => {
+        if (sub.options && sub.options.length > 0) {
+          initial[sub.id] = sub.options[0].id;
         }
       });
     });
-    setSelections(nextSelections);
-  };
+    return initial;
+  });
 
-  // Build the generation prompt dynamically in the background based on selections
-  const constructPrompt = () => {
+  const [aspectRatio, setAspectRatio] = useState("3:4");
+  const [customPromptText, setCustomPromptText] = useState("");
+  const [isGeneratingInternal, setIsGeneratingInternal] = useState(false);
+  const [generationResult, setGenerationResult] = useState(null);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const isGenerating = externalIsGenerating || isGeneratingInternal;
+
+  // Build character prompt from selections
+  const buildPromptFromSelections = useCallback(() => {
     const promptParts = [];
-
-    // Art style setting tone
-    const styleOpt = TABS_CONFIG.style.subcategories.find(s => s.id === "art_style")?.options.find(o => o.id === selections.art_style);
-    if (styleOpt) promptParts.push(styleOpt.promptVal);
-
-    // Identity details
-    const genderOpt = TABS_CONFIG.face.subcategories.find(s => s.id === "gender")?.options.find(o => o.id === selections.gender);
-    const speciesOpt = TABS_CONFIG.face.subcategories.find(s => s.id === "species")?.options.find(o => o.id === selections.species);
-    const ethnicityOpt = TABS_CONFIG.face.subcategories.find(s => s.id === "ethnicity")?.options.find(o => o.id === selections.ethnicity);
-
-    let identity = "virtual influencer character portrait";
-    if (genderOpt && speciesOpt) {
-      identity = `${genderOpt.promptVal} ${speciesOpt.promptVal} AI influencer`;
-    }
-    if (ethnicityOpt) {
-      identity += `, ${ethnicityOpt.promptVal}`;
-    }
-    promptParts.push(identity);
-
-    // Face details
-    const eyesOpt = TABS_CONFIG.face.subcategories.find(s => s.id === "eye_color")?.options.find(o => o.id === selections.eye_color);
-    const earsOpt = TABS_CONFIG.face.subcategories.find(s => s.id === "ears_horns")?.options.find(o => o.id === selections.ears_horns);
-    const eyeDetailOpt = TABS_CONFIG.face.subcategories.find(s => s.id === "eye_details")?.options.find(o => o.id === selections.eye_details);
-    const mouthOpt = TABS_CONFIG.face.subcategories.find(s => s.id === "mouth_teeth")?.options.find(o => o.id === selections.mouth_teeth);
-    const tongueOpt = TABS_CONFIG.face.subcategories.find(s => s.id === "tongue")?.options.find(o => o.id === selections.tongue);
-
-    if (eyesOpt) promptParts.push(eyesOpt.promptVal);
-    if (earsOpt && selections.ears_horns !== "normal_ears") promptParts.push(earsOpt.promptVal);
-    if (eyeDetailOpt && selections.eye_details !== "normal_eyes") promptParts.push(eyeDetailOpt.promptVal);
-    if (mouthOpt && selections.mouth_teeth !== "normal_mouth") promptParts.push(mouthOpt.promptVal);
-    if (tongueOpt && selections.tongue !== "normal_tongue") promptParts.push(tongueOpt.promptVal);
-
-    // Body details
-    const skinPatternOpt = TABS_CONFIG.body.subcategories.find(s => s.id === "skin_patterns")?.options.find(o => o.id === selections.skin_patterns);
-    const bodyShapeOpt = TABS_CONFIG.body.subcategories.find(s => s.id === "body_shape")?.options.find(o => o.id === selections.body_shape);
-    const leftArmOpt = TABS_CONFIG.body.subcategories.find(s => s.id === "left_arm")?.options.find(o => o.id === selections.left_arm);
-    const rightArmOpt = TABS_CONFIG.body.subcategories.find(s => s.id === "right_arm")?.options.find(o => o.id === selections.right_arm);
-    const leftLegOpt = TABS_CONFIG.body.subcategories.find(s => s.id === "left_leg")?.options.find(o => o.id === selections.left_leg);
-    const rightLegOpt = TABS_CONFIG.body.subcategories.find(s => s.id === "right_leg")?.options.find(o => o.id === selections.right_leg);
-
-    if (skinPatternOpt && selections.skin_patterns !== "human_skin") promptParts.push(skinPatternOpt.promptVal);
-    if (bodyShapeOpt && selections.body_shape !== "normal") promptParts.push(bodyShapeOpt.promptVal);
-    if (leftArmOpt && selections.left_arm !== "normal_arm") promptParts.push(leftArmOpt.promptVal);
-    if (rightArmOpt && selections.right_arm !== "normal_arm") promptParts.push(rightArmOpt.promptVal);
-    if (leftLegOpt && selections.left_leg !== "normal_leg") promptParts.push(leftLegOpt.promptVal);
-    if (rightLegOpt && selections.right_leg !== "normal_leg") promptParts.push(rightLegOpt.promptVal);
-
-    // Style details
-    const hairOpt = TABS_CONFIG.style.subcategories.find(s => s.id === "hair_style")?.options.find(o => o.id === selections.hair_style);
-    if (hairOpt) promptParts.push(hairOpt.promptVal);
-
-    if (selections.skin_details) {
-      const skinOpt = TABS_CONFIG.style.subcategories.find(s => s.id === "skin_details")?.options.find(o => o.id === selections.skin_details);
-      if (skinOpt) promptParts.push(`with ${skinOpt.promptVal}`);
-    }
-
-    if (selections.body_marks) {
-      const marksOpt = TABS_CONFIG.style.subcategories.find(s => s.id === "body_marks")?.options.find(o => o.id === selections.body_marks);
-      if (marksOpt) promptParts.push(`adorned with ${marksOpt.promptVal}`);
-    }
-
-    // Custom environment detail
-    if (customDetail.trim()) {
-      promptParts.push(customDetail.trim());
-    }
-
-    return promptParts.join(", ");
-  };
-
-  const handleGenerate = async () => {
-    if (generating) return;
-    setGenerating(true);
-    setGenerateError(null);
-    startTimer();
-
-    try {
-      const fullPrompt = constructPrompt();
-      const result = await generateImage(apiKey, {
-        model: selectedModel,
-        prompt: fullPrompt,
-        aspect_ratio: aspectRatio === "Auto" ? "1:1" : aspectRatio,
-        onRequestId: (id) => { pendingRequestId.current = id; }
+    Object.keys(TABS_CONFIG).forEach((tabKey) => {
+      TABS_CONFIG[tabKey].subcategories.forEach((sub) => {
+        const selectedId = selectedOptions[sub.id];
+        if (selectedId) {
+          const matchedOpt = sub.options.find((o) => o.id === selectedId);
+          if (matchedOpt && matchedOpt.promptVal) {
+            promptParts.push(matchedOpt.promptVal);
+          }
+        }
       });
+    });
 
-      const imageUrl = result.outputs?.[0] || result.url;
-      if (!imageUrl) throw new Error("API returned empty output");
-
-      const entry = {
-        id: result.id || Math.random().toString(36).substring(7),
-        url: imageUrl,
-        prompt: fullPrompt,
-        model: selectedModel,
-        aspectRatio,
-        selections: { ...selections },
-        timestamp: new Date().toISOString()
-      };
-
-      const nextHistory = [entry, ...history];
-      saveHistory(nextHistory);
-    } catch (e) {
-      console.error("[AiInfluencerStudio] Generation failed:", e);
-      setGenerateError(e.message || "Something went wrong. Please check your API key.");
-    } finally {
-      stopTimer();
-      setGenerating(false);
+    let finalPrompt =
+      "Ultra-realistic professional portrait photograph of an AI influencer character, 8k resolution, cinematic lighting, sharp detail";
+    if (promptParts.length > 0) {
+      finalPrompt += ", " + promptParts.join(", ");
     }
+    if (customPromptText.trim()) {
+      finalPrompt += ", " + customPromptText.trim();
+    }
+    return finalPrompt;
+  }, [selectedOptions, customPromptText]);
+
+  const handleOptionSelect = (subcatId, optionId) => {
+    setSelectedOptions((prev) => ({ ...prev, [subcatId]: optionId }));
   };
 
-  const downloadImageFile = async (url, filename) => {
+  // Shuffle: randomly pick one option per subcategory
+  const handleShuffle = () => {
+    const newSelections = {};
+    Object.keys(TABS_CONFIG).forEach((tabKey) => {
+      TABS_CONFIG[tabKey].subcategories.forEach((sub) => {
+        if (sub.options && sub.options.length > 0) {
+          const randomIndex = Math.floor(Math.random() * sub.options.length);
+          newSelections[sub.id] = sub.options[randomIndex].id;
+        }
+      });
+    });
+    setSelectedOptions(newSelections);
+  };
+
+  // Single-request generate
+  const handleGenerate = async () => {
+    if (isGenerating) return;
+    setIsGeneratingInternal(true);
+    setErrorMsg("");
+    setGenerationResult(null);
+
+    const fullPrompt = buildPromptFromSelections();
+
     try {
-      const res = await fetch(url);
-      const blob = await res.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = blobUrl;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(blobUrl);
-    } catch {
-      window.open(url, "_blank");
+      if (onGenerate) {
+        await onGenerate({ prompt: fullPrompt, aspectRatio, selections: selectedOptions });
+      } else {
+        const res = await generateImage({ prompt: fullPrompt, aspect_ratio: aspectRatio });
+        setGenerationResult(res);
+      }
+    } catch (err) {
+      console.error("Studio Generation Error:", err);
+      setErrorMsg(err?.message || "Failed to generate character image");
+    } finally {
+      setIsGeneratingInternal(false);
     }
   };
 
-  const deleteHistoryItem = (id, e) => {
-    e.stopPropagation();
-    if (confirm("Are you sure you want to delete this virtual influencer?")) {
-      const nextHistory = history.filter(item => item.id !== id);
-      saveHistory(nextHistory);
-    }
-  };
+  const tabKeys = Object.keys(TABS_CONFIG);
 
-  const activeTabConfig = TABS_CONFIG[activeTab];
-  const activeSub = activeTabConfig?.subcategories.find(s => s.id === activeSubcategory);
+  const getAspectRatioStyle = () => {
+    const map = { "3:4": "3/4", "1:1": "1/1", "9:16": "9/16", "16:9": "16/9" };
+    return map[aspectRatio] || "3/4";
+  };
 
   return (
-    <div className="flex flex-col h-full w-full bg-[#070709] overflow-hidden text-white font-sans">
-      
-      {/* Workspace Area */}
-      <div className="flex-1 flex flex-col md:flex-row min-h-0 relative">
-        
-        {/* Left Column: Attribute Selector Grid */}
-        <div className="w-full md:w-[480px] flex flex-col bg-[#0b0b0f] border-r border-white/5 shrink-0 min-h-0">
-          
-          {/* Top selection tabs (Face, Body, Style) */}
-          <div className="flex border-b border-white/5 bg-[#0e0e14] shrink-0">
-            {Object.keys(TABS_CONFIG).map((tabKey) => (
-              <button
-                key={tabKey}
-                onClick={() => setActiveTab(tabKey)}
-                className={`flex-1 py-3 text-xs font-black uppercase tracking-wider transition-all border-b-2 ${
-                  activeTab === tabKey
-                    ? "border-[#22d3ee] text-white bg-white/[0.02]"
-                    : "border-transparent text-white/40 hover:text-white/70 hover:bg-white/[0.01]"
-                }`}
-              >
-                {TABS_CONFIG[tabKey].label}
-              </button>
-            ))}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        background: "#0F1117",
+        color: "#fff",
+        overflow: "hidden",
+        fontFamily: "'Inter', 'Segoe UI', sans-serif",
+        userSelect: "none",
+      }}
+    >
+      {/* ── Header Bar ─────────────────────────────────────── */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "12px 24px",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          background: "rgba(20,23,34,0.9)",
+          backdropFilter: "blur(12px)",
+          flexShrink: 0,
+        }}
+      >
+        {/* Title */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 10,
+              background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 4px 12px rgba(124,58,237,0.35)",
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z" />
+            </svg>
           </div>
-
-          {/* Sub-categories Selector */}
-          <div className="p-3 border-b border-white/5 overflow-x-auto flex gap-1.5 scrollbar-none select-none bg-[#09090d]">
-            {activeTabConfig?.subcategories.map((sub) => (
-              <button
-                key={sub.id}
-                onClick={() => setActiveSubcategory(sub.id)}
-                className={`px-3 py-1.5 rounded-xl text-[10px] font-bold tracking-tight transition-all shrink-0 ${
-                  activeSubcategory === sub.id
-                    ? "bg-[#22d3ee] text-black shadow-md shadow-[#22d3ee]/20 font-black"
-                    : "bg-[#13131a] text-white/50 hover:text-white/80 hover:bg-[#1a1a24]"
-                }`}
-              >
-                {sub.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Option card grid view */}
-          <div className="flex-1 overflow-y-auto p-5 custom-scrollbar min-h-0">
-            {activeSub && (
-              <div className="grid grid-cols-3 gap-3">
-                {activeSub.options.map((opt) => {
-                  const isSelected = selections[activeSubcategory] === opt.id;
-                  return (
-                    <div
-                      key={opt.id}
-                      onClick={() => selectOption(activeSubcategory, opt.id)}
-                      className={`group relative aspect-square rounded-2xl overflow-hidden cursor-pointer border transition-all ${
-                        isSelected
-                          ? "border-[#22d3ee] bg-[#22d3ee]/5 shadow-[0_0_12px_rgba(34,211,238,0.15)]"
-                          : "border-white/5 bg-[#121217] hover:border-white/20 hover:scale-[1.01]"
-                      }`}
-                    >
-                      <img
-                        src={opt.img}
-                        alt={opt.label}
-                        className="w-full h-full object-cover select-none pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity"
-                        onError={(e) => {
-                          e.target.src = "/assets/influencer/human_0.webp"; // fallback
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent flex flex-col justify-end p-2.5">
-                        <span className="text-[10px] font-extrabold text-white leading-tight truncate">
-                          {opt.label}
-                        </span>
-                      </div>
-                      {isSelected && (
-                        <div className="absolute top-2 right-2 w-4 h-4 bg-[#22d3ee] rounded-full flex items-center justify-center border border-[#0b0b0f] shadow-lg shadow-black/60">
-                          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="4">
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+          <div>
+            <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "0.01em", color: "#fff" }}>
+              AI Influencer Studio
+            </div>
+            <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 1 }}>
+              Design a unique AI character with fine-grained controls
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Visualizer Canvas */}
-        <div className="flex-1 flex flex-col min-h-0 bg-[#070709] relative">
-          
-          <div className="flex-1 flex flex-col items-center justify-center p-6 min-h-0">
-            {/* Visualizer Canvas display */}
-            <div className="relative flex items-center justify-center w-full h-full max-h-[50vh] aspect-[3/4] rounded-2xl border border-white/5 bg-gradient-to-b from-[#111116] to-[#070709] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
-              {generating ? (
-                <div className="flex flex-col items-center gap-3.5 text-center">
-                  <div className="relative w-12 h-12 flex items-center justify-center">
-                    <span className="absolute animate-ping inline-flex h-full w-full rounded-full bg-[#22d3ee] opacity-35"></span>
-                    <span className="animate-spin inline-block text-[#22d3ee] text-2xl font-light">◌</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-xs font-black tracking-widest text-[#22d3ee] uppercase">Creating Character</span>
-                    <span className="text-[10px] text-white/40 mt-1 font-mono">{elapsedTime}s elapsed</span>
-                  </div>
-                </div>
-              ) : history[0] ? (
-                <div className="w-full h-full relative group">
-                  <img
-                    src={history[0].url}
-                    alt="Active AI Influencer"
-                    className="w-full h-full object-cover cursor-pointer select-none"
-                    onClick={() => setFullscreenUrl(history[0].url)}
-                  />
-                  <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => downloadImageFile(history[0].url, "influencer_character.png")}
-                      className="p-2 bg-black/60 hover:bg-black/95 rounded-xl border border-white/5 hover:border-white/20 transition-all text-white/80 hover:text-white"
-                      title="Download Image"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center gap-2.5 text-center text-white/35 max-w-xs p-6 select-none">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="opacity-40 animate-pulse">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 8v8M8 12h8" />
-                  </svg>
-                  <div>
-                    <h3 className="text-xs font-bold text-white/60">Influencer Workspace Empty</h3>
-                    <p className="text-[10px] text-white/40 mt-1">Select details or click Shuffle, describe your scene and click Generate to see the magic.</p>
-                  </div>
-                </div>
-              )}
-            </div>
+        {/* Controls Row */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {/* Shuffle Button */}
+          <button
+            onClick={handleShuffle}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              padding: "8px 14px",
+              borderRadius: 10,
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "#a78bfa",
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: "pointer",
+              transition: "all 0.15s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.1)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="16 3 21 3 21 8" />
+              <line x1="4" y1="20" x2="21" y2="3" />
+              <polyline points="21 16 21 21 16 21" />
+              <line x1="15" y1="15" x2="21" y2="21" />
+            </svg>
+            Shuffle
+          </button>
+
+          {/* Aspect Ratio */}
+          <div
+            style={{
+              display: "flex",
+              gap: 2,
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 10,
+              padding: 3,
+            }}
+          >
+            {["3:4", "1:1", "9:16", "16:9"].map((ratio) => (
+              <button
+                key={ratio}
+                onClick={() => setAspectRatio(ratio)}
+                style={{
+                  padding: "5px 10px",
+                  borderRadius: 7,
+                  border: "none",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                  background: aspectRatio === ratio ? "#7c3aed" : "transparent",
+                  color: aspectRatio === ratio ? "#fff" : "#9ca3af",
+                  boxShadow: aspectRatio === ratio ? "0 2px 8px rgba(124,58,237,0.4)" : "none",
+                }}
+              >
+                {ratio}
+              </button>
+            ))}
           </div>
 
-          {/* detailing input bar */}
-          <div className="p-5 border-t border-white/5 bg-[#0b0b0f] flex flex-col gap-4">
-            
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] font-black text-white/40 tracking-wider uppercase">Scene details & Outfit</label>
-              <textarea
-                value={customDetail}
-                onChange={(e) => setCustomDetail(e.target.value)}
-                placeholder="Describe clothes, setting, backdrop, camera lens..."
-                rows={2}
-                className="w-full bg-[#13131a] border border-white/5 rounded-xl p-3 text-xs text-white/90 placeholder-white/20 outline-none focus:border-[#22d3ee]/40 focus:ring-1 focus:ring-[#22d3ee]/20 transition-all resize-none custom-scrollbar"
+          {/* Generate Button */}
+          <button
+            onClick={handleGenerate}
+            disabled={isGenerating}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 7,
+              padding: "9px 20px",
+              borderRadius: 10,
+              background: isGenerating ? "rgba(124,58,237,0.4)" : "linear-gradient(135deg, #7c3aed, #4f46e5)",
+              border: "none",
+              color: "#fff",
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: isGenerating ? "not-allowed" : "pointer",
+              boxShadow: isGenerating ? "none" : "0 4px 14px rgba(124,58,237,0.4)",
+              transition: "all 0.15s",
+              opacity: isGenerating ? 0.7 : 1,
+            }}
+          >
+            {isGenerating ? (
+              <>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  style={{ animation: "spin 1s linear infinite" }}
+                >
+                  <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeOpacity="0.3" />
+                  <path d="M21 12a9 9 0 00-9-9" />
+                </svg>
+                Generating…
+              </>
+            ) : (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Generate Character
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Main Content ────────────────────────────────────── */}
+      <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+        {/* Left: Customizer Panel */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+          {/* Tab Nav */}
+          <div
+            style={{
+              display: "flex",
+              gap: 4,
+              padding: "12px 24px 0",
+              borderBottom: "1px solid rgba(255,255,255,0.07)",
+              background: "rgba(20,23,34,0.5)",
+              flexShrink: 0,
+            }}
+          >
+            {tabKeys.map((tabKey) => {
+              const tab = TABS_CONFIG[tabKey];
+              const isActive = activeTab === tabKey;
+              return (
+                <button
+                  key={tabKey}
+                  onClick={() => setActiveTab(tabKey)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 7,
+                    padding: "10px 18px 12px",
+                    borderRadius: "10px 10px 0 0",
+                    border: "none",
+                    borderBottom: isActive ? "2px solid #7c3aed" : "2px solid transparent",
+                    background: isActive ? "rgba(124,58,237,0.12)" : "transparent",
+                    color: isActive ? "#a78bfa" : "#6b7280",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {tab.label}
+                  <span
+                    style={{
+                      fontSize: 10,
+                      padding: "2px 7px",
+                      borderRadius: 20,
+                      background: isActive ? "rgba(124,58,237,0.25)" : "rgba(255,255,255,0.07)",
+                      color: isActive ? "#c4b5fd" : "#6b7280",
+                    }}
+                  >
+                    {tab.subcategories?.length}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Options Grid */}
+          <div style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: 28 }}>
+            {TABS_CONFIG[activeTab]?.subcategories?.map((subcat) => (
+              <div key={subcat.id}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: 12,
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: "#9ca3af",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                    }}
+                  >
+                    {subcat.label}
+                  </span>
+                  <span style={{ fontSize: 10, color: "#4b5563" }}>
+                    {subcat.options?.length} options
+                  </span>
+                </div>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(88px, 1fr))",
+                    gap: 10,
+                  }}
+                >
+                  {subcat.options?.map((opt) => {
+                    const isSelected = selectedOptions[subcat.id] === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        onClick={() => handleOptionSelect(subcat.id, opt.id)}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          padding: 8,
+                          borderRadius: 12,
+                          border: isSelected
+                            ? "1.5px solid #7c3aed"
+                            : "1.5px solid rgba(255,255,255,0.06)",
+                          background: isSelected
+                            ? "rgba(124,58,237,0.15)"
+                            : "rgba(22,25,38,0.9)",
+                          cursor: "pointer",
+                          transition: "all 0.15s",
+                          boxShadow: isSelected ? "0 0 0 3px rgba(124,58,237,0.15), 0 4px 12px rgba(124,58,237,0.2)" : "none",
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isSelected) {
+                            e.currentTarget.style.border = "1.5px solid rgba(255,255,255,0.15)";
+                            e.currentTarget.style.background = "rgba(30,33,50,0.95)";
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isSelected) {
+                            e.currentTarget.style.border = "1.5px solid rgba(255,255,255,0.06)";
+                            e.currentTarget.style.background = "rgba(22,25,38,0.9)";
+                          }
+                        }}
+                      >
+                        {/* Thumbnail */}
+                        <div
+                          style={{
+                            width: "100%",
+                            aspectRatio: "1/1",
+                            borderRadius: 8,
+                            overflow: "hidden",
+                            background: "#000",
+                            marginBottom: 7,
+                            position: "relative",
+                          }}
+                        >
+                          <img
+                            src={opt.img}
+                            alt={opt.label}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              display: "block",
+                              transition: "transform 0.3s",
+                            }}
+                            loading="lazy"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = "/assets/influencer_studio/character_type_human.webp";
+                            }}
+                          />
+                          {isSelected && (
+                            <div
+                              style={{
+                                position: "absolute",
+                                top: 5,
+                                right: 5,
+                                width: 18,
+                                height: 18,
+                                borderRadius: "50%",
+                                background: "#7c3aed",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                boxShadow: "0 2px 6px rgba(124,58,237,0.5)",
+                              }}
+                            >
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Label */}
+                        <span
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 600,
+                            color: isSelected ? "#c4b5fd" : "#9ca3af",
+                            textAlign: "center",
+                            lineHeight: 1.3,
+                            maxWidth: "100%",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {opt.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right: Preview Panel */}
+        <div
+          style={{
+            width: 340,
+            borderLeft: "1px solid rgba(255,255,255,0.07)",
+            background: "#12141D",
+            display: "flex",
+            flexDirection: "column",
+            padding: 20,
+            overflowY: "auto",
+            flexShrink: 0,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              color: "#6b7280",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              marginBottom: 14,
+            }}
+          >
+            Character Preview
+          </div>
+
+          {/* Preview image box */}
+          <div
+            style={{
+              width: "100%",
+              aspectRatio: getAspectRatioStyle(),
+              maxHeight: 420,
+              borderRadius: 16,
+              border: "1px solid rgba(255,255,255,0.08)",
+              background: "#181B26",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              marginBottom: 16,
+              position: "relative",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+            }}
+          >
+            {generationResult?.url ? (
+              <img
+                src={generationResult.url}
+                alt="Generated AI Character"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
-            </div>
-
-            {/* controls row */}
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              {/* model & AR options */}
-              <div className="flex items-center gap-2">
-                
-                {/* Model dropdown */}
-                <div className="relative">
-                  <button
-                    onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
-                    className="h-9 px-3 bg-[#13131a] border border-white/5 text-xs text-white/70 hover:text-white rounded-xl flex items-center gap-1.5 transition-all"
-                  >
-                    <span>{selectedModel === "nano-banana-pro" ? "Nano Banana Pro" : "Nano Banana 2"}</span>
-                    <span className="text-[8px] opacity-40">▼</span>
-                  </button>
-                  {isModelDropdownOpen && (
-                    <div className="absolute bottom-[calc(100%+8px)] left-0 bg-[#0f0f12] border border-white/10 rounded-xl p-1.5 shadow-2xl flex flex-col gap-1 z-30 min-w-[130px]">
-                      {["nano-banana-pro", "nano-banana-2"].map(m => (
-                        <button
-                          key={m}
-                          onClick={() => {
-                            setSelectedModel(m);
-                            setIsModelDropdownOpen(false);
-                          }}
-                          className={`text-left text-[11px] font-bold p-2 px-3 rounded-lg transition-all ${
-                            selectedModel === m ? "bg-[#22d3ee]/10 text-white" : "hover:bg-white/5 text-white/60"
-                          }`}
-                        >
-                          {m === "nano-banana-pro" ? "Nano Banana Pro" : "Nano Banana 2"}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Aspect ratio selector */}
-                <div className="relative">
-                  <button
-                    onClick={() => setIsArDropdownOpen(!isArDropdownOpen)}
-                    className="h-9 px-3 bg-[#13131a] border border-white/5 text-xs text-white/70 hover:text-white rounded-xl flex items-center gap-1.5 transition-all"
-                  >
-                    <span>AR: {aspectRatio}</span>
-                    <span className="text-[8px] opacity-40">▼</span>
-                  </button>
-                  {isArDropdownOpen && (
-                    <div className="absolute bottom-[calc(100%+8px)] left-0 bg-[#0f0f12] border border-white/10 rounded-xl p-1.5 shadow-2xl flex flex-col gap-1 z-30 min-w-[100px]">
-                      {["3:4", "9:16", "1:1", "16:9"].map(r => (
-                        <button
-                          key={r}
-                          onClick={() => {
-                            setAspectRatio(r);
-                            setIsArDropdownOpen(false);
-                          }}
-                          className={`text-left text-[11px] font-bold p-2 px-3 rounded-lg transition-all ${
-                            aspectRatio === r ? "bg-[#22d3ee]/10 text-white" : "hover:bg-white/5 text-white/60"
-                          }`}
-                        >
-                          {r}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+            ) : isGenerating ? (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: 24 }}>
+                <div
+                  style={{
+                    width: 36,
+                    height: 36,
+                    border: "3px solid rgba(124,58,237,0.3)",
+                    borderTop: "3px solid #7c3aed",
+                    borderRadius: "50%",
+                    animation: "spin 1s linear infinite",
+                  }}
+                />
+                <span style={{ fontSize: 11, color: "#a78bfa", textAlign: "center" }}>
+                  Generating your character…
+                </span>
               </div>
-
-              {/* Action buttons (Shuffle & Generate) */}
-              <div className="flex items-center gap-2">
-                
-                {/* Shuffle/Randomizer button */}
-                <button
-                  onClick={handleShuffle}
-                  title="Randomize selections"
-                  className="h-9 w-9 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 active:scale-[0.95] text-white/70 hover:text-white rounded-xl flex items-center justify-center transition-all shadow-md"
-                >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M4 4l5 5M15 15l6 6" />
-                  </svg>
-                </button>
-
-                {/* Generate Trigger */}
-                <button
-                  onClick={handleGenerate}
-                  disabled={generating || !customDetail.trim()}
-                  className="h-9 px-6 bg-[#b5f500] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-black font-extrabold text-xs rounded-xl flex items-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-[#b5f500]/10"
-                >
-                  {generating ? (
-                    <>
-                      <span className="animate-spin inline-block">◌</span>
-                      Creating...
-                    </>
-                  ) : (
-                    <>
-                      Generate Influencer
-                      <span>✦</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-            
-            {generateError && (
-              <div className="text-[11px] font-bold text-red-500 bg-red-500/10 p-2.5 rounded-xl border border-red-500/10">
-                {generateError}
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 10,
+                  padding: 24,
+                  color: "#374151",
+                  textAlign: "center",
+                }}
+              >
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.35 }}>
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+                <span style={{ fontSize: 11, color: "#4b5563" }}>
+                  Select options and click<br />Generate to create your character
+                </span>
               </div>
             )}
+          </div>
+
+          {/* Additional Prompt */}
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#6b7280", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              Additional Details
+            </label>
+            <textarea
+              value={customPromptText}
+              onChange={(e) => setCustomPromptText(e.target.value)}
+              placeholder="e.g. neon cyberpunk lighting, luxury penthouse background, dramatic shadows…"
+              style={{
+                width: "100%",
+                height: 80,
+                background: "#181B26",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: 10,
+                padding: "10px 12px",
+                color: "#e5e7eb",
+                fontSize: 11,
+                resize: "none",
+                outline: "none",
+                boxSizing: "border-box",
+                fontFamily: "inherit",
+                lineHeight: 1.5,
+              }}
+              onFocus={(e) => (e.target.style.border = "1px solid rgba(124,58,237,0.5)")}
+              onBlur={(e) => (e.target.style.border = "1px solid rgba(255,255,255,0.08)")}
+            />
+          </div>
+
+          {/* Error */}
+          {errorMsg && (
+            <div
+              style={{
+                padding: "10px 12px",
+                borderRadius: 10,
+                background: "rgba(239,68,68,0.1)",
+                border: "1px solid rgba(239,68,68,0.2)",
+                color: "#f87171",
+                fontSize: 11,
+                lineHeight: 1.5,
+              }}
+            >
+              {errorMsg}
+            </div>
+          )}
+
+          {/* Selection Summary */}
+          <div style={{ marginTop: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: "#6b7280", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>
+              Selections
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              {Object.keys(TABS_CONFIG).map((tabKey) =>
+                TABS_CONFIG[tabKey].subcategories.map((sub) => {
+                  const selId = selectedOptions[sub.id];
+                  const opt = sub.options.find((o) => o.id === selId);
+                  if (!opt) return null;
+                  return (
+                    <div
+                      key={sub.id}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "4px 0",
+                        borderBottom: "1px solid rgba(255,255,255,0.03)",
+                      }}
+                    >
+                      <span style={{ fontSize: 10, color: "#6b7280" }}>{sub.label}</span>
+                      <span style={{ fontSize: 10, color: "#c4b5fd", fontWeight: 600 }}>{opt.label}</span>
+                    </div>
+                  );
+                })
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Generation History Bottom Bar */}
-      {history.length > 0 && (
-        <div className="border-t border-white/5 bg-[#0a0a0d] p-4 shrink-0 flex flex-col gap-3 z-10">
-          <span className="text-[10px] font-black text-white/30 tracking-widest uppercase">Characters Library</span>
-          <div className="flex gap-4 overflow-x-auto custom-scrollbar pb-1">
-            {history.map((item) => (
-              <div
-                key={item.id}
-                className="relative h-24 aspect-[3/4] rounded-xl overflow-hidden cursor-pointer border border-white/5 bg-black hover:border-[#b5f500]/40 transition-all flex-shrink-0 group/hist"
-                onClick={() => setFullscreenUrl(item.url)}
-              >
-                <img src={item.url} alt="Past Character" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/hist:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      downloadImageFile(item.url, "influencer_character.png");
-                    }}
-                    className="p-1.5 bg-black/60 rounded-md hover:bg-black text-white/80 hover:text-white"
-                  >
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                    </svg>
-                  </button>
-                  <button
-                    onClick={(e) => deleteHistoryItem(item.id, e)}
-                    className="p-1.5 bg-red-950/60 rounded-md hover:bg-red-900 text-red-400 hover:text-red-300"
-                  >
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <polyline points="3 6 5 6 21 6" />
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Fullscreen Overlay Viewer */}
-      {fullscreenUrl && (
-        <div
-          onClick={() => setFullscreenUrl(null)}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 cursor-pointer"
-        >
-          <div className="relative max-w-4xl max-h-[90vh] aspect-[3/4] rounded-2xl overflow-hidden border border-white/10 bg-black">
-            <img src={fullscreenUrl} alt="Fullscreen View" className="w-full h-full object-contain" />
-            <button
-              onClick={() => setFullscreenUrl(null)}
-              className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-xl bg-black/60 hover:bg-black border border-white/10 text-white/80 hover:text-white"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Spin animation */}
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

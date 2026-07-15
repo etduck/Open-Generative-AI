@@ -100,6 +100,13 @@ export default function StandaloneShell() {
     setActiveTab(tabId);
   };
 
+  const handleTabClick = (e, tabId) => {
+    if (e.button === 0 && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
+      e.preventDefault();
+      handleTabChange(tabId);
+    }
+  };
+
   // Auto-hide header when inside a specific workflow view or design agent
   useEffect(() => {
     const isEditingWorkflow = (activeTab === 'workflows' || !!idFromParams) && urlWorkflowId;
@@ -306,9 +313,10 @@ export default function StandaloneShell() {
             
             <nav className="flex items-center gap-4 overflow-x-auto scrollbar-none w-full lg:w-auto h-full px-4 lg:px-0">
               {TABS.map((tab) => (
-                <button
+                <a
                   key={tab.id}
-                  onClick={() => handleTabChange(tab.id)}
+                  href={`/studio/${tab.id}`}
+                  onClick={(e) => handleTabClick(e, tab.id)}
                   className={`relative text-[13px] font-medium transition-all duration-300 whitespace-nowrap px-1 flex-shrink-0 flex items-center h-full ${
                     activeTab === tab.id
                       ? 'text-[#22d3ee]'
@@ -319,7 +327,7 @@ export default function StandaloneShell() {
                   {activeTab === tab.id && (
                     <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#22d3ee] to-[#a855f7] rounded-full shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
                   )}
-                </button>
+                </a>
               ))}
             </nav>
             

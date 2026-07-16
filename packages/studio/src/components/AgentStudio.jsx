@@ -27,7 +27,7 @@ function AgentCard({ agent, onClick, onEdit }) {
     <div className="group relative aspect-[4/5] rounded-xl cursor-pointer">
       <div
         onClick={() => onClick(agent)}
-        className="absolute inset-0 rounded-xl overflow-hidden border border-white/5 bg-[#0a0a0a] transition-all group-hover:border-[#22d3ee]/30 group-hover:scale-[1.02] shadow-2xl"
+        className="absolute inset-0 rounded-xl overflow-hidden border border-ink/10 bg-surface transition-all group-hover:border-accent/30 group-hover:scale-[1.02] shadow-2xl"
       >
         {agent.icon_url ? (
           <img
@@ -42,16 +42,16 @@ function AgentCard({ agent, onClick, onEdit }) {
             </svg>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-app-bg via-app-bg to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-4">
-          <div className="text-[10px] font-bold text-[#22d3ee] uppercase tracking-wider mb-1 opacity-80">
+          <div className="text-[10px] font-bold text-accent uppercase tracking-wider mb-1 opacity-80">
             {agent.category || "AI Assistant"}
           </div>
-          <h3 className="text-sm font-bold text-white truncate group-hover:text-[#22d3ee] transition-colors">
+          <h3 className="text-sm font-bold text-ink truncate group-hover:text-accent transition-colors">
             {agent.name || "Unnamed Agent"}
           </h3>
           {agent.owner_username && (
-            <p className="text-[9px] text-white/40 mt-1 uppercase tracking-tighter font-black">
+            <p className="text-[9px] text-ink/65 mt-1 uppercase tracking-tighter font-black">
               By {agent.owner_username}
             </p>
           )}
@@ -64,7 +64,7 @@ function AgentCard({ agent, onClick, onEdit }) {
             e.stopPropagation();
             onEdit(agent);
           }}
-          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-[#22d3ee] hover:text-black hover:scale-110 z-10"
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 border border-ink/15 flex items-center justify-center text-ink opacity-0 group-hover:opacity-100 transition-all hover:bg-accent hover:text-ink hover:scale-110 z-10"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -83,14 +83,14 @@ function ConversationCard({ conv, onClick }) {
   return (
     <div
       onClick={() => onClick(agentSlug, conv.id)}
-      className="group flex flex-col gap-3 bg-white/[0.03] border border-white/5 rounded-xl p-4 hover:border-[#22d3ee]/20 hover:bg-white/5 transition-all cursor-pointer"
+      className="group flex flex-col gap-3 bg-ink/5 border border-ink/10 rounded-xl p-4 hover:border-accent/20 hover:bg-ink/5 transition-all cursor-pointer"
     >
       <div className="flex items-center gap-3">
-        <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-white/5 border border-white/5 shrink-0">
+        <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-ink/5 border border-ink/10 shrink-0">
           {conv.agent_icon_url ? (
             <img src={conv.agent_icon_url} alt={conv.agent_name || "Agent"} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-white/20">
+            <div className="w-full h-full flex items-center justify-center text-ink/45">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
               </svg>
@@ -98,15 +98,15 @@ function ConversationCard({ conv, onClick }) {
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[10px] font-black text-[#22d3ee] uppercase tracking-wider truncate">
+          <p className="text-[10px] font-black text-accent uppercase tracking-wider truncate">
             {conv.agent_name || "Unknown Agent"}
           </p>
-          <p className="text-sm font-bold text-white truncate" title={displayTitle}>
+          <p className="text-sm font-bold text-ink truncate" title={displayTitle}>
             {displayTitle}
           </p>
         </div>
       </div>
-      <div className="flex items-center justify-between pt-2 border-t border-white/5 mt-auto text-[10px] text-white/30 font-medium">
+      <div className="flex items-center justify-between pt-2 border-t border-ink/10 mt-auto text-[10px] text-ink/55 font-medium">
         <span>{timeAgo(conv.updated_at)}</span>
         {conv.message_count != null && <span>{conv.message_count} msgs</span>}
       </div>
@@ -188,22 +188,22 @@ export default function AgentStudio({ apiKey }) {
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
-    <div className="h-full flex flex-col bg-[#030303] text-white">
+    <div className="h-full flex flex-col bg-app-bg text-ink">
       {/* Header */}
-      <div className="flex-shrink-0 h-16 border-b border-white/5 flex items-center justify-between px-8 bg-black/40">
+      <div className="flex-shrink-0 h-16 border-b border-ink/10 flex items-center justify-between px-8 bg-ink/10">
         <div className="flex items-center gap-8 h-full">
-          <h2 className="text-sm font-black uppercase tracking-[0.2em] text-[#22d3ee]">
+          <h2 className="text-sm font-black uppercase tracking-[0.2em] text-accent">
             Agents
           </h2>
-          <div className="flex gap-1 bg-white/5 p-1 rounded-xl">
+          <div className="flex gap-1 bg-ink/5 p-1 rounded-xl">
             {TABS.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveMainTab(tab)}
                 className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${
                   activeMainTab === tab
-                    ? "bg-white text-black shadow-xl"
-                    : "text-white/40 hover:text-white hover:bg-white/5"
+                    ? "bg-ink text-white shadow-xl"
+                    : "text-ink/65 hover:text-ink hover:bg-ink/5"
                 }`}
               >
                 {tab.replace(/-/g, " ")}
@@ -214,7 +214,7 @@ export default function AgentStudio({ apiKey }) {
 
         <button
           onClick={handleCreateAgent}
-          className="px-6 py-2 bg-[#22d3ee] text-black text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-[#ebff66] transition-all active:scale-95 flex items-center gap-2"
+          className="px-6 py-2 bg-accent text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-accent-hover transition-all active:scale-95 flex items-center gap-2"
         >
           <span className="text-sm">+</span>
           Create
@@ -225,10 +225,10 @@ export default function AgentStudio({ apiKey }) {
       <div className="flex-1 overflow-y-auto custom-scrollbar p-8">
         {loading ? (
           <div className="h-full flex items-center justify-center">
-            <div className="w-10 h-10 border-2 border-white/5 border-t-[#22d3ee] rounded-full animate-spin" />
+            <div className="w-10 h-10 border-2 border-ink/10 border-t-accent rounded-full animate-spin" />
           </div>
         ) : error ? (
-          <div className="h-full flex flex-col items-center justify-center text-white/20 gap-4">
+          <div className="h-full flex flex-col items-center justify-center text-ink/45 gap-4">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="8" x2="12" y2="12" />
@@ -237,7 +237,7 @@ export default function AgentStudio({ apiKey }) {
             <p className="text-xs font-bold uppercase tracking-widest">{error}</p>
             <button
               onClick={() => setActiveMainTab(activeMainTab)} // retrigger effect
-              className="text-[10px] text-white/40 hover:text-white border border-white/10 px-4 py-2 rounded-lg transition-colors"
+              className="text-[10px] text-ink/65 hover:text-ink border border-ink/15 px-4 py-2 rounded-lg transition-colors"
             >
               Retry
             </button>
@@ -245,14 +245,14 @@ export default function AgentStudio({ apiKey }) {
         ) : activeMainTab === "my-chats" ? (
           // ── My Chats view ─────────────────────────────────────────────────
           conversations.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-white/10 gap-4">
+            <div className="h-full flex flex-col items-center justify-center text-ink/45 gap-4">
               <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
               </svg>
               <p className="text-[10px] font-black uppercase tracking-[0.3em]">No chats yet</p>
               <button
                 onClick={() => setActiveMainTab("templates")}
-                className="text-[10px] text-[#22d3ee] hover:text-white border border-[#22d3ee]/20 hover:border-white/20 px-4 py-2 rounded-lg transition-colors"
+                className="text-[10px] text-accent hover:text-ink border border-accent/20 hover:border-ink/25 px-4 py-2 rounded-lg transition-colors"
               >
                 Browse Templates
               </button>
@@ -271,7 +271,7 @@ export default function AgentStudio({ apiKey }) {
         ) : (
           // ── Agents grid (templates / my-agents) ───────────────────────────
           agents.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-white/10 gap-4">
+            <div className="h-full flex flex-col items-center justify-center text-ink/45 gap-4">
               <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
               </svg>

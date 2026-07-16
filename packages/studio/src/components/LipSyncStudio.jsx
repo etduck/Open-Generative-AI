@@ -53,7 +53,7 @@ function MediaPickerButton({
   const borderClass =
     uploadState === UPLOAD_STATE.READY
       ? "border-primary/60 bg-primary/5"
-      : "border-white/[0.03] bg-white/[0.03] hover:bg-white/[0.06] hover:border-primary/40";
+      : "border-ink/10 bg-ink/5 hover:bg-ink/10 hover:border-primary/40";
 
   return (
     <button
@@ -92,7 +92,7 @@ function MediaPickerButton({
               stroke="currentColor"
               strokeWidth="2"
               fill="transparent"
-              className="text-white/10"
+              className="text-ink/45"
             />
             <circle
               cx="16"
@@ -201,7 +201,7 @@ function Dropdown({ isOpen, items, selectedId, onSelect, onClose, anchorRef }) {
         overflowY: "auto",
         ...style,
       }}
-      className="bg-[#111] border border-white/10 rounded-lg shadow-3xl p-2 custom-scrollbar w-[calc(100vw-3rem)] max-w-xs"
+      className="bg-surface border border-ink/15 rounded-lg shadow-3xl p-2 custom-scrollbar w-[calc(100vw-3rem)] max-w-xs"
     >
       {items.map((item) => (
         <button
@@ -211,10 +211,10 @@ function Dropdown({ isOpen, items, selectedId, onSelect, onClose, anchorRef }) {
             onSelect(item);
             onClose();
           }}
-          className={`w-full text-left px-4 py-2 rounded text-sm transition-all hover:bg-white/10 ${
+          className={`w-full text-left px-4 py-2 rounded text-sm transition-all hover:bg-ink/10 ${
             item.id === selectedId
               ? "text-primary font-bold bg-primary/5"
-              : "text-white font-medium"
+              : "text-ink font-medium"
           }`}
         >
           <div>{item.name}</div>
@@ -239,7 +239,7 @@ function HistoryThumb({ entry, isActive, onSelect, onDownload }) {
       className={`relative group/thumb cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-300 ${
         isActive
           ? "border-primary shadow-glow"
-          : "border-white/10 hover:border-white/30"
+          : "border-ink/15 hover:border-ink/30"
       }`}
     >
       <video
@@ -255,7 +255,7 @@ function HistoryThumb({ entry, isActive, onSelect, onDownload }) {
             e.stopPropagation();
             onDownload(entry);
           }}
-          className="p-1.5 bg-primary rounded-lg text-black hover:scale-110 transition-transform"
+          className="p-1.5 bg-primary rounded-lg text-white hover:scale-110 transition-transform"
           title="Download"
         >
           <svg
@@ -754,11 +754,11 @@ export default function LipSyncStudio({
             {history.map((entry, idx) => (
               <div
                 key={entry.id || idx}
-                className="relative group rounded-2xl overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
+                className="relative group rounded-2xl overflow-hidden border border-ink/15 bg-surface shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
               >
                 <video
                   src={entry.url}
-                  className="w-full aspect-video object-cover bg-black/40 cursor-pointer hover:opacity-80 transition-opacity"
+                  className="w-full aspect-video object-cover bg-ink/10 cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => setFullscreenUrl(entry.url)}
                   controls={false}
                   loop
@@ -780,7 +780,7 @@ export default function LipSyncStudio({
                       e.stopPropagation();
                       setFullscreenUrl(entry.url);
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-primary hover:text-black transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-primary hover:text-ink transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <polyline points="15 3 21 3 21 9" />
@@ -796,7 +796,7 @@ export default function LipSyncStudio({
                       e.stopPropagation();
                       downloadFile(entry.url, `lipsync-${entry.id || idx}.mp4`);
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-primary hover:text-black transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-primary hover:text-ink transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
@@ -811,7 +811,7 @@ export default function LipSyncStudio({
                         setInternalHistory(prev => prev.filter((_, i) => i !== idx));
                       }
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-red-400 hover:bg-red-500 hover:text-white transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-red-600 hover:bg-red-500 hover:text-white transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <polyline points="3 6 5 6 21 6" />
@@ -823,13 +823,13 @@ export default function LipSyncStudio({
                 </div>
 
                 {/* Details */}
-                <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-white/5 flex-1 flex flex-col justify-between gap-2">
+                <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-ink/10 flex-1 flex flex-col justify-between gap-2">
                   <div className="flex items-center justify-between flex-wrap gap-1">
                     <span className="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded border border-primary/20 whitespace-nowrap">
                       {entry.model?.name || entry.model || "Lip Sync"}
                     </span>
                     {entry.resolution && (
-                      <span className="text-[10px] text-white/40">{entry.resolution}</span>
+                      <span className="text-[10px] text-ink/65">{entry.resolution}</span>
                     )}
                   </div>
                 </div>
@@ -840,28 +840,28 @@ export default function LipSyncStudio({
           <div className="flex flex-col items-center justify-center h-full animate-fade-in-up transition-all duration-700 min-h-[50vh]">
             {/* Overlapping floating cards */}
             <div className="flex items-center justify-center gap-1.5 md:gap-3 mb-10 select-none scale-90 sm:scale-100">
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/sdxl-image.avif"
                   alt="Creative asset 1"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/chroma-image.avif"
                   alt="Creative asset 2"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-white/10 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-ink/15 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/neta-lumina.avif"
                   alt="Creative asset 3"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/perfect-pony-xl.avif"
                   alt="Creative asset 4"
@@ -871,12 +871,12 @@ export default function LipSyncStudio({
             </div>
 
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-center px-4 flex flex-col items-center">
-              <span className="text-white font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
-              <span className="text-[#22d3ee] font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
+              <span className="text-ink font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
+              <span className="text-accent font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
                 LIP SYNC STUDIO
               </span>
             </h1>
-            <p className="text-white/40 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
+            <p className="text-ink/65 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
               Sync any voice with any face video to create premium talking avatars and videos.
             </p>
           </div>
@@ -885,7 +885,7 @@ export default function LipSyncStudio({
 
       {/* ── BOTTOM PROMPT BAR ── */}
       <div className="absolute bottom-4 w-full max-w-[95%] lg:max-w-4xl z-40 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-        <div className="w-full bg-gradient-to-b from-[#18181c]/90 via-[#0f0f12]/90 to-[#0c0c0e]/95 backdrop-blur-2xl rounded-[2rem] border border-white/[0.08] p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
+        <div className="w-full bg-gradient-to-b from-surface/90 via-surface/90 to-surface/95 backdrop-blur-2xl rounded-[2rem] border border-ink/10 p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
           {/* Mode toggle row */}
           <div className="flex items-center gap-2 px-3">
             <button
@@ -893,8 +893,8 @@ export default function LipSyncStudio({
               onClick={switchToImage}
               className={`px-3 py-1 rounded-md text-xs font-bold transition-all border ${
                 inputMode === "image"
-                  ? "border-[#22d3ee]/60 bg-[#22d3ee]/5 text-[#22d3ee]"
-                  : "border-white/[0.03] bg-white/[0.03] text-white/40 hover:border-white/20 hover:text-white"
+                  ? "border-accent/60 bg-accent/5 text-accent"
+                  : "border-ink/10 bg-ink/5 text-ink/65 hover:border-ink/25 hover:text-ink"
               }`}
             >
               🖼 Portrait Image
@@ -904,8 +904,8 @@ export default function LipSyncStudio({
               onClick={switchToVideo}
               className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all border ${
                 inputMode === "video"
-                  ? "border-[#22d3ee]/60 bg-[#22d3ee]/5 text-[#22d3ee]"
-                  : "border-white/[0.03] bg-white/[0.03] text-white/40 hover:border-white/20 hover:text-white"
+                  ? "border-accent/60 bg-accent/5 text-accent"
+                  : "border-ink/10 bg-ink/5 text-ink/65 hover:border-ink/25 hover:text-ink"
               }`}
             >
               🎬 Video
@@ -928,7 +928,7 @@ export default function LipSyncStudio({
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
-                      className="text-white/40 group-hover:text-[#22d3ee] transition-colors"
+                      className="text-ink/65 group-hover:text-accent transition-colors"
                     >
                       <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                       <circle cx="8.5" cy="8.5" r="1.5" />
@@ -956,7 +956,7 @@ export default function LipSyncStudio({
                   accept="video/*"
                   label="Video"
                   icon={
-                    <VideoIcon className="text-white/40 group-hover:text-[#22d3ee] transition-colors" />
+                    <VideoIcon className="text-ink/65 group-hover:text-accent transition-colors" />
                   }
                   onUpload={handleVideoPick}
                   onClear={() => {
@@ -978,7 +978,7 @@ export default function LipSyncStudio({
                 accept="audio/*"
                 label="Audio"
                 icon={
-                  <MicIcon className="text-white/40 group-hover:text-[#22d3ee] transition-colors" />
+                  <MicIcon className="text-ink/65 group-hover:text-accent transition-colors" />
                 }
                 onUpload={handleAudioPick}
                 onClear={() => {
@@ -1002,14 +1002,14 @@ export default function LipSyncStudio({
                 value={prompt}
                 onChange={handlePromptInput}
                 placeholder="Describe speech style..."
-                className="w-full bg-transparent border-none text-white text-sm placeholder:text-white/20 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] md:max-h-[250px] overflow-y-auto custom-scrollbar disabled:opacity-40"
+                className="w-full bg-transparent border-none text-ink text-sm placeholder:text-ink/45 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] md:max-h-[250px] overflow-y-auto custom-scrollbar disabled:opacity-40"
                 rows={1}
               />
             </div>
           </div>
 
           {/* Bottom controls row */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-white/[0.03] relative">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-ink/10 relative">
             <div className="flex items-center gap-2 px-1">
               {/* Model selector */}
               <div className="relative">
@@ -1022,14 +1022,14 @@ export default function LipSyncStudio({
                       openDropdown === "model" ? null : "model",
                     );
                   }}
-                  className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                  className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                 >
-                  <div className="w-3.5 h-3.5 bg-[#22d3ee] rounded-sm flex items-center justify-center">
-                    <span className="text-[9px] font-black text-black">
+                  <div className="w-3.5 h-3.5 bg-accent rounded-sm flex items-center justify-center">
+                    <span className="text-[9px] font-black text-white">
                       S
                     </span>
                   </div>
-                  <span className="text-xs font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                  <span className="text-xs font-semibold text-ink/85 group-hover:text-accent transition-colors">
                     {selectedModel?.name ?? "Select model"}
                   </span>
                   <svg
@@ -1066,9 +1066,9 @@ export default function LipSyncStudio({
                         openDropdown === "resolution" ? null : "resolution",
                       );
                     }}
-                    className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                    className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                   >
-                    <span className="text-xs font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                    <span className="text-xs font-semibold text-ink/85 group-hover:text-accent transition-colors">
                       {selectedResolution}
                     </span>
                   </button>
@@ -1089,11 +1089,11 @@ export default function LipSyncStudio({
               type="button"
               onClick={handleGenerate}
               disabled={isGenerating}
-              className="bg-[#22d3ee] text-black px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-[#22d3ee]/20 hover:shadow-[#22d3ee]/35 border border-[#22d3ee]/10 z-10"
+              className="bg-accent text-white px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-accent/20 hover:shadow-accent/35 border border-accent/10 z-10"
             >
               {isGenerating ? (
                 <>
-                  <span className="animate-spin inline-block text-black">
+                  <span className="animate-spin inline-block text-white">
                     ◌
                   </span>{" "}
                   Generating...
@@ -1118,7 +1118,7 @@ export default function LipSyncStudio({
         >
           <button
             type="button"
-            className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors border border-white/10"
+            className="absolute top-6 right-6 p-3 bg-ink/10 hover:bg-ink/15 rounded-full text-ink transition-colors border border-ink/15"
             onClick={(e) => {
               e.stopPropagation();
               setFullscreenUrl(null);

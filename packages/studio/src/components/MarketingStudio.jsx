@@ -11,18 +11,18 @@ const SCROLLBAR_STYLE = `
     background: transparent;
   }
   .custom-scrollbar-thin::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(23,25,28, 0.1);
     border-radius: 10px;
   }
   .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: rgba(34, 211, 238, 0.3);
+    background: rgba(37,99,235, 0.3);
   }
 `;
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 
 const CheckSvg = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" strokeWidth="4">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="4">
     <polyline points="20 6 9 17 4 12" />
   </svg>
 );
@@ -104,7 +104,7 @@ function UploadSlot({ icon, url, progress, label, onUpload, onClear, multiple = 
         onClick={() => inputRef.current?.click()}
         title={`Upload ${label}`}
         className={`relative w-10 h-10 rounded-full border transition-all flex items-center justify-center cursor-pointer ${
-          url ? 'border-primary/40 bg-primary/5' : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/20'
+          url ? 'border-primary/40 bg-primary/5' : 'border-ink/10 bg-ink/5 hover:bg-ink/10 hover:border-ink/25'
         }`}
       >
         <input 
@@ -125,7 +125,7 @@ function UploadSlot({ icon, url, progress, label, onUpload, onClear, multiple = 
             <img src={url} className="w-full h-full object-cover" alt={label} />
           </div>
         ) : (
-          <div className="text-white/40 group-hover:text-primary transition-colors">
+          <div className="text-ink/65 group-hover:text-primary transition-colors">
             {icon}
           </div>
         )}
@@ -161,16 +161,16 @@ function Dropdown({ isOpen, title, items, selectedId, onSelect, onClose, isVideo
   return (
     <div 
       ref={ref}
-      className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-[#0a0a0a] rounded p-4 shadow-4xl border border-white/10 w-[420px] animate-fade-in-up"
+      className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-surface rounded p-4 shadow-4xl border border-ink/15 w-[420px] animate-fade-in-up"
     >
-      <div className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-4 px-1">{title}</div>
+      <div className="text-[10px] font-black text-ink/65 uppercase tracking-widest mb-4 px-1">{title}</div>
       <div className="grid grid-cols-3 gap-3 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
         {items.map(item => (
           <div 
             key={item.id}
             onClick={() => onSelect(item)}
             className={`relative rounded overflow-hidden border-2 transition-all group cursor-pointer ${
-              selectedId === item.id || selectedId === item.url ? 'border-primary shadow-glow' : 'border-white/5 hover:border-white/20'
+              selectedId === item.id || selectedId === item.url ? 'border-primary shadow-glow' : 'border-ink/10 hover:border-ink/25'
             }`}
           >
             {onPreview && !isVideo && (
@@ -181,7 +181,7 @@ function Dropdown({ isOpen, title, items, selectedId, onSelect, onClose, isVideo
                   e.stopPropagation();
                   onPreview(item);
                 }}
-                className="absolute top-1.5 left-1.5 w-6 h-6 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-[#22d3ee] hover:text-black transition-all border border-white/10 z-20 text-white"
+                className="absolute top-1.5 left-1.5 w-6 h-6 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-accent hover:text-ink transition-all border border-ink/15 z-20 text-ink"
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <circle cx="11" cy="11" r="8" />
@@ -197,8 +197,8 @@ function Dropdown({ isOpen, title, items, selectedId, onSelect, onClose, isVideo
             ) : (
               <img src={item.url} className="w-full aspect-square object-cover group-hover:scale-105 transition-all duration-500" alt={item.name} />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-[9px] font-black text-white uppercase tracking-tight">{item.name}</span>
+            <div className="absolute inset-0 bg-gradient-to-t from-app-bg via-transparent to-transparent flex items-end p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="text-[9px] font-black text-ink uppercase tracking-tight">{item.name}</span>
             </div>
             {(selectedId === item.id || selectedId === item.url) && (
               <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-primary rounded-full flex items-center justify-center shadow-lg">
@@ -229,15 +229,15 @@ function SimpleDropdown({ isOpen, title, options, selected, onSelect, onClose })
   return (
     <div 
       ref={ref}
-      className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-[#0a0a0a] rounded p-1 max-h-[200px] overflow-y-auto custom-scrollbar shadow-3xl border border-white/10 min-w-[140px] animate-fade-in-up"
+      className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-surface rounded p-1 max-h-[200px] overflow-y-auto custom-scrollbar shadow-3xl border border-ink/15 min-w-[140px] animate-fade-in-up"
     >
-      <div className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2 px-3 pt-2">{title}</div>
+      <div className="text-[10px] font-black text-ink/65 uppercase tracking-widest mb-2 px-3 pt-2">{title}</div>
       {options.map(opt => (
         <button
           key={opt}
           onClick={() => { onSelect(opt); onClose(); }}
           className={`w-full text-left px-4 py-2 rounded text-xs font-bold transition-all flex items-center justify-between ${
-            selected === opt ? 'bg-primary text-black' : 'text-white/60 hover:bg-white/5 hover:text-white'
+            selected === opt ? 'bg-primary text-white' : 'text-ink/75 hover:bg-ink/5 hover:text-ink'
           }`}
         >
           <span>{opt}</span>
@@ -395,7 +395,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
         {history.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
             {history.map(entry => (
-              <div key={entry.id} className="relative group rounded-lg overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col">
+              <div key={entry.id} className="relative group rounded-lg overflow-hidden border border-ink/15 bg-surface shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col">
                 <video 
                   src={entry.url} 
                   className="w-full aspect-video object-cover cursor-pointer hover:opacity-80 transition-opacity" 
@@ -407,7 +407,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
                 <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                    <button
                     onClick={(e) => { e.stopPropagation(); downloadFile(entry.url, `marketing-ad-${entry.id}.mp4`); }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-primary hover:text-black transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-primary hover:text-ink transition-all border border-ink/15"
                     title="Download"
                    >
                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -423,7 +423,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
                         setHistory(prev => prev.filter(h => h.id !== entry.id));
                       }
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-red-400 hover:bg-red-500 hover:text-white transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-red-600 hover:bg-red-500 hover:text-white transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <polyline points="3 6 5 6 21 6" />
@@ -434,13 +434,13 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
                   </button>
                 </div>
 
-                <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-white/5 flex flex-col gap-1.5 flex-1">
-                  <p className="text-white/60 text-[10px] line-clamp-2 leading-relaxed font-medium">{entry.prompt}</p>
+                <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-ink/10 flex flex-col gap-1.5 flex-1">
+                  <p className="text-ink/75 text-[10px] line-clamp-2 leading-relaxed font-medium">{entry.prompt}</p>
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-[9px] font-black text-primary px-2 py-0.5 bg-primary/10 rounded border border-primary/20 uppercase tracking-tighter">
                       {entry.format}
                     </span>
-                    <span className="text-[9px] text-white/30 font-bold">{new Date(entry.timestamp).toLocaleDateString()}</span>
+                    <span className="text-[9px] text-ink/55 font-bold">{new Date(entry.timestamp).toLocaleDateString()}</span>
                   </div>
                 </div>
               </div>
@@ -450,28 +450,28 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
           <div className="h-full flex flex-col items-center justify-center animate-fade-in-up transition-all duration-700 min-h-[50vh]">
             {/* Overlapping floating cards */}
             <div className="flex items-center justify-center gap-1.5 md:gap-3 mb-10 select-none scale-90 sm:scale-100">
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/sdxl-image.avif"
                   alt="Creative asset 1"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/chroma-image.avif"
                   alt="Creative asset 2"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-white/10 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-ink/15 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/neta-lumina.avif"
                   alt="Creative asset 3"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/perfect-pony-xl.avif"
                   alt="Creative asset 4"
@@ -481,12 +481,12 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
             </div>
 
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-center px-4 flex flex-col items-center">
-              <span className="text-white font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
-              <span className="text-[#22d3ee] font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
+              <span className="text-ink font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
+              <span className="text-accent font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
                 MARKETING STUDIO
               </span>
             </h1>
-            <p className="text-white/40 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
+            <p className="text-ink/65 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
               Describe your scene, upload your product, and watch high-converting AI video ads come to life.
             </p>
           </div>
@@ -495,15 +495,15 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
 
       {/* ── BOTTOM PROMPT BAR ── */}
       <div style={{ animationDelay: "0.2s" }} className="absolute bottom-4 w-full max-w-[95%] lg:max-w-4xl z-40 animate-fade-in-up">
-        <div className="w-full bg-gradient-to-b from-[#18181c]/90 via-[#0f0f12]/90 to-[#0c0c0e]/95 backdrop-blur-2xl rounded-[2rem] border border-white/[0.08] p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
+        <div className="w-full bg-gradient-to-b from-surface/90 via-surface/90 to-surface/95 backdrop-blur-2xl rounded-[2rem] border border-ink/10 p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
           {additionalImages.length > 0 && (
             <div className="flex items-center gap-1.5">
               {additionalImages.map((img, idx) => (
                 <div key={idx} className="relative group/img flex-shrink-0">
-                  <img src={img} className="w-9 h-9 rounded-full object-cover border border-white/10" />
+                  <img src={img} className="w-9 h-9 rounded-full object-cover border border-ink/15" />
                   <button 
                     onClick={() => setAdditionalImages(prev => prev.filter((_, i) => i !== idx))}
-                    className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-black/80 text-white rounded-full flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity border border-white/10"
+                    className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-black/80 text-ink rounded-full flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity border border-ink/15"
                   >
                     <CloseSvg />
                   </button>
@@ -520,16 +520,16 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
               onInput={handleTextareaInput}
               placeholder="Describe your ad script... Use @image1 for product, @image2 for avatar."
               rows={1}
-              className="w-full bg-transparent border-none text-white text-sm placeholder:text-white/20 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] md:max-h-[250px] overflow-y-auto custom-scrollbar disabled:opacity-40"
+              className="w-full bg-transparent border-none text-ink text-sm placeholder:text-ink/45 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] md:max-h-[250px] overflow-y-auto custom-scrollbar disabled:opacity-40"
             />
           </div>
 
           {/* Bottom Row: Uploads + Controls + Generate */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-white/[0.03] relative">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-ink/10 relative">
             <div className="flex items-center gap-3 flex-wrap">
               
               {/* Asset Uploads Group */}
-              <div className="flex items-center gap-1.5 pr-3 border-r border-white/10">
+              <div className="flex items-center gap-1.5 pr-3 border-r border-ink/15">
                 <UploadSlot 
                   label="Product" 
                   icon={<ProductIcon />} 
@@ -568,12 +568,12 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
               <div className="relative">
                 <button
                   onClick={(e) => { e.stopPropagation(); setDropdown(dropdown === 'format' ? null : 'format'); }}
-                  className={`flex items-center gap-2 px-3 py-2 bg-white/[0.03] hover:bg-white/[0.08] rounded border transition-all group whitespace-nowrap ${dropdown === 'format' ? 'border-primary/50' : 'border-white/5'}`}
+                  className={`flex items-center gap-2 px-3 py-2 bg-ink/5 hover:bg-ink/10 rounded border transition-all group whitespace-nowrap ${dropdown === 'format' ? 'border-primary/50' : 'border-ink/10'}`}
                 >
                   <div className="w-4 h-4 bg-primary/10 rounded flex items-center justify-center border border-primary/20">
                     <span className="text-[8px] font-black text-primary uppercase">U</span>
                   </div>
-                  <span className="text-sm font-bold text-white/70 group-hover:text-primary transition-colors">{params.format}</span>
+                  <span className="text-sm font-bold text-ink/85 group-hover:text-primary transition-colors">{params.format}</span>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" className="opacity-20 group-hover:opacity-100 transition-opacity"><path d="M6 9l6 6 6-6" /></svg>
                 </button>
                 <Dropdown 
@@ -591,12 +591,12 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
               <div className="relative flex items-center gap-1.5">
                 <button
                   onClick={(e) => { e.stopPropagation(); setDropdown(dropdown === 'avatar' ? null : 'avatar'); }}
-                  className={`flex items-center gap-2 px-3 py-2 bg-white/[0.03] hover:bg-white/[0.08] rounded border transition-all group whitespace-nowrap ${dropdown === 'avatar' ? 'border-primary/50' : 'border-white/5'}`}
+                  className={`flex items-center gap-2 px-3 py-2 bg-ink/5 hover:bg-ink/10 rounded border transition-all group whitespace-nowrap ${dropdown === 'avatar' ? 'border-primary/50' : 'border-ink/10'}`}
                 >
-                  <div className="w-4 h-4 rounded-full overflow-hidden border border-white/20 shadow-inner">
+                  <div className="w-4 h-4 rounded-full overflow-hidden border border-ink/25 shadow-inner">
                     <img src={avatarImage || ASSETS.avatar[0].url} className="w-full h-full object-cover" />
                   </div>
-                  <span className="text-sm font-bold text-white/70 group-hover:text-primary transition-colors">
+                  <span className="text-sm font-bold text-ink/85 group-hover:text-primary transition-colors">
                     {ASSETS.avatar.find(a => a.url === avatarImage)?.name || "Select Avatar"}
                   </span>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" className="opacity-20 group-hover:opacity-100 transition-opacity"><path d="M6 9l6 6 6-6" /></svg>
@@ -615,7 +615,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
                         setPreviewAvatar({ id: "custom", name: "Custom Uploaded Avatar", url: avatarImage });
                       }
                     }}
-                    className="h-[34px] w-[34px] flex items-center justify-center bg-white/[0.03] hover:bg-white/[0.08] rounded border border-white/5 text-white/40 hover:text-primary transition-all"
+                    className="h-[34px] w-[34px] flex items-center justify-center bg-ink/5 hover:bg-ink/10 rounded border border-ink/10 text-ink/65 hover:text-primary transition-all"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <circle cx="11" cy="11" r="8" />
@@ -642,7 +642,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
                 <div key={key} className="relative">
                   <button
                     onClick={(e) => { e.stopPropagation(); setDropdown(dropdown === key ? null : key); }}
-                    className={`px-3 py-2 bg-white/[0.03] hover:bg-white/[0.08] rounded border transition-all text-sm font-bold ${dropdown === key ? 'border-primary/50 text-primary' : 'border-white/5 text-white/70'}`}
+                    className={`px-3 py-2 bg-ink/5 hover:bg-ink/10 rounded border transition-all text-sm font-bold ${dropdown === key ? 'border-primary/50 text-primary' : 'border-ink/10 text-ink/85'}`}
                   >
                     {key === 'duration' ? `${params[key]}s` : params[key]}
                   </button>
@@ -661,11 +661,11 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
             <button
               onClick={handleGenerate}
               disabled={isGenerating}
-              className="bg-[#22d3ee] text-black px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-[#22d3ee]/20 hover:shadow-[#22d3ee]/35 border border-[#22d3ee]/10 z-10"
+              className="bg-accent text-white px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-accent/20 hover:shadow-accent/35 border border-accent/10 z-10"
             >
               {isGenerating ? (
                 <>
-                  <span className="animate-spin inline-block text-black">◌</span>
+                  <span className="animate-spin inline-block text-white">◌</span>
                   Generating...
                 </>
               ) : (
@@ -679,7 +679,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
       {/* Fullscreen Preview */}
       {fullscreenUrl && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm animate-fade-in" onClick={() => setFullscreenUrl(null)}>
-          <button className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white border border-white/10 transition-colors shadow-2xl"><CloseSvg /></button>
+          <button className="absolute top-6 right-6 p-3 bg-ink/10 hover:bg-ink/15 rounded-full text-ink border border-ink/15 transition-colors shadow-2xl"><CloseSvg /></button>
           <video src={fullscreenUrl} controls autoPlay className="max-w-[95vw] max-h-[95vh] rounded-lg shadow-4xl animate-scale-up" onClick={e => e.stopPropagation()} />
         </div>
       )}
@@ -687,13 +687,13 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
       {/* ── AVATAR FULLSCREEN PREVIEW MODAL ── */}
       {previewAvatar && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-md animate-fade-in select-none"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/10 backdrop-blur-md animate-fade-in select-none"
           onClick={() => setPreviewAvatar(null)}
         >
           {/* Close button (cross) in the right corner */}
           <button
             type="button"
-            className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors border border-white/10 z-50 animate-fade-in"
+            className="absolute top-6 right-6 p-3 bg-ink/10 hover:bg-ink/15 rounded-full text-ink transition-colors border border-ink/15 z-50 animate-fade-in"
             onClick={(e) => {
               e.stopPropagation();
               setPreviewAvatar(null);
@@ -740,7 +740,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
           {previewAvatar.id !== "custom" && (
             <button
               type="button"
-              className="absolute left-6 p-4 bg-white/5 hover:bg-white/10 hover:text-primary rounded-full text-white transition-all border border-white/10 z-50"
+              className="absolute left-6 p-4 bg-ink/5 hover:bg-ink/10 hover:text-primary rounded-full text-ink transition-all border border-ink/15 z-50"
               onClick={(e) => {
                 e.stopPropagation();
                 const currentIndex = ASSETS.avatar.findIndex(a => a.id === previewAvatar.id);
@@ -761,7 +761,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
           {previewAvatar.id !== "custom" && (
             <button
               type="button"
-              className="absolute right-6 p-4 bg-white/5 hover:bg-white/10 hover:text-primary rounded-full text-white transition-all border border-white/10 z-50"
+              className="absolute right-6 p-4 bg-ink/5 hover:bg-ink/10 hover:text-primary rounded-full text-ink transition-all border border-ink/15 z-50"
               onClick={(e) => {
                 e.stopPropagation();
                 const currentIndex = ASSETS.avatar.findIndex(a => a.id === previewAvatar.id);
@@ -792,7 +792,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
                     setPreviewAvatar(prevAvatar);
                   }
                 }}
-                className="hidden md:flex flex-col items-center opacity-50 hover:opacity-60 scale-75 hover:scale-80 transition-all duration-300 cursor-pointer select-none max-w-[15vw] max-h-[50vh] rounded-xl overflow-hidden border border-white/5 bg-[#0d0d0f]/50"
+                className="hidden md:flex flex-col items-center opacity-50 hover:opacity-60 scale-75 hover:scale-80 transition-all duration-300 cursor-pointer select-none max-w-[15vw] max-h-[50vh] rounded-xl overflow-hidden border border-ink/10 bg-surface/50"
               >
                 <img
                   src={ASSETS.avatar[(ASSETS.avatar.findIndex(a => a.id === previewAvatar.id) - 1 + ASSETS.avatar.length) % ASSETS.avatar.length].url}
@@ -810,7 +810,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
               }`}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-[#0d0d0f] shadow-2xl">
+              <div className="relative rounded-2xl overflow-hidden border border-ink/15 bg-surface shadow-2xl">
                 <img
                   src={previewAvatar.url}
                   alt={previewAvatar.name}
@@ -818,8 +818,8 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
                 />
                 
                 {/* Overlay with Name of the Avatar */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pt-10 flex flex-col items-center justify-end gap-3">
-                  <h2 className="text-xl font-black text-white tracking-wide uppercase">
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-app-bg via-app-bg to-transparent p-4 pt-10 flex flex-col items-center justify-end gap-3">
+                  <h2 className="text-xl font-black text-ink tracking-wide uppercase">
                     {previewAvatar.name}
                   </h2>
                   
@@ -831,7 +831,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
                       setPreviewAvatar(null);
                       setDropdown(null);
                     }}
-                    className="bg-[#22d3ee] text-black px-6 py-2.5 rounded-full font-bold text-sm hover:opacity-95 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-[#22d3ee]/20"
+                    className="bg-accent text-white px-6 py-2.5 rounded-full font-bold text-sm hover:opacity-95 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-accent/20"
                   >
                     <CheckSvg />
                     Select Avatar
@@ -852,7 +852,7 @@ export default function MarketingStudio({ apiKey, droppedFiles, onFilesHandled, 
                     setPreviewAvatar(nextAvatar);
                   }
                 }}
-                className="hidden md:flex flex-col items-center opacity-50 hover:opacity-60 scale-75 hover:scale-80 transition-all duration-300 cursor-pointer select-none max-w-[15vw] max-h-[50vh] rounded-xl overflow-hidden border border-white/5 bg-[#0d0d0f]/50"
+                className="hidden md:flex flex-col items-center opacity-50 hover:opacity-60 scale-75 hover:scale-80 transition-all duration-300 cursor-pointer select-none max-w-[15vw] max-h-[50vh] rounded-xl overflow-hidden border border-ink/10 bg-surface/50"
               >
                 <img
                   src={ASSETS.avatar[(ASSETS.avatar.findIndex(a => a.id === previewAvatar.id) + 1) % ASSETS.avatar.length].url}

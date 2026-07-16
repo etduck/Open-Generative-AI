@@ -128,12 +128,12 @@ function Dropdown({ items, selected, onSelect, triggerRef, onClose }) {
   return (
     <div
       ref={menuRef}
-      className="custom-dropdown absolute bottom-[calc(100%+8px)] left-0 bg-[#1a1a1a] border border-white/10 rounded py-1 shadow-2xl z-50 flex flex-col min-w-[120px] animate-fade-in"
+      className="custom-dropdown absolute bottom-[calc(100%+8px)] left-0 bg-surface border border-ink/15 rounded py-1 shadow-2xl z-50 flex flex-col min-w-[120px] animate-fade-in"
     >
       {items.map((item) => (
         <button
           key={item}
-          className={`px-3 py-2 text-xs font-bold text-left hover:bg-white/10 transition-colors ${item === selected ? "text-primary" : "text-white"}`}
+          className={`px-3 py-2 text-xs font-bold text-left hover:bg-ink/10 transition-colors ${item === selected ? "text-primary" : "text-ink"}`}
           onClick={(e) => {
             e.stopPropagation();
             onSelect(item);
@@ -283,16 +283,16 @@ function ScrollColumn({ title, items, columnKey, value, onChange }) {
 
   return (
     <div className="flex flex-col items-center relative w-[130px] md:w-[150px] shrink-0 snap-center">
-      <div className="mb-4 text-[10px] font-black text-white/20 uppercase tracking-[0.25em] text-center">
+      <div className="mb-4 text-[10px] font-black text-ink/45 uppercase tracking-[0.25em] text-center">
         {title}
       </div>
-      <div className="relative overflow-hidden w-full h-[280px] md:h-[300px] bg-gradient-to-b from-white/[0.02] to-transparent rounded-2xl border border-white/[0.03] shadow-2xl backdrop-blur-3xl group">
+      <div className="relative overflow-hidden w-full h-[280px] md:h-[300px] bg-gradient-to-b from-ink/10 to-transparent rounded-2xl border border-ink/10 shadow-2xl backdrop-blur-3xl group">
         {/* Masks */}
-        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-surface to-transparent z-20 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-surface to-transparent z-20 pointer-events-none" />
         
         {/* Active Selection Ring */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[70px] bg-white/[0.02] border border-white/[0.05] rounded-xl pointer-events-none z-0" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[70px] bg-ink/5 border border-ink/10 rounded-xl pointer-events-none z-0" />
 
         <div
           ref={listRef}
@@ -310,7 +310,7 @@ function ScrollColumn({ title, items, columnKey, value, onChange }) {
               <div
                 key={item}
                 data-value={item}
-                className="h-[70px] flex flex-col items-center justify-center gap-2 snap-center cursor-pointer transition-all duration-300 ease-out text-white p-2 select-none opacity-20 scale-90"
+                className="h-[70px] flex flex-col items-center justify-center gap-2 snap-center cursor-pointer transition-all duration-300 ease-out text-ink p-2 select-none opacity-20 scale-90"
                 onClick={() => onItemClick(item)}
               >
                 <div
@@ -324,14 +324,14 @@ function ScrollColumn({ title, items, columnKey, value, onChange }) {
                       className="w-full h-full object-cover opacity-70"
                     />
                   ) : (
-                    <span className="text-sm font-bold text-white/40">
+                    <span className="text-sm font-bold text-ink/65">
                       {item}
                     </span>
                   )}
                 </div>
                 <span
                   data-label="true"
-                  className="text-[8px] md:text-[9px] font-black uppercase text-center leading-tight max-w-full truncate px-1 tracking-widest text-white/60"
+                  className="text-[8px] md:text-[9px] font-black uppercase text-center leading-tight max-w-full truncate px-1 tracking-widest text-ink/75"
                 >
                   {item}
                 </span>
@@ -372,23 +372,23 @@ function CameraControlsOverlay({
   return (
     <div
       ref={backdropRef}
-      className={`fixed inset-0 bg-[#0a0a0a]/80 backdrop-blur-2xl z-[100] flex items-center justify-center transition-all duration-500 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+      className={`fixed inset-0 bg-surface/80 backdrop-blur-2xl z-[100] flex items-center justify-center transition-all duration-500 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
       onClick={handleBackdropClick}
     >
       <div
-        className={`w-full max-w-5xl bg-[#0a0a0a] border border-white/5 rounded-3xl p-6 md:p-10 shadow-[0_0_100px_rgba(0,0,0,0.8)] transform transition-all duration-500 flex flex-col max-h-[90vh] ${isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-10"}`}
+        className={`w-full max-w-5xl bg-surface border border-ink/10 rounded-3xl p-6 md:p-10 shadow-[0_0_100px_rgba(0,0,0,0.8)] transform transition-all duration-500 flex flex-col max-h-[90vh] ${isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-10"}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex flex-col gap-1">
-            <h2 className="text-2xl font-black text-white tracking-tighter uppercase italic">
+            <h2 className="text-2xl font-black text-ink tracking-tighter uppercase italic">
               Camera Config
             </h2>
             <div className="h-[1px] w-12 bg-primary/40" />
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center text-white/20 hover:text-white transition-all"
+            className="w-10 h-10 rounded-full hover:bg-ink/5 flex items-center justify-center text-ink/45 hover:text-ink transition-all"
           >
             <svg
               width="20"
@@ -709,7 +709,7 @@ export default function CinemaStudio({
 
   // ── Render ───────────────────────────────────────────────────────────────
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-black relative overflow-hidden">
+    <div className="w-full h-full flex flex-col items-center justify-center bg-app-bg relative overflow-hidden">
       
       {/* ── CENTRAL GALLERY AREA ── */}
       <div className="flex-1 w-full max-w-7xl mx-auto overflow-y-auto custom-scrollbar pb-40 lg:pb-32 px-2">
@@ -718,13 +718,13 @@ export default function CinemaStudio({
             {history.map((entry, idx) => (
               <div
                 key={entry.timestamp ?? idx}
-                className="relative group rounded-lg overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-xl hover:border-[#22d3ee]/50 transition-all duration-300 flex flex-col cursor-pointer"
+                className="relative group rounded-lg overflow-hidden border border-ink/15 bg-surface shadow-xl hover:border-accent/50 transition-all duration-300 flex flex-col cursor-pointer"
                 onClick={() => loadHistoryItem(entry, idx)}
               >
                 <img
                   src={entry.url}
                   alt={`History item ${idx + 1}`}
-                  className="w-full aspect-[4/3] object-cover bg-black/40"
+                  className="w-full aspect-[4/3] object-cover bg-ink/10"
                 />
                 
                 {/* Overlay actions */}
@@ -736,7 +736,7 @@ export default function CinemaStudio({
                       e.stopPropagation();
                       setFullscreenUrl(entry.url);
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-[#22d3ee] hover:text-black transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-accent hover:text-ink transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <polyline points="15 3 21 3 21 9" />
@@ -765,7 +765,7 @@ export default function CinemaStudio({
                         window.open(entry.url, "_blank");
                       }
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-[#22d3ee] hover:text-black transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-accent hover:text-ink transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
@@ -780,7 +780,7 @@ export default function CinemaStudio({
                         setInternalHistory(prev => prev.filter((_, i) => i !== idx));
                       }
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-red-400 hover:bg-red-500 hover:text-white transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-red-600 hover:bg-red-500 hover:text-white transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <polyline points="3 6 5 6 21 6" />
@@ -792,18 +792,18 @@ export default function CinemaStudio({
                 </div>
 
                 {/* Details */}
-                <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-white/5 flex-1 flex flex-col justify-between gap-2">
-                  <p className="text-white/70 text-xs line-clamp-3 leading-relaxed">
+                <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-ink/10 flex-1 flex flex-col justify-between gap-2">
+                  <p className="text-ink/85 text-xs line-clamp-3 leading-relaxed">
                     {entry.settings?.prompt || "No prompt"}
                   </p>
                   <div className="flex items-center justify-between mt-1 flex-wrap gap-1">
-                    <span className="text-[10px] font-bold text-[#22d3ee] px-2 py-0.5 bg-[#22d3ee]/10 rounded border border-[#22d3ee]/20">
+                    <span className="text-[10px] font-bold text-accent px-2 py-0.5 bg-accent/10 rounded border border-accent/20">
                       {entry.settings?.camera || "Standard"}
                     </span>
                     <div className="flex gap-2">
-                      <span className="text-[10px] text-white/40">{entry.settings?.lens || "35mm"}</span>
+                      <span className="text-[10px] text-ink/65">{entry.settings?.lens || "35mm"}</span>
                       {entry.settings?.aspect_ratio && (
-                        <span className="text-[10px] text-white/40">{entry.settings.aspect_ratio}</span>
+                        <span className="text-[10px] text-ink/65">{entry.settings.aspect_ratio}</span>
                       )}
                     </div>
                   </div>
@@ -815,28 +815,28 @@ export default function CinemaStudio({
           <div className="flex flex-col items-center justify-center h-full text-center px-4 animate-fade-in-up transition-all duration-700 min-h-[50vh]">
             {/* Overlapping floating cards */}
             <div className="flex items-center justify-center gap-1.5 md:gap-3 mb-10 select-none scale-90 sm:scale-100">
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/sdxl-image.avif"
                   alt="Creative asset 1"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/chroma-image.avif"
                   alt="Creative asset 2"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-white/10 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-ink/15 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/neta-lumina.avif"
                   alt="Creative asset 3"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/perfect-pony-xl.avif"
                   alt="Creative asset 4"
@@ -846,12 +846,12 @@ export default function CinemaStudio({
             </div>
 
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-center px-4 flex flex-col items-center">
-              <span className="text-white font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
-              <span className="text-[#22d3ee] font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
+              <span className="text-ink font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
+              <span className="text-accent font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
                 CINEMA STUDIO
               </span>
             </h1>
-            <p className="text-white/40 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
+            <p className="text-ink/65 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
               What would you shoot with infinite budget? Control cameras, lighting, lenses, and prompt high-end cinematic scenes.
             </p>
           </div>
@@ -860,7 +860,7 @@ export default function CinemaStudio({
 
       {/* ── BOTTOM PROMPT BAR ── */}
       <div className="absolute bottom-4 left-4 right-4 md:left-0 md:right-0 md:mx-auto md:max-w-[95%] lg:max-w-4xl z-30 transition-all duration-700 animate-fade-in-up">
-        <div className="w-full bg-gradient-to-b from-[#18181c]/90 via-[#0f0f12]/90 to-[#0c0c0e]/95 backdrop-blur-2xl rounded-[2rem] border border-white/[0.08] p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
+        <div className="w-full bg-gradient-to-b from-surface/90 via-surface/90 to-surface/95 backdrop-blur-2xl rounded-[2rem] border border-ink/10 p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
           {/* Upper Row: Image Upload & Textarea */}
           <div className="flex items-start gap-4 w-full px-1">
             {/* Image Upload Button */}
@@ -880,7 +880,7 @@ export default function CinemaStudio({
                     : imageInputRef.current?.click()
                 }
                 disabled={isUploadingImage}
-                className={`w-10 h-10 shrink-0 rounded-full border transition-all flex items-center justify-center relative overflow-hidden ${uploadedImage ? "border-[#22d3ee]/60 bg-white/5" : "bg-white/[0.03] border-white/[0.03] hover:bg-white/10 hover:border-[#22d3ee]/40"} group`}
+                className={`w-10 h-10 shrink-0 rounded-full border transition-all flex items-center justify-center relative overflow-hidden ${uploadedImage ? "border-accent/60 bg-ink/5" : "bg-ink/5 border-ink/10 hover:bg-ink/10 hover:border-accent/40"} group`}
               >
                 {isUploadingImage ? (
                   <div className="flex flex-col items-center justify-center w-full h-full absolute inset-0 bg-black/80 z-20 backdrop-blur-[2px]">
@@ -892,7 +892,7 @@ export default function CinemaStudio({
                         stroke="currentColor"
                         strokeWidth="2"
                         fill="transparent"
-                        className="text-white/10"
+                        className="text-ink/45"
                       />
                       <circle
                         cx="16"
@@ -906,7 +906,7 @@ export default function CinemaStudio({
                         className="text-primary transition-all duration-300"
                       />
                     </svg>
-                    <span className="absolute text-[8px] font-bold text-white">
+                    <span className="absolute text-[8px] font-bold text-ink">
                       {imageUploadProgress}%
                     </span>
                   </div>
@@ -918,13 +918,13 @@ export default function CinemaStudio({
                       className="w-full h-full object-cover opacity-80 group-hover:opacity-40 transition-opacity"
                     />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-white">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-ink">
                         <path d="M18 6L6 18M6 6l12 12" />
                       </svg>
                     </div>
                   </div>
                 ) : (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/40 group-hover:text-[#22d3ee] transition-colors">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-ink/65 group-hover:text-accent transition-colors">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                     <circle cx="8.5" cy="8.5" r="1.5" />
                     <polyline points="21 15 16 10 5 21" />
@@ -944,19 +944,19 @@ export default function CinemaStudio({
                 el.style.height = Math.min(el.scrollHeight, maxH) + "px";
               }}
               placeholder="Describe your cinema scene..."
-              className="w-full bg-transparent border-none text-white text-sm placeholder:text-white/20 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] md:max-h-[250px] overflow-y-auto custom-scrollbar disabled:opacity-40"
+              className="w-full bg-transparent border-none text-ink text-sm placeholder:text-ink/45 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] md:max-h-[250px] overflow-y-auto custom-scrollbar disabled:opacity-40"
               rows={1}
             />
           </div>
 
           {/* Bottom Row: Controls & Generate */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-white/[0.03] relative">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-ink/10 relative">
             <div className="flex items-center gap-2 relative flex-wrap pb-1 md:pb-0">
               {/* Aspect Ratio Button */}
               <div className="relative">
                 <button
                   ref={arBtnRef}
-                  className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner text-[11px] font-semibold text-white/70 hover:text-white"
+                  className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner text-[11px] font-semibold text-ink/85 hover:text-ink"
                   onClick={() =>
                     setOpenDropdown((d) => (d === "ar" ? null : "ar"))
                   }
@@ -967,7 +967,7 @@ export default function CinemaStudio({
                   {settings.aspect_ratio}
                 </button>
                 {openDropdown === "ar" && (
-                  <div className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-[#0c0c0f]/95 rounded-xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-white/[0.08] backdrop-blur-2xl min-w-[140px]">
+                  <div className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-surface/95 rounded-xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-ink/10 backdrop-blur-2xl min-w-[140px]">
                     <Dropdown
                       items={ASPECT_RATIOS}
                       selected={settings.aspect_ratio}
@@ -985,7 +985,7 @@ export default function CinemaStudio({
               <div className="relative">
                 <button
                   ref={resBtnRef}
-                  className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner text-[11px] font-semibold text-white/70 hover:text-white"
+                  className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner text-[11px] font-semibold text-ink/85 hover:text-ink"
                   onClick={() =>
                     setOpenDropdown((d) => (d === "res" ? null : "res"))
                   }
@@ -996,7 +996,7 @@ export default function CinemaStudio({
                   {resolution}
                 </button>
                 {openDropdown === "res" && (
-                  <div className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-[#0c0c0f]/95 rounded-xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-white/[0.08] backdrop-blur-2xl min-w-[140px]">
+                  <div className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-surface/95 rounded-xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-ink/10 backdrop-blur-2xl min-w-[140px]">
                     <Dropdown
                       items={RESOLUTIONS}
                       selected={resolution}
@@ -1010,11 +1010,11 @@ export default function CinemaStudio({
 
               {/* Summary Card (triggers overlay) */}
               <button
-                className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] text-left group overflow-hidden shadow-inner text-[11px] font-semibold text-white/70 hover:text-white"
+                className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 text-left group overflow-hidden shadow-inner text-[11px] font-semibold text-ink/85 hover:text-ink"
                 onClick={() => setIsOverlayOpen(true)}
               >
-                <div className="w-1.5 h-1.5 bg-[#22d3ee] rounded-full shadow-lg shadow-[#22d3ee]/20 shrink-0" />
-                <span className="max-w-[120px] truncate text-[11px] font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                <div className="w-1.5 h-1.5 bg-accent rounded-full shadow-lg shadow-accent/20 shrink-0" />
+                <span className="max-w-[120px] truncate text-[11px] font-semibold text-ink/85 group-hover:text-accent transition-colors">
                   {settings.camera} · {formatSummaryValue()}
                 </span>
               </button>
@@ -1022,13 +1022,13 @@ export default function CinemaStudio({
 
             {/* Generate Button */}
             <button
-              className="bg-[#22d3ee] text-black px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-[#22d3ee]/20 hover:shadow-[#22d3ee]/35 border border-[#22d3ee]/10 z-10 uppercase tracking-wider"
+              className="bg-accent text-white px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-accent/20 hover:shadow-accent/35 border border-accent/10 z-10 uppercase tracking-wider"
               disabled={isGenerating || !settings.prompt.trim()}
               onClick={handleGenerate}
             >
               {isGenerating ? (
                 <>
-                  <span className="animate-spin inline-block text-black">◌</span> SHOOTING...
+                  <span className="animate-spin inline-block text-white">◌</span> SHOOTING...
                 </>
               ) : (
                 <>
@@ -1046,7 +1046,7 @@ export default function CinemaStudio({
         >
           <button
             type="button"
-            className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors border border-white/10"
+            className="absolute top-6 right-6 p-3 bg-ink/10 hover:bg-ink/15 rounded-full text-ink transition-colors border border-ink/15"
             onClick={(e) => {
               e.stopPropagation();
               setFullscreenUrl(null);

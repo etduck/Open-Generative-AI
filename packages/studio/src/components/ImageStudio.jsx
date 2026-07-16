@@ -249,7 +249,7 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
           stroke="currentColor"
           strokeWidth="2"
           fill="transparent"
-          className="text-white/10"
+          className="text-ink/45"
         />
         <circle
           cx="16"
@@ -260,10 +260,10 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
           fill="transparent"
           strokeDasharray={88}
           strokeDashoffset={88 - (88 * lastUploadProgress) / 100}
-          className="text-[#22d3ee] transition-all duration-300"
+          className="text-accent transition-all duration-300"
         />
       </svg>
-      <span className="absolute text-[9px] font-black text-[#22d3ee] leading-none">
+      <span className="absolute text-[9px] font-black text-accent leading-none">
         {lastUploadProgress}%
       </span>
     </div>
@@ -271,7 +271,7 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
     hasSelection ? (
       <img src={selectedEntries[0].url} alt="" className="w-full h-full object-cover" />
     ) : (
-      <span className="text-[10px] font-bold text-white/50">Face</span>
+      <span className="text-[10px] font-bold text-ink/70">Face</span>
     )
   ) : (
     <svg
@@ -281,7 +281,7 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
       fill="none"
       stroke="currentColor"
       strokeWidth="2.5"
-      className="text-white/40 group-hover:text-[#22d3ee] transition-colors"
+      className="text-ink/65 group-hover:text-accent transition-colors"
     >
       <line x1="12" y1="5" x2="12" y2="19" />
       <line x1="5" y1="12" x2="19" y2="12" />
@@ -318,10 +318,10 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
           e.stopPropagation();
           setPanelOpen((o) => !o);
         }}
-        className={`w-12 h-12 shrink-0 rounded-xl border border-dashed transition-all flex items-center justify-center relative overflow-hidden bg-white/[0.02] hover:bg-white/5 group ${
+        className={`w-12 h-12 shrink-0 rounded-xl border border-dashed transition-all flex items-center justify-center relative overflow-hidden bg-ink/5 hover:bg-ink/5 group ${
           hasSelection
-            ? "border-[#22d3ee]/40 hover:border-[#22d3ee]/60"
-            : "border-white/10 hover:border-[#22d3ee]/40"
+            ? "border-accent/40 hover:border-accent/60"
+            : "border-ink/15 hover:border-accent/40"
         }`}
       >
         {triggerContent}
@@ -332,10 +332,10 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
         <div
           ref={panelRef}
           onClick={(e) => e.stopPropagation()}
-          className="absolute z-50 bottom-[calc(100%+8px)] left-0 bg-[#111] rounded-xl p-3 shadow-4xl border border-white/10 w-96"
+          className="absolute z-50 bottom-[calc(100%+8px)] left-0 bg-surface rounded-xl p-3 shadow-4xl border border-ink/15 w-96"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-1 pb-3 mb-2 border-b border-white/5">
+          <div className="flex items-center justify-between px-1 pb-3 mb-2 border-b border-ink/10">
             <div className="flex flex-col gap-0.5">
               <span className="text-xs font-bold text-secondary">
                 Reference Images
@@ -351,7 +351,7 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
                 <button
                   type="button"
                   onClick={handleDone}
-                  className="flex items-center gap-1 px-3 py-1.5 bg-primary text-black rounded-xl text-xs font-black transition-all hover:scale-105"
+                  className="flex items-center gap-1 px-3 py-1.5 bg-primary text-white rounded-xl text-xs font-black transition-all hover:scale-105"
                 >
                   ✓ Done ({count})
                 </button>
@@ -418,7 +418,7 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
                     className={`relative rounded-xl overflow-hidden border-2 cursor-pointer group/cell aspect-square transition-all ${
                       isSelected
                         ? "border-primary shadow-glow"
-                        : "border-white/10 hover:border-white/30"
+                        : "border-ink/15 hover:border-ink/30"
                     } ${atMax ? "opacity-40 cursor-not-allowed" : ""} ${!entry.url ? "cursor-wait" : ""}`}
                   >
                     {entry.url ? (
@@ -428,7 +428,7 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full bg-white/5 flex flex-col items-center justify-center">
+                      <div className="w-full h-full bg-ink/5 flex flex-col items-center justify-center">
                         <div className="w-8 h-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin mb-1" />
                         <span className="text-[10px] font-black text-primary">
                           {entry.progress}%
@@ -464,7 +464,7 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
                     {isSelected && (
                       <div className="absolute top-1 left-1 min-w-[20px] h-5 bg-primary rounded-full flex items-center justify-center px-1">
                         {isMulti ? (
-                          <span className="text-[10px] font-black text-black">
+                          <span className="text-[10px] font-black text-white">
                             {selIdx + 1}
                           </span>
                         ) : (
@@ -489,14 +489,14 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
 
           {/* Bottom bar for multi-select */}
           {isMulti && hasSelection && (
-            <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between">
+            <div className="mt-3 pt-3 border-t border-ink/10 flex items-center justify-between">
               <span className="text-xs text-secondary">
                 {count} of {maxImages} selected
               </span>
               <button
                 type="button"
                 onClick={handleDone}
-                className="px-4 py-1.5 bg-primary text-black rounded-xl text-xs font-black transition-all hover:scale-105"
+                className="px-4 py-1.5 bg-primary text-white rounded-xl text-xs font-black transition-all hover:scale-105"
               >
                 Use Selected
               </button>
@@ -538,7 +538,7 @@ const PROVIDER_LOGOS = {
   stability: "https://cdn.muapi.ai/models/stability.png"
 };
 
-const invertLogos = ['openai', 'blackforest', 'runway', 'ideogram', 'lightricks', 'grok'];
+const invertLogos = []; // dark-logo inversion was for the dark theme; logos render as-is on light
 
 function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
   const [search, setSearch] = useState("");
@@ -547,33 +547,33 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
   const getProviderStyle = (provider) => {
     switch (provider) {
       case "grok":
-        return { text: "xI", bg: "bg-orange-500/10 text-orange-400 border-orange-500/25" };
+        return { text: "xI", bg: "bg-orange-500/10 text-orange-600 border-orange-500/25" };
       case "openai":
-        return { text: "O", bg: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25" };
+        return { text: "O", bg: "bg-emerald-500/10 text-emerald-600 border-emerald-500/25" };
       case "google":
-        return { text: "G", bg: "bg-blue-500/10 text-blue-400 border-blue-500/25" };
+        return { text: "G", bg: "bg-blue-500/10 text-blue-600 border-blue-500/25" };
       case "blackforest":
-        return { text: "BF", bg: "bg-amber-500/10 text-amber-400 border-amber-500/25" };
+        return { text: "BF", bg: "bg-amber-500/10 text-amber-600 border-amber-500/25" };
       case "bytedance":
-        return { text: "BD", bg: "bg-purple-500/10 text-purple-400 border-purple-500/25" };
+        return { text: "BD", bg: "bg-purple-500/10 text-purple-600 border-purple-500/25" };
       case "midjourney":
-        return { text: "MJ", bg: "bg-indigo-500/10 text-indigo-400 border-indigo-500/25" };
+        return { text: "MJ", bg: "bg-indigo-500/10 text-indigo-600 border-indigo-500/25" };
       case "kling":
-        return { text: "KL", bg: "bg-rose-500/10 text-rose-400 border-rose-500/25" };
+        return { text: "KL", bg: "bg-rose-500/10 text-rose-600 border-rose-500/25" };
       case "vidu":
-        return { text: "VD", bg: "bg-cyan-500/10 text-cyan-400 border-cyan-500/25" };
+        return { text: "VD", bg: "bg-cyan-500/10 text-cyan-600 border-cyan-500/25" };
       case "minimax":
-        return { text: "MX", bg: "bg-pink-500/10 text-pink-400 border-pink-500/25" };
+        return { text: "MX", bg: "bg-pink-500/10 text-pink-600 border-pink-500/25" };
       case "ideogram":
-        return { text: "ID", bg: "bg-yellow-500/10 text-yellow-400 border-yellow-500/25" };
+        return { text: "ID", bg: "bg-yellow-500/10 text-yellow-600 border-yellow-500/25" };
       case "luma":
-        return { text: "LM", bg: "bg-teal-500/10 text-teal-400 border-teal-500/25" };
+        return { text: "LM", bg: "bg-teal-500/10 text-teal-600 border-teal-500/25" };
       case "alibaba":
-        return { text: "AL", bg: "bg-sky-500/10 text-sky-400 border-sky-500/25" };
+        return { text: "AL", bg: "bg-sky-500/10 text-sky-600 border-sky-500/25" };
       case "leonardoai":
-        return { text: "LE", bg: "bg-violet-500/10 text-violet-400 border-violet-500/25" };
+        return { text: "LE", bg: "bg-violet-500/10 text-violet-600 border-violet-500/25" };
       case "stability":
-        return { text: "SD", bg: "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/25" };
+        return { text: "SD", bg: "bg-fuchsia-500/10 text-fuchsia-600 border-fuchsia-500/25" };
       default:
         const name = provider ? provider.toUpperCase() : "AI";
         return { text: name.substring(0, 2), bg: "bg-primary/10 text-primary border-primary/25" };
@@ -607,19 +607,19 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
     );
   });
 
-  const invertLogos = ['openai', 'blackforest', 'runway', 'ideogram', 'lightricks', 'grok'];
+  const invertLogos = []; // dark-logo inversion was for the dark theme; logos render as-is on light
 
   return (
     <div className="flex gap-4 h-full max-h-[60vh] min-h-[350px] overflow-x-hidden">
       {/* Left Sidebar: Provider tabs */}
-      <div className="flex flex-col gap-2.5 items-center pr-3 border-r border-white/5 shrink-0 select-none overflow-y-auto custom-scrollbar w-12 pt-0.5">
+      <div className="flex flex-col gap-2.5 items-center pr-3 border-r border-ink/10 shrink-0 select-none overflow-y-auto custom-scrollbar w-12 pt-0.5">
         <button
           type="button"
           onClick={() => setSelectedProvider("all")}
           className={`w-8.5 h-8.5 rounded-full flex items-center justify-center border transition-all flex-shrink-0 cursor-pointer ${
             selectedProvider === "all"
-              ? "bg-white/10 text-yellow-400 border-yellow-500/30 shadow-md scale-105"
-              : "bg-white/[0.02] text-white/50 border-white/[0.03] hover:bg-white/5 hover:text-white"
+              ? "bg-ink/10 text-yellow-600 border-yellow-500/30 shadow-md scale-105"
+              : "bg-ink/5 text-ink/70 border-ink/10 hover:bg-ink/5 hover:text-ink"
           }`}
           title="All Providers"
         >
@@ -638,8 +638,8 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
               onClick={() => setSelectedProvider(p.id)}
               className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center font-black text-[10px] border transition-all flex-shrink-0 cursor-pointer overflow-hidden ${
                 isSelected
-                  ? `${style.bg} border-white/25 scale-105 shadow-md`
-                  : "bg-white/[0.02] text-white/40 border-white/[0.02] hover:bg-white/5 hover:text-white/80"
+                  ? `${style.bg} border-ink/25 scale-105 shadow-md`
+                  : "bg-ink/5 text-ink/65 border-ink/10 hover:bg-ink/5 hover:text-ink/90"
               }`}
               title={p.name}
             >
@@ -659,8 +659,8 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
 
       {/* Right Pane: Search input + Models list */}
       <div className="flex-1 flex flex-col gap-2 min-w-0">
-        <div className="border-b border-white/5 shrink-0 pb-2">
-          <div className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-2 border border-white/5 focus-within:border-primary/50 transition-colors">
+        <div className="border-b border-ink/10 shrink-0 pb-2">
+          <div className="flex items-center gap-3 bg-ink/5 rounded-xl px-4 py-2 border border-ink/10 focus-within:border-primary/50 transition-colors">
             <svg
               width="14"
               height="14"
@@ -679,7 +679,7 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
               value={search}
               onClick={(e) => e.stopPropagation()}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-transparent border-none text-xs text-white focus:ring-0 w-full p-0 focus:outline-none"
+              className="bg-transparent border-none text-xs text-ink focus:ring-0 w-full p-0 focus:outline-none"
             />
           </div>
         </div>
@@ -687,7 +687,7 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
         <div className="text-xs font-semibold text-secondary py-1 shrink-0 flex items-center justify-between">
           <span>Available models</span>
           {selectedProvider !== "all" && (
-            <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded text-white/60">
+            <span className="text-[10px] bg-ink/5 px-2 py-0.5 rounded text-ink/75">
               {availableProviders.find(p => p.id === selectedProvider)?.name || selectedProvider}
             </span>
           )}
@@ -695,7 +695,7 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
         
         <div className="flex flex-col gap-1.5 overflow-y-auto custom-scrollbar pr-1 pb-2 flex-1">
           {filtered.length === 0 ? (
-            <div className="text-xs text-white/30 text-center py-6">
+            <div className="text-xs text-ink/55 text-center py-6">
               No models found
             </div>
           ) : (
@@ -707,13 +707,13 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
                   onSelect(m);
                   onClose();
                 }}
-                className={`flex items-center justify-between p-3 hover:bg-white/5 rounded-lg cursor-pointer transition-all border border-transparent hover:border-white/5 ${
-                  selectedModel === m.id ? "bg-white/5 border-white/5" : ""
+                className={`flex items-center justify-between p-3 hover:bg-ink/5 rounded-lg cursor-pointer transition-all border border-transparent hover:border-ink/10 ${
+                  selectedModel === m.id ? "bg-ink/5 border-ink/10" : ""
                 }`}
               >
                 <div className="flex items-center gap-3">
                   {PROVIDER_LOGOS[m.provider] ? (
-                    <div className="w-8 h-8 rounded-full border border-white/5 overflow-hidden shrink-0 flex items-center justify-center bg-white/[0.02]">
+                    <div className="w-8 h-8 rounded-full border border-ink/10 overflow-hidden shrink-0 flex items-center justify-center bg-ink/5">
                       <img
                         src={PROVIDER_LOGOS[m.provider]}
                         alt={m.provider_name}
@@ -724,9 +724,9 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
                     <div
                       className={`w-8.5 h-8.5 ${
                         m.family === "kontext"
-                          ? "bg-blue-500/10 text-blue-400 border-blue-500/10"
+                          ? "bg-blue-500/10 text-blue-600 border-blue-500/10"
                           : m.family === "effects"
-                            ? "bg-purple-500/10 text-purple-400 border-purple-500/10"
+                            ? "bg-purple-500/10 text-purple-600 border-purple-500/10"
                             : "bg-primary/10 text-primary border-primary/10"
                       } border rounded-full flex items-center justify-center font-bold text-xs shadow-inner uppercase`}
                     >
@@ -734,20 +734,20 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
                     </div>
                   )}
                   <div className="flex flex-col gap-0.5 min-w-0">
-                    <span className="text-xs font-bold text-white tracking-tight truncate flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-ink tracking-tight truncate flex items-center gap-1.5">
                       {m.name}
                       {m.apiProvider && m.apiProvider !== "muapi" && (
                         <span className={`text-[8px] font-bold px-1.5 py-px rounded-full border ${
                           m.apiProvider === "kie"
-                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/25"
-                            : "bg-orange-500/10 text-orange-400 border-orange-500/25"
+                            ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/25"
+                            : "bg-orange-500/10 text-orange-600 border-orange-500/25"
                         }`}>
                           {m.apiProvider === "kie" ? "Kie.ai" : "Agnes AI"}
                         </span>
                       )}
                     </span>
                     {selectedProvider === "all" && m.provider_name && (
-                      <span className="text-[9px] text-white/40">
+                      <span className="text-[9px] text-ink/65">
                         {m.provider_name}
                       </span>
                     )}
@@ -759,7 +759,7 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
                     height="14"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#22d3ee"
+                    stroke="#2563eb"
                     strokeWidth="4"
                   >
                     <polyline points="20 6 9 17 4 12" />
@@ -779,7 +779,7 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
 function SimpleDropdown({ title, options, selected, onSelect, onClose }) {
   return (
     <>
-      <div className="text-xs font-semibold text-white/30 uppercase tracking-wider pb-2 border-b border-white/[0.05] mb-2 px-1">
+      <div className="text-xs font-semibold text-ink/55 uppercase tracking-wider pb-2 border-b border-ink/10 mb-2 px-1">
         {title}
       </div>
       <div className="flex flex-col gap-1">
@@ -791,9 +791,9 @@ function SimpleDropdown({ title, options, selected, onSelect, onClose }) {
               onSelect(opt);
               onClose();
             }}
-            className="flex items-center justify-between p-2.5 px-3 hover:bg-[#22d3ee]/10 hover:text-white rounded-xl cursor-pointer transition-all group"
+            className="flex items-center justify-between p-2.5 px-3 hover:bg-accent/10 hover:text-ink rounded-xl cursor-pointer transition-all group"
           >
-            <span className="text-xs font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+            <span className="text-xs font-semibold text-ink/85 group-hover:text-accent transition-colors">
               {opt}
             </span>
             {selected === opt && (
@@ -802,7 +802,7 @@ function SimpleDropdown({ title, options, selected, onSelect, onClose }) {
                 height="12"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#22d3ee"
+                stroke="#2563eb"
                 strokeWidth="4.5"
               >
                 <polyline points="20 6 9 17 4 12" />
@@ -1210,12 +1210,12 @@ export default function ImageStudio({
             {history.map((entry, idx) => (
               <div
                 key={entry.id || idx}
-                className="relative group rounded-lg overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
+                className="relative group rounded-lg overflow-hidden border border-ink/15 bg-surface shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
               >
                 <img
                   src={entry.url}
                   alt={entry.prompt?.substring(0, 30) || "Generated image"}
-                  className="w-full aspect-square object-cover bg-black/40 cursor-pointer hover:opacity-80 transition-opacity"
+                  className="w-full aspect-square object-cover bg-ink/10 cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => setFullscreenUrl(entry.url)}
                 />
                 
@@ -1228,7 +1228,7 @@ export default function ImageStudio({
                       e.stopPropagation();
                       setFullscreenUrl(entry.url);
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-primary hover:text-black transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-primary hover:text-ink transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <polyline points="15 3 21 3 21 9" />
@@ -1244,7 +1244,7 @@ export default function ImageStudio({
                       e.stopPropagation();
                       downloadImage(entry.url, `muapi-${entry.id || idx}.jpg`);
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-primary hover:text-black transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-primary hover:text-ink transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
@@ -1259,7 +1259,7 @@ export default function ImageStudio({
                         setLocalHistory(prev => prev.filter((_, i) => i !== idx));
                       }
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-red-400 hover:bg-red-500 hover:text-white transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-red-600 hover:bg-red-500 hover:text-white transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <polyline points="3 6 5 6 21 6" />
@@ -1271,15 +1271,15 @@ export default function ImageStudio({
                 </div>
 
                 {/* Prompt & Details */}
-                <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-white/5 flex-1 flex flex-col justify-between gap-2">
-                  <p className="text-white/70 text-xs line-clamp-3 leading-relaxed" title={entry.prompt}>
+                <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-ink/10 flex-1 flex flex-col justify-between gap-2">
+                  <p className="text-ink/85 text-xs line-clamp-3 leading-relaxed" title={entry.prompt}>
                     {entry.prompt || "No prompt provided"}
                   </p>
                   <div className="flex items-center justify-between mt-1">
                     <span className="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded border border-primary/20">
                       {entry.model?.replace("-", " ")}
                     </span>
-                    <span className="text-[10px] text-white/40">{entry.aspect_ratio}</span>
+                    <span className="text-[10px] text-ink/65">{entry.aspect_ratio}</span>
                   </div>
                 </div>
               </div>
@@ -1289,28 +1289,28 @@ export default function ImageStudio({
           <div className="flex flex-col items-center justify-center h-full animate-fade-in-up transition-all duration-700 min-h-[50vh]">
             {/* Overlapping floating cards */}
             <div className="flex items-center justify-center gap-1.5 md:gap-3 mb-10 select-none scale-90 sm:scale-100">
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/sdxl-image.avif"
                   alt="Creative asset 1"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/chroma-image.avif"
                   alt="Creative asset 2"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-white/10 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-ink/15 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/neta-lumina.avif"
                   alt="Creative asset 3"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/perfect-pony-xl.avif"
                   alt="Creative asset 4"
@@ -1320,12 +1320,12 @@ export default function ImageStudio({
             </div>
 
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-center px-4 flex flex-col items-center">
-              <span className="text-white font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
-              <span className="text-[#22d3ee] font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
+              <span className="text-ink font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
+              <span className="text-accent font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
                 {selectedModelName}
               </span>
             </h1>
-            <p className="text-white/40 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
+            <p className="text-ink/65 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
               Describe a scene, character, mood, or style — and watch it come to life
             </p>
           </div>
@@ -1337,13 +1337,13 @@ export default function ImageStudio({
         className="absolute bottom-4 w-full max-w-[95%] lg:max-w-4xl z-40 animate-fade-in-up" 
         style={{ animationDelay: "0.2s" }}
       >
-        <div className="w-full bg-gradient-to-b from-[#18181c]/90 via-[#0f0f12]/90 to-[#0c0c0e]/95 backdrop-blur-2xl rounded-[2rem] border border-white/[0.08] p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
+        <div className="w-full bg-gradient-to-b from-surface/90 via-surface/90 to-surface/95 backdrop-blur-2xl rounded-[2rem] border border-ink/10 p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
           {/* Top row: upload picker + textarea */}
           <div className="flex flex-col gap-3">
             {/* Inline list of uploaded files */}
             <div className="flex items-center gap-2.5 flex-wrap">
               {uploadedImageUrls && uploadedImageUrls.length > 0 && uploadedImageUrls.map((url, idx) => (
-                <div key={idx} className="relative w-12 h-12 rounded-xl border border-white/10 overflow-hidden shadow-md group">
+                <div key={idx} className="relative w-12 h-12 rounded-xl border border-ink/15 overflow-hidden shadow-md group">
                   <img src={url} alt="" className="w-full h-full object-cover" />
                   <button
                     type="button"
@@ -1352,7 +1352,7 @@ export default function ImageStudio({
                       setUploadedImageUrls(next);
                       if (next.length === 0) handleUploadClear();
                     }}
-                    className="absolute top-0.5 right-0.5 w-4 h-4 bg-black/60 hover:bg-black rounded-full flex items-center justify-center text-white/85 hover:text-white text-[8px] border border-white/5"
+                    className="absolute top-0.5 right-0.5 w-4 h-4 bg-black/60 hover:bg-surface-2 rounded-full flex items-center justify-center text-ink/90 hover:text-ink text-[8px] border border-ink/10"
                   >
                     ×
                   </button>
@@ -1391,12 +1391,12 @@ export default function ImageStudio({
               onInput={handleTextareaInput}
               placeholder={placeholderText}
               rows={1}
-              className="w-full bg-transparent border-none text-white text-sm placeholder:text-white/20 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] md:max-h-[250px] overflow-y-auto custom-scrollbar"
+              className="w-full bg-transparent border-none text-ink text-sm placeholder:text-ink/45 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] md:max-h-[250px] overflow-y-auto custom-scrollbar"
             />
           </div>
 
           {/* Bottom row: controls + generate */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-white/[0.03] relative">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-ink/10 relative">
             {/* Left controls */}
             <div className="flex items-center gap-2 relative flex-wrap pb-1 md:pb-0">
               {/* Model button */}
@@ -1407,9 +1407,9 @@ export default function ImageStudio({
                     e.stopPropagation();
                     setDropdownOpen((o) => (o === "model" ? null : "model"));
                   }}
-                  className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                  className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                 >
-                  <div className="w-4 h-4 rounded overflow-hidden shrink-0 flex items-center justify-center bg-white/5">
+                  <div className="w-4 h-4 rounded overflow-hidden shrink-0 flex items-center justify-center bg-ink/5">
                     {(() => {
                       const selectedModelObj = currentModels.find(m => m.id === selectedModelId);
                       const selectedModelProvider = selectedModelObj?.provider || 'muapi';
@@ -1420,11 +1420,11 @@ export default function ImageStudio({
                           className={`w-full h-full object-contain ${invertLogos.includes(selectedModelProvider) ? "invert" : ""}`} 
                         />
                       ) : (
-                        <span className="text-[9px] font-bold text-black uppercase">G</span>
+                        <span className="text-[9px] font-bold text-white uppercase">G</span>
                       );
                     })()}
                   </div>
-                  <span className="text-xs font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                  <span className="text-xs font-semibold text-ink/85 group-hover:text-accent transition-colors">
                     {selectedModelName}
                   </span>
                   <svg
@@ -1444,7 +1444,7 @@ export default function ImageStudio({
                   <div
                     ref={dropdownRef}
                     onClick={(e) => e.stopPropagation()}
-                    className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-[#0c0c0f]/95 rounded-xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-white/[0.08] backdrop-blur-2xl w-[calc(100vw-2rem)] md:w-[480px] max-w-md md:max-w-none"
+                    className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-surface/95 rounded-xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-ink/10 backdrop-blur-2xl w-[calc(100vw-2rem)] md:w-[480px] max-w-md md:max-w-none"
                   >
                     <ModelDropdown
                       models={currentModels}
@@ -1464,12 +1464,12 @@ export default function ImageStudio({
                     e.stopPropagation();
                     setDropdownOpen((o) => (o === "ar" ? null : "ar"));
                   }}
-                  className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                  className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-40 text-white">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-40 text-ink">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                   </svg>
-                  <span className="text-[11px] font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                  <span className="text-[11px] font-semibold text-ink/85 group-hover:text-accent transition-colors">
                     {selectedAr}
                   </span>
                 </button>
@@ -1477,7 +1477,7 @@ export default function ImageStudio({
                 {dropdownOpen === "ar" && (
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-[#0c0c0f]/95 rounded-xl p-3.5 max-h-[40vh] overflow-y-auto custom-scrollbar shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-white/[0.08] backdrop-blur-2xl min-w-[160px]"
+                    className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-surface/95 rounded-xl p-3.5 max-h-[40vh] overflow-y-auto custom-scrollbar shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-ink/10 backdrop-blur-2xl min-w-[160px]"
                   >
                     <SimpleDropdown
                       title="Aspect Ratio"
@@ -1499,12 +1499,12 @@ export default function ImageStudio({
                       e.stopPropagation();
                       setDropdownOpen((o) => (o === "quality" ? null : "quality"));
                     }}
-                    className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                    className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                   >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-40 text-white">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-40 text-ink">
                       <polygon points="12 2 22 12 12 22 2 12" />
                     </svg>
-                    <span className="text-[11px] font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                    <span className="text-[11px] font-semibold text-ink/85 group-hover:text-accent transition-colors">
                       {selectedQuality || currentResolutions[0]}
                     </span>
                   </button>
@@ -1512,7 +1512,7 @@ export default function ImageStudio({
                   {dropdownOpen === "quality" && (
                     <div
                       onClick={(e) => e.stopPropagation()}
-                      className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-[#0c0c0f]/95 rounded-xl p-3.5 max-h-[40vh] overflow-y-auto custom-scrollbar shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-white/[0.08] backdrop-blur-2xl min-w-[160px]"
+                      className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-surface/95 rounded-xl p-3.5 max-h-[40vh] overflow-y-auto custom-scrollbar shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-ink/10 backdrop-blur-2xl min-w-[160px]"
                     >
                       <SimpleDropdown
                         title="Resolution"
@@ -1535,12 +1535,12 @@ export default function ImageStudio({
                       e.stopPropagation();
                       setDropdownOpen((o) => (o === "effect" ? null : "effect"));
                     }}
-                    className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                    className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-40 text-white">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-40 text-ink">
                       <path d="M5 3l14 9-14 9V3z" />
                     </svg>
-                    <span className="text-[11px] font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors max-w-[140px] truncate">
+                    <span className="text-[11px] font-semibold text-ink/85 group-hover:text-accent transition-colors max-w-[140px] truncate">
                       {selectedEffect || "Effect"}
                     </span>
                   </button>
@@ -1548,7 +1548,7 @@ export default function ImageStudio({
                   {dropdownOpen === "effect" && (
                     <div
                       onClick={(e) => e.stopPropagation()}
-                      className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-[#0c0c0f]/95 rounded-xl p-3.5 max-h-[40vh] overflow-y-auto custom-scrollbar shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-white/[0.08] backdrop-blur-2xl min-w-[200px]"
+                      className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-surface/95 rounded-xl p-3.5 max-h-[40vh] overflow-y-auto custom-scrollbar shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-ink/10 backdrop-blur-2xl min-w-[200px]"
                     >
                       <SimpleDropdown
                         title="Effect Type"
@@ -1563,21 +1563,21 @@ export default function ImageStudio({
               )}
 
               {/* Batch size stepper */}
-              <div className="h-[34px] flex items-center gap-2 bg-[#16161a]/60 rounded-md px-2.5 border border-white/[0.06] shadow-inner select-none">
+              <div className="h-[34px] flex items-center gap-2 bg-surface/60 rounded-md px-2.5 border border-ink/10 shadow-inner select-none">
                 <button
                   type="button"
                   onClick={() => setBatchSize(prev => Math.max(1, prev - 1))}
-                  className="text-white/40 hover:text-white/80 font-extrabold text-xs transition-colors px-1"
+                  className="text-ink/65 hover:text-ink/90 font-extrabold text-xs transition-colors px-1"
                 >
                   -
                 </button>
-                <span className="text-[11px] font-black text-white/70 min-w-[24px] text-center">
+                <span className="text-[11px] font-black text-ink/85 min-w-[24px] text-center">
                   {batchSize}/4
                 </span>
                 <button
                   type="button"
                   onClick={() => setBatchSize(prev => Math.min(4, prev + 1))}
-                  className="text-white/40 hover:text-white/80 font-extrabold text-xs transition-colors px-1"
+                  className="text-ink/65 hover:text-ink/90 font-extrabold text-xs transition-colors px-1"
                 >
                   +
                 </button>
@@ -1586,14 +1586,14 @@ export default function ImageStudio({
               {/* Draw button */}
               <button
                 type="button"
-                className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                 onClick={() => setIsDrawModalOpen(true)}
               >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-40 text-white group-hover:text-[#22d3ee] transition-colors">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-40 text-ink group-hover:text-accent transition-colors">
                   <path d="M12 20h9" />
                   <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
                 </svg>
-                <span className="text-[11px] font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                <span className="text-[11px] font-semibold text-ink/85 group-hover:text-accent transition-colors">
                   Draw
                 </span>
               </button>
@@ -1604,11 +1604,11 @@ export default function ImageStudio({
               type="button"
               onClick={handleGenerate}
               disabled={generating}
-              className="bg-[#22d3ee] text-black px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-[#22d3ee]/20 hover:shadow-[#22d3ee]/35 border border-[#22d3ee]/10 z-10"
+              className="bg-accent text-white px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-accent/20 hover:shadow-accent/35 border border-accent/10 z-10"
             >
               {generating ? (
                 <>
-                  <span className="animate-spin inline-block text-black">◌</span>
+                  <span className="animate-spin inline-block text-white">◌</span>
                   Generating...
                 </>
               ) : generateError ? (
@@ -1631,7 +1631,7 @@ export default function ImageStudio({
         >
           <button
             type="button"
-            className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors border border-white/10"
+            className="absolute top-6 right-6 p-3 bg-ink/10 hover:bg-ink/15 rounded-full text-ink transition-colors border border-ink/15"
             onClick={(e) => {
               e.stopPropagation();
               setFullscreenUrl(null);

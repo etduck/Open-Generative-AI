@@ -6,7 +6,7 @@ import { runClipping, uploadFile } from "../muapi.js";
 // ---------------------------------------------------------------------------
 // Inline SVG Icons
 // ---------------------------------------------------------------------------
-const ScissorsIcon = ({ className = "text-[#22d3ee]" }) => (
+const ScissorsIcon = ({ className = "text-accent" }) => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <circle cx="6" cy="6" r="3" />
     <circle cx="6" cy="18" r="3" />
@@ -51,7 +51,7 @@ const ClockIcon = () => (
 );
 
 const CheckIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" strokeWidth="3">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3">
     <polyline points="20 6 9 17 4 12" />
   </svg>
 );
@@ -414,14 +414,14 @@ export default function ClippingStudio({
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-app-bg text-white relative overflow-hidden">
+    <div className="w-full h-full flex flex-col items-center justify-center bg-app-bg text-ink relative overflow-hidden">
       
       {/* ─── CENTRAL AREA ─── */}
       <div className="flex-1 w-full max-w-7xl mx-auto overflow-y-auto custom-scrollbar pb-40 lg:pb-32 px-2">
         
         {/* Error Message */}
         {generateError && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded text-xs font-semibold leading-relaxed mb-6">
+          <div className="bg-red-500/10 border border-red-500/20 text-red-600 p-4 rounded text-xs font-semibold leading-relaxed mb-6">
             {generateError}
           </div>
         )}
@@ -431,28 +431,28 @@ export default function ClippingStudio({
           <div className="flex-grow flex flex-col items-center justify-center animate-fade-in-up transition-all duration-700 min-h-[55vh]">
             {/* Overlapping floating cards */}
             <div className="flex items-center justify-center gap-1.5 md:gap-3 mb-10 select-none scale-90 sm:scale-100">
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/sdxl-image.avif"
                   alt="Creative asset 1"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/chroma-image.avif"
                   alt="Creative asset 2"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-white/10 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-ink/15 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/neta-lumina.avif"
                   alt="Creative asset 3"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/perfect-pony-xl.avif"
                   alt="Creative asset 4"
@@ -462,12 +462,12 @@ export default function ClippingStudio({
             </div>
 
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-center px-4 flex flex-col items-center">
-              <span className="text-white font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
-              <span className="text-[#22d3ee] font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
+              <span className="text-ink font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
+              <span className="text-accent font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
                 AI CLIPPING STUDIO
               </span>
             </h1>
-            <p className="text-white/40 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
+            <p className="text-ink/65 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
               Extract viral highlights and precise timings from your videos automatically.
             </p>
           </div>
@@ -476,12 +476,12 @@ export default function ClippingStudio({
         {/* 2. History Gallery List (Active result is null, history has items) */}
         {!result && history.length > 0 && (
           <div className="space-y-6 pt-4">
-            <div className="flex items-center justify-between border-b border-white/5 pb-4">
-              <h2 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+            <div className="flex items-center justify-between border-b border-ink/10 pb-4">
+              <h2 className="text-sm font-black text-ink uppercase tracking-widest flex items-center gap-2">
                 <ScissorsIcon className="text-primary w-4 h-4" />
                 Clipping History Runs
               </h2>
-              <span className="text-xs font-bold text-zinc-400 bg-white/5 border border-white/5 px-2.5 py-1 rounded">
+              <span className="text-xs font-bold text-secondary bg-ink/5 border border-ink/10 px-2.5 py-1 rounded">
                 {history.length} Saved Generations
               </span>
             </div>
@@ -490,9 +490,9 @@ export default function ClippingStudio({
               {history.map((entry, idx) => (
                 <div
                   key={entry.id || idx}
-                  className="relative group rounded-lg overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
+                  className="relative group rounded-lg overflow-hidden border border-ink/15 bg-surface shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
                 >
-                  <div className="aspect-video bg-zinc-950 flex items-center justify-center border-b border-white/5 relative overflow-hidden">
+                  <div className="aspect-video bg-surface flex items-center justify-center border-b border-ink/10 relative overflow-hidden">
                     <video
                       src={entry.videoUrl}
                       className="w-full h-full object-cover opacity-60 group-hover:opacity-85 transition-opacity cursor-pointer animate-fade-in"
@@ -517,7 +517,7 @@ export default function ClippingStudio({
                           e.stopPropagation();
                           setHistory((prev) => prev.filter((h) => h.id !== entry.id));
                         }}
-                        className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-red-500 hover:text-white transition-all border border-white/10"
+                        className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-red-500 hover:text-white transition-all border border-ink/15"
                       >
                         <TrashIcon />
                       </button>
@@ -525,13 +525,13 @@ export default function ClippingStudio({
                   </div>
                   <div 
                     onClick={() => handleSelectHistory(entry)}
-                    className="p-3 bg-black/80 backdrop-blur-sm border-t border-white/5 flex-1 flex flex-col justify-between gap-2 cursor-pointer"
+                    className="p-3 bg-black/80 backdrop-blur-sm border-t border-ink/10 flex-1 flex flex-col justify-between gap-2 cursor-pointer"
                   >
                     <div className="flex flex-col gap-1">
-                      <h4 className="text-xs font-bold text-white truncate" title={entry.videoUrl.split('/').pop()}>
+                      <h4 className="text-xs font-bold text-ink truncate" title={entry.videoUrl.split('/').pop()}>
                         {entry.videoUrl.split('/').pop() || "source_video.mp4"}
                       </h4>
-                      <p className="text-[9px] text-zinc-500 font-semibold uppercase tracking-wider">
+                      <p className="text-[9px] text-muted font-semibold uppercase tracking-wider">
                         {entry.returnCoordinatesOnly ? "Timeline Seek Mode" : "Clips Gallery Mode"}
                       </p>
                     </div>
@@ -539,7 +539,7 @@ export default function ClippingStudio({
                       <span className="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded border border-primary/20">
                         {entry.aspectRatio}
                       </span>
-                      <span className="text-[10px] text-white/40">
+                      <span className="text-[10px] text-ink/65">
                         {entry.returnCoordinatesOnly ? `${entry.coordinates?.length || 0} Highlights` : `${entry.clips?.length || 0} Clips`}
                       </span>
                     </div>
@@ -554,11 +554,11 @@ export default function ClippingStudio({
         {result && (
           <div className="flex-1 flex flex-col min-h-0">
             {/* Header / Back Action */}
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-ink/10">
               <button
                 type="button"
                 onClick={() => setResult(null)}
-                className="flex items-center gap-2 text-xs font-bold text-zinc-400 hover:text-white transition-colors"
+                className="flex items-center gap-2 text-xs font-bold text-secondary hover:text-ink transition-colors"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <line x1="19" y1="12" x2="5" y2="12" />
@@ -570,7 +570,7 @@ export default function ClippingStudio({
                 <span className="text-[10px] font-bold text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded">
                   {result.returnCoordinatesOnly ? "Timeline Seek Mode" : "Clips Gallery Mode"}
                 </span>
-                <span className="text-[10px] text-zinc-400 bg-white/5 border border-white/5 px-2.5 py-0.5 rounded">
+                <span className="text-[10px] text-secondary bg-ink/5 border border-ink/10 px-2.5 py-0.5 rounded">
                   {result.aspectRatio}
                 </span>
               </div>
@@ -580,26 +580,26 @@ export default function ClippingStudio({
             {result.returnCoordinatesOnly ? (
               <div className="flex-1 flex flex-col lg:flex-row gap-6 min-h-0">
                 {/* Left Side: Original Player */}
-                <div className="flex-1 bg-black border border-zinc-900 rounded-lg overflow-hidden flex flex-col shadow-2xl relative min-h-[300px] lg:min-h-0">
-                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/5 z-10 text-[10px] uppercase font-bold tracking-wider text-primary">
+                <div className="flex-1 bg-black border border-line rounded-lg overflow-hidden flex flex-col shadow-2xl relative min-h-[300px] lg:min-h-0">
+                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-md border border-ink/10 z-10 text-[10px] uppercase font-bold tracking-wider text-primary">
                     Original Video Player
                   </div>
                   <video
                     ref={mainVideoRef}
                     src={result.videoUrl}
                     controls
-                    className="w-full flex-1 object-contain bg-zinc-950"
+                    className="w-full flex-1 object-contain bg-surface"
                     preload="auto"
                   />
                 </div>
 
                 {/* Right Side: Highlights list */}
-                <div className="w-full lg:w-[350px] border border-zinc-900 bg-zinc-950/40 backdrop-blur-md rounded-lg p-5 flex flex-col min-h-[350px] lg:min-h-0">
-                  <div className="pb-4 border-b border-zinc-900 flex items-center justify-between">
-                    <h3 className="text-xs font-black text-white uppercase tracking-widest">
+                <div className="w-full lg:w-[350px] border border-line bg-surface/40 backdrop-blur-md rounded-lg p-5 flex flex-col min-h-[350px] lg:min-h-0">
+                  <div className="pb-4 border-b border-line flex items-center justify-between">
+                    <h3 className="text-xs font-black text-ink uppercase tracking-widest">
                       Highlights Timeline
                     </h3>
-                    <span className="text-[10px] font-bold text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+                    <span className="text-[10px] font-bold text-secondary bg-surface px-2 py-0.5 rounded border border-line">
                       {result.coordinates?.length || 0} Matches
                     </span>
                   </div>
@@ -619,26 +619,26 @@ export default function ClippingStudio({
                               setActiveHighlightIndex(i);
                               seekToHighlight(start);
                             }}
-                            className={`w-full p-4 border rounded-lg text-left transition-all hover:bg-zinc-900/60 flex flex-col gap-2 group/hl ${
+                            className={`w-full p-4 border rounded-lg text-left transition-all hover:bg-surface-2/60 flex flex-col gap-2 group/hl ${
                               isActive 
-                                ? "border-primary bg-primary/5 shadow-[0_0_12px_rgba(34,211,238,0.03)]" 
-                                : "border-zinc-800 bg-zinc-900/30 hover:border-zinc-700"
+                                ? "border-primary bg-primary/5 shadow-[0_0_12px_rgba(37,99,235,0.03)]" 
+                                : "border-line bg-surface/30 hover:border-ink/30"
                             }`}
                           >
                             <div className="flex items-center justify-between w-full">
-                              <span className={`text-xs font-bold transition-colors ${isActive ? "text-primary" : "text-white"}`}>
+                              <span className={`text-xs font-bold transition-colors ${isActive ? "text-primary" : "text-ink"}`}>
                                 {hl.label || `Highlight #${i + 1}`}
                               </span>
                               {hl.score && (
-                                <span className="text-[9px] font-black text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded border border-emerald-400/20">
+                                <span className="text-[9px] font-black text-emerald-600 bg-emerald-400/10 px-1.5 py-0.5 rounded border border-emerald-400/20">
                                   {(hl.score * 100).toFixed(0)}% Score
                                 </span>
                               )}
                             </div>
-                            <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-semibold">
+                            <div className="flex items-center gap-2 text-[10px] text-secondary font-semibold">
                               <ClockIcon />
                               <span>{formatSeconds(start)} - {formatSeconds(end)}</span>
-                              <span className="text-zinc-650">•</span>
+                              <span className="text-muted">•</span>
                               <span className="text-primary/80 font-bold">{(end - start).toFixed(0)}s duration</span>
                             </div>
                             
@@ -649,7 +649,7 @@ export default function ClippingStudio({
                         );
                       })
                     ) : (
-                      <div className="text-center py-8 text-xs text-zinc-500 font-semibold">
+                      <div className="text-center py-8 text-xs text-muted font-semibold">
                         No highlights extracted.
                       </div>
                     )}
@@ -659,11 +659,11 @@ export default function ClippingStudio({
             ) : (
               /* Clips Grid Gallery */
               <div className="space-y-5">
-                <div className="flex items-center justify-between border-b border-zinc-900 pb-3.5">
-                  <h3 className="text-xs font-black text-white uppercase tracking-widest">
+                <div className="flex items-center justify-between border-b border-line pb-3.5">
+                  <h3 className="text-xs font-black text-ink uppercase tracking-widest">
                     Extracted Video Clips
                   </h3>
-                  <span className="text-[10px] font-bold text-zinc-400 bg-zinc-900 px-2.5 py-1 rounded border border-zinc-800">
+                  <span className="text-[10px] font-bold text-secondary bg-surface px-2.5 py-1 rounded border border-line">
                     Aspect Ratio: {result.aspectRatio}
                   </span>
                 </div>
@@ -673,12 +673,12 @@ export default function ClippingStudio({
                     {result.clips.map((clipUrl, i) => (
                       <div
                         key={i}
-                        className="relative group rounded-lg overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
+                        className="relative group rounded-lg overflow-hidden border border-ink/15 bg-surface shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
                       >
-                        <div className="relative group/vid border-b border-white/5 overflow-hidden bg-black/40">
+                        <div className="relative group/vid border-b border-ink/10 overflow-hidden bg-ink/10">
                           <video
                             src={clipUrl}
-                            className={`w-full ${getAspectClass(result.aspectRatio)} object-cover bg-black/40 cursor-pointer hover:opacity-85 transition-opacity`}
+                            className={`w-full ${getAspectClass(result.aspectRatio)} object-cover bg-ink/10 cursor-pointer hover:opacity-85 transition-opacity`}
                             onClick={() => setFullscreenUrl(clipUrl)}
                             controls={false}
                             loop
@@ -700,7 +700,7 @@ export default function ClippingStudio({
                                 e.stopPropagation();
                                 setFullscreenUrl(clipUrl);
                               }}
-                              className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-primary hover:text-black transition-all border border-white/10"
+                              className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-primary hover:text-ink transition-all border border-ink/15"
                             >
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                 <polyline points="15 3 21 3 21 9" />
@@ -716,7 +716,7 @@ export default function ClippingStudio({
                                 e.stopPropagation();
                                 copyToClipboard(clipUrl);
                               }}
-                              className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-primary hover:text-black transition-all border border-white/10"
+                              className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-primary hover:text-ink transition-all border border-ink/15"
                             >
                               <CopyIcon />
                             </button>
@@ -727,30 +727,30 @@ export default function ClippingStudio({
                                 e.stopPropagation();
                                 downloadVideo(clipUrl, `clip-${i + 1}.mp4`);
                               }}
-                              className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-primary hover:text-black transition-all border border-white/10"
+                              className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-primary hover:text-ink transition-all border border-ink/15"
                             >
                               <DownloadIcon />
                             </button>
                           </div>
 
-                          <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-md px-2 py-1 rounded border border-white/5 text-[9px] uppercase font-black tracking-wider text-primary">
+                          <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-md px-2 py-1 rounded border border-ink/10 text-[9px] uppercase font-black tracking-wider text-primary">
                             Clip #{i + 1}
                           </div>
                         </div>
 
-                        <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-white/5 flex-1 flex flex-col justify-between gap-2">
+                        <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-ink/10 flex-1 flex flex-col justify-between gap-2">
                           <div className="flex items-center justify-between mt-1">
                             <span className="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded border border-primary/20 whitespace-nowrap">
                               Clip #{i + 1}
                             </span>
-                            <span className="text-[10px] text-white/40">{result.aspectRatio}</span>
+                            <span className="text-[10px] text-ink/65">{result.aspectRatio}</span>
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="py-20 text-center text-xs text-zinc-500 font-semibold border border-zinc-900 rounded bg-zinc-950/20">
+                  <div className="py-20 text-center text-xs text-muted font-semibold border border-line rounded bg-surface/20">
                     No video clips generated. Try re-running.
                   </div>
                 )}
@@ -763,17 +763,17 @@ export default function ClippingStudio({
 
       {/* ─── FLOATING BOTTOM PROMPT BAR ─── */}
       <div className="absolute bottom-4 w-full max-w-[95%] lg:max-w-4xl z-40 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-        <div className="w-full bg-gradient-to-b from-[#18181c]/90 via-[#0f0f12]/90 to-[#0c0c0e]/95 backdrop-blur-2xl rounded-[2rem] border border-white/[0.08] p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
+        <div className="w-full bg-gradient-to-b from-surface/90 via-surface/90 to-surface/95 backdrop-blur-2xl rounded-[2rem] border border-ink/10 p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
           
           {/* Inline list of uploaded media files */}
           {videoUrl && (
             <div className="flex items-center gap-2.5 px-1 pb-1">
-              <div className="relative w-12 h-12 rounded-xl border border-white/10 overflow-hidden shadow-md group">
+              <div className="relative w-12 h-12 rounded-xl border border-ink/15 overflow-hidden shadow-md group">
                 <video src={videoUrl} className="w-full h-full object-cover" muted playsInline />
                 <button
                   type="button"
                   onClick={clearVideoUpload}
-                  className="absolute top-0.5 right-0.5 w-4 h-4 bg-black/60 hover:bg-black rounded-full flex items-center justify-center text-white/85 hover:text-white text-[8px] border border-white/5"
+                  className="absolute top-0.5 right-0.5 w-4 h-4 bg-black/60 hover:bg-surface-2 rounded-full flex items-center justify-center text-ink/90 hover:text-ink text-[8px] border border-ink/10"
                   title="Clear video"
                 >
                   ×
@@ -799,12 +799,12 @@ export default function ClippingStudio({
                 type="button"
                 title="Upload source video"
                 onClick={() => videoFileInputRef.current?.click()}
-                className="w-10 h-10 shrink-0 rounded-full border bg-white/5 border-white/[0.03] hover:bg-white/10 hover:border-[#22d3ee]/40 transition-all flex items-center justify-center relative overflow-hidden group"
+                className="w-10 h-10 shrink-0 rounded-full border bg-ink/5 border-ink/10 hover:bg-ink/10 hover:border-accent/40 transition-all flex items-center justify-center relative overflow-hidden group"
               >
                 {videoUploading ? (
                   <div className="flex flex-col items-center justify-center w-full h-full absolute inset-0 bg-black/85 z-20 backdrop-blur-[1px]">
                     <svg className="w-8 h-8 -rotate-90">
-                      <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="2" fill="transparent" className="text-white/10" />
+                      <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="2" fill="transparent" className="text-ink/45" />
                       <circle
                         cx="16"
                         cy="16"
@@ -814,16 +814,16 @@ export default function ClippingStudio({
                         fill="transparent"
                         strokeDasharray={88}
                         strokeDashoffset={88 - (88 * videoProgress) / 100}
-                        className="text-[#22d3ee] transition-all duration-300"
+                        className="text-accent transition-all duration-300"
                       />
                     </svg>
-                    <span className="absolute text-[8px] font-black text-[#22d3ee] leading-none">
+                    <span className="absolute text-[8px] font-black text-accent leading-none">
                       {videoProgress}%
                     </span>
                   </div>
                 ) : null}
 
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/40 group-hover:text-[#22d3ee] transition-colors">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-ink/65 group-hover:text-accent transition-colors">
                   <polygon points="23 7 16 12 23 17 23 7" />
                   <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
                 </svg>
@@ -838,21 +838,21 @@ export default function ClippingStudio({
                 onChange={handlePromptInput}
                 placeholder="Describe prompt / highlights to extract"
                 rows={1}
-                className="w-full bg-transparent border-none text-white text-sm placeholder:text-white/20 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] overflow-y-auto custom-scrollbar"
+                className="w-full bg-transparent border-none text-ink text-sm placeholder:text-ink/45 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] overflow-y-auto custom-scrollbar"
               />
             </div>
           </div>
 
           {/* Bottom row: controls + generate button */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-white/[0.03] relative">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-ink/10 relative">
             <div className="flex items-center gap-2 relative flex-wrap pb-1 md:pb-0">
               
               {/* Model Identifier (C) */}
-              <div className="flex items-center gap-2 px-3.5 h-[34px] bg-[#16161a]/60 rounded-md border border-white/[0.06] shadow-inner whitespace-nowrap">
-                <div className="w-4 h-4 bg-[#22d3ee] rounded flex items-center justify-center shadow-lg shadow-[#22d3ee]/10">
-                  <span className="text-[9px] font-bold text-black uppercase">C</span>
+              <div className="flex items-center gap-2 px-3.5 h-[34px] bg-surface/60 rounded-md border border-ink/10 shadow-inner whitespace-nowrap">
+                <div className="w-4 h-4 bg-accent rounded flex items-center justify-center shadow-lg shadow-accent/10">
+                  <span className="text-[9px] font-bold text-white uppercase">C</span>
                 </div>
-                <span className="text-xs font-semibold text-white/70">
+                <span className="text-xs font-semibold text-ink/85">
                   AI Clipping
                 </span>
               </div>
@@ -862,32 +862,32 @@ export default function ClippingStudio({
                 <button
                   type="button"
                   onClick={() => setAspectDropdownOpen(!aspectDropdownOpen)}
-                  className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                  className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-40 text-white">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-40 text-ink">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                   </svg>
-                  <span className="text-[11px] font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                  <span className="text-[11px] font-semibold text-ink/85 group-hover:text-accent transition-colors">
                     {aspectRatio}
                   </span>
                   <ChevronDownIcon />
                 </button>
                 {aspectDropdownOpen && (
-                  <div className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-[#0c0c0f]/95 rounded-xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-white/[0.08] backdrop-blur-2xl min-w-[160px]">
-                    <div className="text-xs font-bold text-white/20 border-b border-white/[0.03] mb-2 pb-1">
+                  <div className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-surface/95 rounded-xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-ink/10 backdrop-blur-2xl min-w-[160px]">
+                    <div className="text-xs font-bold text-ink/45 border-b border-ink/10 mb-2 pb-1">
                       Aspect Ratio
                     </div>
                     <div className="flex flex-col gap-1 max-h-60 overflow-y-auto custom-scrollbar">
                       {ASPECT_RATIOS.map((r) => (
                         <div
                           key={r.value}
-                          className="flex items-center justify-between p-2.5 hover:bg-white/5 rounded cursor-pointer transition-all group/opt"
+                          className="flex items-center justify-between p-2.5 hover:bg-ink/5 rounded cursor-pointer transition-all group/opt"
                           onClick={() => {
                             setAspectRatio(r.value);
                             setAspectDropdownOpen(false);
                           }}
                         >
-                          <span className="text-[11px] font-semibold text-white/70 group-hover/opt:text-white transition-opacity">
+                          <span className="text-[11px] font-semibold text-ink/85 group-hover/opt:text-ink transition-opacity">
                             {r.value}
                           </span>
                           {aspectRatio === r.value && <CheckIcon />}
@@ -903,22 +903,22 @@ export default function ClippingStudio({
                 <button
                   type="button"
                   onClick={() => setHighlightsDropdownOpen(!highlightsDropdownOpen)}
-                  className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                  className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                 >
                   <ClockIcon />
-                  <span className="text-[11px] font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                  <span className="text-[11px] font-semibold text-ink/85 group-hover:text-accent transition-colors">
                     {numHighlights} Highlights
                   </span>
                   <ChevronDownIcon />
                 </button>
                 {highlightsDropdownOpen && (
-                  <div className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-[#0c0c0f]/95 rounded-xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-white/[0.08] backdrop-blur-2xl min-w-[180px]">
-                    <div className="text-xs font-bold text-white/20 border-b border-white/[0.03] mb-3 pb-1">
+                  <div className="absolute bottom-[calc(100%+12px)] left-0 z-50 bg-surface/95 rounded-xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-ink/10 backdrop-blur-2xl min-w-[180px]">
+                    <div className="text-xs font-bold text-ink/45 border-b border-ink/10 mb-3 pb-1">
                       Max Highlights
                     </div>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-white/60">Limit:</span>
+                        <span className="text-xs text-ink/75">Limit:</span>
                         <span className="text-xs font-black text-primary bg-primary/10 px-2.5 py-0.5 rounded">
                           {numHighlights}
                         </span>
@@ -930,7 +930,7 @@ export default function ClippingStudio({
                         step="1"
                         value={numHighlights}
                         onChange={(e) => setNumHighlights(Number(e.target.value))}
-                        className="w-full h-1 bg-zinc-850 rounded appearance-none cursor-pointer accent-primary"
+                        className="w-full h-1 bg-surface-2 rounded appearance-none cursor-pointer accent-primary"
                       />
                     </div>
                   </div>
@@ -943,8 +943,8 @@ export default function ClippingStudio({
                 onClick={() => setReturnCoordinatesOnly(!returnCoordinatesOnly)}
                 className={`h-[34px] flex items-center gap-2 px-3.5 rounded-md transition-all border whitespace-nowrap text-[11px] font-semibold shadow-inner ${
                   returnCoordinatesOnly 
-                    ? "bg-[#22d3ee]/10 border-[#22d3ee]/20 text-[#22d3ee]" 
-                    : "bg-[#16161a]/60 border-white/[0.06] text-white/70 hover:bg-[#202026]/80 hover:text-white"
+                    ? "bg-accent/10 border-accent/20 text-accent" 
+                    : "bg-surface/60 border-ink/10 text-ink/85 hover:bg-surface-2/80 hover:text-ink"
                 }`}
               >
                 <ScissorsIcon className="w-3.5 h-3.5 text-current" />
@@ -958,16 +958,16 @@ export default function ClippingStudio({
               type="button"
               onClick={handleGenerate}
               disabled={isGenerating}
-              className="bg-[#22d3ee] text-black px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-[#22d3ee]/20 hover:shadow-[#22d3ee]/35 border border-[#22d3ee]/10 z-10 uppercase tracking-wider"
+              className="bg-accent text-white px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-accent/20 hover:shadow-accent/35 border border-accent/10 z-10 uppercase tracking-wider"
             >
               {isGenerating ? (
                 <>
-                  <span className="animate-spin inline-block text-black">◌</span>
+                  <span className="animate-spin inline-block text-white">◌</span>
                   <span>{elapsedTime}s</span>
                 </>
               ) : (
                 <>
-                  <ScissorsIcon className="text-black w-4 h-4" />
+                  <ScissorsIcon className="text-white w-4 h-4" />
                   <span>Generate</span>
                 </>
               )}
@@ -985,15 +985,15 @@ export default function ClippingStudio({
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.08);
+          background: rgba(23,25,28, 0.08);
           border-radius: 99px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.15);
+          background: rgba(23,25,28, 0.15);
         }
         .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+          scrollbar-color: rgba(23,25,28, 0.08) transparent;
         }
       `}</style>
     </div>

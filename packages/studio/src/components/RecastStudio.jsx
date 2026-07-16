@@ -50,7 +50,7 @@ function MediaPickerButton({
   const borderClass =
     uploadState === UPLOAD_STATE.READY
       ? "border-primary/60 bg-primary/5"
-      : "border-white/[0.03] bg-white/[0.03] hover:bg-white/[0.06] hover:border-primary/40";
+      : "border-ink/10 bg-ink/5 hover:bg-ink/10 hover:border-primary/40";
 
   return (
     <button
@@ -89,7 +89,7 @@ function MediaPickerButton({
               stroke="currentColor"
               strokeWidth="2"
               fill="transparent"
-              className="text-white/10"
+              className="text-ink/45"
             />
             <circle
               cx="16"
@@ -171,11 +171,11 @@ function AssetsDropdown({
   return (
     <div
       ref={dropRef}
-      className="absolute bottom-[calc(100%+8px)] left-0 z-50 bg-[#111] border border-white/10 rounded-lg shadow-3xl p-3 custom-scrollbar w-80 max-h-80 flex flex-col gap-2 animate-fade-in"
+      className="absolute bottom-[calc(100%+8px)] left-0 z-50 bg-surface border border-ink/15 rounded-lg shadow-3xl p-3 custom-scrollbar w-80 max-h-80 flex flex-col gap-2 animate-fade-in"
       onClick={(e) => e.stopPropagation()}
     >
       {/* Tabs */}
-      <div className="flex border-b border-white/5 pb-1">
+      <div className="flex border-b border-ink/10 pb-1">
         {["videos", "images", "results"].map((tab) => (
           <button
             key={tab}
@@ -183,8 +183,8 @@ function AssetsDropdown({
             onClick={() => setActiveTab(tab)}
             className={`flex-1 text-center py-1 text-xs font-bold capitalize transition-colors ${
               activeTab === tab
-                ? "text-[#22d3ee] border-b border-[#22d3ee]"
-                : "text-white/40 hover:text-white/80"
+                ? "text-accent border-b border-accent"
+                : "text-ink/65 hover:text-ink/90"
             }`}
           >
             {tab}
@@ -195,7 +195,7 @@ function AssetsDropdown({
       {/* Items list */}
       <div className="overflow-y-auto custom-scrollbar flex-1 flex flex-col gap-1.5 min-h-[180px] max-h-60">
         {items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center flex-1 py-10 text-xs text-white/20">
+          <div className="flex flex-col items-center justify-center flex-1 py-10 text-xs text-ink/45">
             No assets found
           </div>
         ) : (
@@ -211,10 +211,10 @@ function AssetsDropdown({
                   onSelectResultAsVideo(item.url, item.name);
                 }
               }}
-              className="flex items-center justify-between p-2 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/5 hover:border-white/10 transition-all gap-2 group/item cursor-pointer"
+              className="flex items-center justify-between p-2 rounded-xl bg-ink/5 border border-ink/10 hover:bg-ink/5 hover:border-ink/15 transition-all gap-2 group/item cursor-pointer"
             >
               {/* Media Preview Thumbnail */}
-              <div className="w-10 h-10 rounded-lg overflow-hidden bg-white/5 flex-shrink-0 relative">
+              <div className="w-10 h-10 rounded-lg overflow-hidden bg-ink/5 flex-shrink-0 relative">
                 {activeTab === "images" ? (
                   <img
                     src={item.url}
@@ -238,7 +238,7 @@ function AssetsDropdown({
                     e.stopPropagation();
                     setFullscreenUrl(item.url);
                   }}
-                  className="absolute inset-0 bg-black/60 opacity-0 group-hover/item:opacity-100 flex items-center justify-center transition-opacity text-white hover:text-[#22d3ee]"
+                  className="absolute inset-0 bg-black/60 opacity-0 group-hover/item:opacity-100 flex items-center justify-center transition-opacity text-ink hover:text-accent"
                 >
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <circle cx="11" cy="11" r="8" />
@@ -251,10 +251,10 @@ function AssetsDropdown({
 
               {/* Info */}
               <div className="flex-1 min-w-0 flex flex-col">
-                <span className="text-xs text-white/95 font-semibold truncate" title={item.name}>
+                <span className="text-xs text-ink/90 font-semibold truncate" title={item.name}>
                   {item.name}
                 </span>
-                <span className="text-[9px] text-white/30 truncate mt-0.5">
+                <span className="text-[9px] text-ink/55 truncate mt-0.5">
                   {new Date(item.timestamp || Date.now()).toLocaleDateString()}
                 </span>
               </div>
@@ -263,7 +263,7 @@ function AssetsDropdown({
               <div className="flex items-center gap-1">
                 <button
                   type="button"
-                  className="text-xs text-black font-black px-2.5 py-1 bg-[#22d3ee] rounded-md hover:bg-[#22d3ee]/90 transition-colors"
+                  className="text-xs text-white font-black px-2.5 py-1 bg-accent rounded-md hover:bg-accent/90 transition-colors"
                 >
                   Use
                 </button>
@@ -274,7 +274,7 @@ function AssetsDropdown({
                     e.stopPropagation();
                     onDeleteAsset(activeTab, item.url);
                   }}
-                  className="p-1.5 text-white/30 hover:text-red-500 rounded hover:bg-white/5 transition-colors"
+                  className="p-1.5 text-ink/55 hover:text-red-500 rounded hover:bg-ink/5 transition-colors"
                 >
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <polyline points="3 6 5 6 21 6" />
@@ -315,7 +315,7 @@ function Dropdown({ isOpen, items, selectedId, onSelect, onClose, anchorRef }) {
   return (
     <div
       ref={dropRef}
-      className="absolute bottom-[calc(100%+8px)] left-0 z-50 bg-[#111] border border-white/10 rounded-lg shadow-3xl p-2 custom-scrollbar w-64 max-h-60 overflow-y-auto animate-fade-in"
+      className="absolute bottom-[calc(100%+8px)] left-0 z-50 bg-surface border border-ink/15 rounded-lg shadow-3xl p-2 custom-scrollbar w-64 max-h-60 overflow-y-auto animate-fade-in"
       onClick={(e) => e.stopPropagation()}
     >
       {items.map((item) => (
@@ -326,15 +326,15 @@ function Dropdown({ isOpen, items, selectedId, onSelect, onClose, anchorRef }) {
             onSelect(item);
             onClose();
           }}
-          className={`w-full text-left px-4 py-2 rounded text-sm transition-all hover:bg-white/10 ${
+          className={`w-full text-left px-4 py-2 rounded text-sm transition-all hover:bg-ink/10 ${
             item.id === selectedId
               ? "text-primary font-bold bg-primary/5"
-              : "text-white font-medium"
+              : "text-ink font-medium"
           }`}
         >
           <div>{item.name}</div>
           {item.description && (
-            <div className="text-xs text-white/40 mt-0.5">
+            <div className="text-xs text-ink/65 mt-0.5">
               {item.description.slice(0, 75)}
             </div>
           )}
@@ -348,7 +348,7 @@ function Dropdown({ isOpen, items, selectedId, onSelect, onClose, anchorRef }) {
 // SVG icons
 // ---------------------------------------------------------------------------
 const VideoIcon = ({
-  className = "text-white/40 group-hover:text-primary transition-colors",
+  className = "text-ink/65 group-hover:text-primary transition-colors",
 }) => (
   <svg
     width="16"
@@ -365,7 +365,7 @@ const VideoIcon = ({
 );
 
 const ImageIcon = ({
-  className = "text-white/40 group-hover:text-primary transition-colors",
+  className = "text-ink/65 group-hover:text-primary transition-colors",
 }) => (
   <svg
     width="16"
@@ -766,11 +766,11 @@ export default function RecastStudio({
             {history.map((entry, idx) => (
               <div
                 key={entry.id || idx}
-                className="relative group rounded-2xl overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
+                className="relative group rounded-2xl overflow-hidden border border-ink/15 bg-surface shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
               >
                 <video
                   src={entry.url}
-                  className="w-full aspect-video object-cover bg-black/40 cursor-pointer hover:opacity-80 transition-opacity"
+                  className="w-full aspect-video object-cover bg-ink/10 cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => setFullscreenUrl(entry.url)}
                   controls={false}
                   loop
@@ -792,7 +792,7 @@ export default function RecastStudio({
                       e.stopPropagation();
                       setFullscreenUrl(entry.url);
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-primary hover:text-black transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-primary hover:text-ink transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <polyline points="15 3 21 3 21 9" />
@@ -808,7 +808,7 @@ export default function RecastStudio({
                       e.stopPropagation();
                       downloadFile(entry.url, `bodyswap-${entry.id || idx}.mp4`);
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-primary hover:text-black transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-ink hover:bg-primary hover:text-ink transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
@@ -823,7 +823,7 @@ export default function RecastStudio({
                         setInternalHistory(prev => prev.filter((_, i) => i !== idx));
                       }
                     }}
-                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-red-400 hover:bg-red-500 hover:text-white transition-all border border-white/10"
+                    className="p-2 bg-black/60 backdrop-blur-md rounded-full text-red-600 hover:bg-red-500 hover:text-white transition-all border border-ink/15"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <polyline points="3 6 5 6 21 6" />
@@ -835,7 +835,7 @@ export default function RecastStudio({
                 </div>
 
                 {/* Details */}
-                <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-white/5 flex-1 flex flex-col justify-between gap-2">
+                <div className="p-3 bg-black/80 backdrop-blur-sm border-t border-ink/10 flex-1 flex flex-col justify-between gap-2">
                   <div className="flex items-center justify-between flex-wrap gap-1">
                     <span className="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded border border-primary/20 whitespace-nowrap">
                       {entry.model?.name || entry.model || "Body Swap"}
@@ -849,28 +849,28 @@ export default function RecastStudio({
           <div className="flex flex-col items-center justify-center h-full animate-fade-in-up transition-all duration-700 min-h-[50vh]">
             {/* Overlapping floating cards */}
             <div className="flex items-center justify-center gap-1.5 md:gap-3 mb-10 select-none scale-90 sm:scale-100">
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/sdxl-image.avif"
                   alt="Creative asset 1"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl -rotate-[4deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/chroma-image.avif"
                   alt="Creative asset 2"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-white/10 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border border-ink/15 shadow-2xl rotate-[6deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/neta-lumina.avif"
                   alt="Creative asset 3"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-white/10 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-white/[0.01] -ml-3 sm:-ml-4 flex-shrink-0">
+              <div className="w-18 h-22 sm:w-24 sm:h-28 rounded-2xl border border-ink/15 shadow-2xl rotate-[12deg] transform hover:rotate-0 hover:scale-110 hover:z-20 transition-all duration-300 overflow-hidden bg-ink/5 -ml-3 sm:-ml-4 flex-shrink-0">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/perfect-pony-xl.avif"
                   alt="Creative asset 4"
@@ -880,12 +880,12 @@ export default function RecastStudio({
             </div>
 
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-center px-4 flex flex-col items-center">
-              <span className="text-white font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
-              <span className="text-[#22d3ee] font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
+              <span className="text-ink font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
+              <span className="text-accent font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
                 BODY SWAP STUDIO
               </span>
             </h1>
-            <p className="text-white/40 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
+            <p className="text-ink/65 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
               Swap the character in any video dynamically by choosing a video clip and a target character image.
             </p>
           </div>
@@ -894,7 +894,7 @@ export default function RecastStudio({
 
       {/* ── BOTTOM PROMPT BAR ── */}
       <div className="absolute bottom-4 w-full max-w-[95%] lg:max-w-4xl z-40 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-        <div className="w-full bg-gradient-to-b from-[#18181c]/90 via-[#0f0f12]/90 to-[#0c0c0e]/95 backdrop-blur-2xl rounded-[2rem] border border-white/[0.08] p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
+        <div className="w-full bg-gradient-to-b from-surface/90 via-surface/90 to-surface/95 backdrop-blur-2xl rounded-[2rem] border border-ink/10 p-4 flex flex-col gap-3 shadow-[0_15px_50px_rgba(0,0,0,0.8)]">
           {/* Uploads row */}
           <div className="flex items-center gap-2 px-1">
             <div className="flex items-center gap-2">
@@ -902,7 +902,7 @@ export default function RecastStudio({
               <MediaPickerButton
                 accept="video/*"
                 label="Video"
-                icon={<VideoIcon className="text-white/40 group-hover:text-[#22d3ee] transition-colors" />}
+                icon={<VideoIcon className="text-ink/65 group-hover:text-accent transition-colors" />}
                 onUpload={handleVideoPick}
                 onClear={() => {
                   setVideoUrl(null);
@@ -920,7 +920,7 @@ export default function RecastStudio({
               <MediaPickerButton
                 accept="image/*"
                 label="Character image"
-                icon={<ImageIcon className="text-white/40 group-hover:text-[#22d3ee] transition-colors" />}
+                icon={<ImageIcon className="text-ink/65 group-hover:text-accent transition-colors" />}
                 onUpload={handleImageUpload}
                 onClear={() => {
                   setImageUrl(null);
@@ -942,14 +942,14 @@ export default function RecastStudio({
                 value={prompt}
                 onChange={handlePromptInput}
                 placeholder="Optional — describe the motion or scene..."
-                className="w-full bg-transparent border-none text-white text-sm placeholder:text-white/10 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] md:max-h-[250px] overflow-y-auto custom-scrollbar disabled:opacity-40"
+                className="w-full bg-transparent border-none text-ink text-sm placeholder:text-ink/45 focus:outline-none resize-none pt-1 leading-relaxed min-h-[40px] max-h-[150px] md:max-h-[250px] overflow-y-auto custom-scrollbar disabled:opacity-40"
                 rows={1}
               />
             </div>
           </div>
 
           {/* Bottom controls row */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-white/[0.03] relative">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-3 border-t border-ink/10 relative">
             <div className="flex items-center gap-2 px-1">
               {/* Model selector */}
               <div className="relative">
@@ -960,12 +960,12 @@ export default function RecastStudio({
                     e.stopPropagation();
                     setOpenDropdown(openDropdown === "model" ? null : "model");
                   }}
-                  className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                  className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                 >
-                  <div className="w-3.5 h-3.5 bg-[#22d3ee] rounded-sm flex items-center justify-center">
-                    <span className="text-[9px] font-black text-black">R</span>
+                  <div className="w-3.5 h-3.5 bg-accent rounded-sm flex items-center justify-center">
+                    <span className="text-[9px] font-black text-white">R</span>
                   </div>
-                  <span className="text-xs font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                  <span className="text-xs font-semibold text-ink/85 group-hover:text-accent transition-colors">
                     {selectedModel?.name ?? "Select model"}
                   </span>
                   <svg
@@ -1000,9 +1000,9 @@ export default function RecastStudio({
                       e.stopPropagation();
                       setOpenDropdown(openDropdown === "aspect" ? null : "aspect");
                     }}
-                    className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                    className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                   >
-                    <span className="text-xs font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                    <span className="text-xs font-semibold text-ink/85 group-hover:text-accent transition-colors">
                       {selectedAspectRatio}
                     </span>
                     <svg
@@ -1038,12 +1038,12 @@ export default function RecastStudio({
                       e.stopPropagation();
                       setOpenDropdown(openDropdown === "orientation" ? null : "orientation");
                     }}
-                    className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                    className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                   >
-                    <span className="text-xs font-semibold text-white/50 group-hover:text-[#22d3ee] transition-colors">
+                    <span className="text-xs font-semibold text-ink/70 group-hover:text-accent transition-colors">
                       Orientation:
                     </span>
-                    <span className="text-xs font-bold text-white group-hover:text-[#22d3ee] transition-colors capitalize">
+                    <span className="text-xs font-bold text-ink group-hover:text-accent transition-colors capitalize">
                       {characterOrientation}
                     </span>
                     <svg
@@ -1081,7 +1081,7 @@ export default function RecastStudio({
                     e.stopPropagation();
                     setOpenDropdown(openDropdown === "assets" ? null : "assets");
                   }}
-                  className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
+                  className="h-[34px] flex items-center gap-2 px-3.5 bg-surface/60 hover:bg-surface-2/80 rounded-md transition-all border border-ink/10 group whitespace-nowrap shadow-inner"
                 >
                   <svg
                     width="14"
@@ -1090,12 +1090,12 @@ export default function RecastStudio({
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
-                    className="text-white/50 group-hover:text-[#22d3ee] transition-colors"
+                    className="text-ink/70 group-hover:text-accent transition-colors"
                   >
                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
                     <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
                   </svg>
-                  <span className="text-xs font-semibold text-white/70 group-hover:text-[#22d3ee] transition-colors">
+                  <span className="text-xs font-semibold text-ink/85 group-hover:text-accent transition-colors">
                     Library
                   </span>
                   <svg
@@ -1147,11 +1147,11 @@ export default function RecastStudio({
               type="button"
               onClick={handleGenerate}
               disabled={isGenerating}
-              className="bg-[#22d3ee] text-black px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-[#22d3ee]/20 hover:shadow-[#22d3ee]/35 border border-[#22d3ee]/10 z-10"
+              className="bg-accent text-white px-7 py-3 rounded-full font-bold text-sm hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-accent/20 hover:shadow-accent/35 border border-accent/10 z-10"
             >
               {isGenerating ? (
                 <>
-                  <span className="animate-spin inline-block text-black">◌</span>{" "}
+                  <span className="animate-spin inline-block text-white">◌</span>{" "}
                   Swapping...
                 </>
               ) : generateError ? (
@@ -1172,7 +1172,7 @@ export default function RecastStudio({
         >
           <button
             type="button"
-            className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors border border-white/10"
+            className="absolute top-6 right-6 p-3 bg-ink/10 hover:bg-ink/15 rounded-full text-ink transition-colors border border-ink/15"
             onClick={(e) => {
               e.stopPropagation();
               setFullscreenUrl(null);

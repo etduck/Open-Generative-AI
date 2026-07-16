@@ -7,7 +7,7 @@ import { ImageStudio, VideoStudio, ClippingStudio, VibeMotionStudio, LipSyncStud
 
 const DesignAgentStudio = dynamic(() => import('studio').then(mod => mod.DesignAgentStudio), {
   ssr: false,
-  loading: () => <div className="h-full w-full bg-black flex items-center justify-center text-white/20">Loading Design Studio...</div>
+  loading: () => <div className="h-full w-full bg-black flex items-center justify-center text-ink/45">Loading Design Studio...</div>
 });
 import axios from 'axios';
 import ApiKeyModal from './ApiKeyModal';
@@ -277,8 +277,8 @@ export default function StandaloneShell() {
   }, []);
 
   if (!hasMounted) return (
-    <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-      <div className="animate-spin text-[#22d3ee] text-3xl">◌</div>
+    <div className="min-h-screen bg-app-bg flex items-center justify-center">
+      <div className="animate-spin text-accent text-3xl">◌</div>
     </div>
   );
 
@@ -296,7 +296,7 @@ export default function StandaloneShell() {
 
   return (
     <div 
-      className="h-screen bg-[#030303] flex flex-col overflow-hidden text-white relative"
+      className="h-screen bg-app-bg flex flex-col overflow-hidden text-ink relative"
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
@@ -304,16 +304,16 @@ export default function StandaloneShell() {
     >
       {/* Drag Overlay */}
       {isDragging && (
-        <div className="fixed inset-0 z-[100] bg-[#22d3ee]/10 backdrop-blur-md border-4 border-dashed border-[#22d3ee]/50 flex items-center justify-center pointer-events-none transition-all duration-300">
-          <div className="bg-[#0a0a0a] p-8 rounded-3xl border border-white/10 shadow-2xl flex flex-col items-center gap-4 scale-110 animate-pulse">
-            <div className="w-20 h-20 bg-[#22d3ee] rounded-2xl flex items-center justify-center">
+        <div className="fixed inset-0 z-[100] bg-accent/10 backdrop-blur-md border-4 border-dashed border-accent/50 flex items-center justify-center pointer-events-none transition-all duration-300">
+          <div className="bg-surface p-8 rounded-3xl border border-ink/15 shadow-2xl flex flex-col items-center gap-4 scale-110 animate-pulse">
+            <div className="w-20 h-20 bg-accent rounded-2xl flex items-center justify-center">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5">
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
               </svg>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-xl font-bold text-white">Drop your media here</span>
-              <span className="text-sm text-white/40">Images, videos, or audio files</span>
+              <span className="text-xl font-bold text-ink">Drop your media here</span>
+              <span className="text-sm text-ink/65">Images, videos, or audio files</span>
             </div>
           </div>
         </div>
@@ -326,7 +326,7 @@ export default function StandaloneShell() {
             href="https://vadoo.tv"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[13px] font-bold text-white hover:opacity-80 transition-opacity text-center"
+            className="text-[13px] font-bold text-ink hover:opacity-80 transition-opacity text-center"
           >
             Unrestricted AI Images &amp; Videos → Auto-Publish as YouTube Shorts &amp; TikToks, Earn ↗
           </a>
@@ -335,7 +335,7 @@ export default function StandaloneShell() {
               setShowVadooBanner(false);
               localStorage.setItem('vadoo_banner_dismissed', '1');
             }}
-            className="absolute right-3 text-white/60 hover:text-white transition-colors text-lg leading-none"
+            className="absolute right-3 text-ink/75 hover:text-ink transition-colors text-lg leading-none"
             aria-label="Dismiss"
           >
             ✕
@@ -345,11 +345,11 @@ export default function StandaloneShell() {
 
       {/* Header */}
       {isHeaderVisible && (
-        <header className="flex-shrink-0 h-14 border-b border-white/[0.03] flex items-center justify-between px-6 bg-black/20 backdrop-blur-md z-40 gap-4">
+        <header className="flex-shrink-0 h-14 border-b border-line flex items-center justify-between px-6 bg-surface/80 backdrop-blur-md z-40 gap-4">
           {/* Left: Logo */}
           <div className="flex-shrink-0 flex items-center gap-2">
-            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-8 h-8 bg-ink rounded-lg flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
               </svg>
             </div>
@@ -359,7 +359,7 @@ export default function StandaloneShell() {
           {/* Center: Navigation Container with fade edges */}
           <div className="flex-1 min-w-0 mx-4 sm:mx-6 relative overflow-hidden h-full flex items-center justify-start lg:justify-center">
             {/* Fade Left Overlay */}
-            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#030303] to-transparent pointer-events-none z-10 block lg:hidden" />
+            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-app-bg to-transparent pointer-events-none z-10 block lg:hidden" />
             
             <nav className="flex items-center gap-4 overflow-x-auto scrollbar-none w-full lg:w-auto h-full px-4 lg:px-0">
               {TABS.map((tab) => (
@@ -369,28 +369,28 @@ export default function StandaloneShell() {
                   onClick={(e) => handleTabClick(e, tab.id)}
                   className={`relative text-[13px] font-medium transition-all duration-300 whitespace-nowrap px-1 flex-shrink-0 flex items-center h-full ${
                     activeTab === tab.id
-                      ? 'text-[#22d3ee]'
-                      : 'text-white/50 hover:text-white'
+                      ? 'text-accent'
+                      : 'text-ink/70 hover:text-ink'
                   }`}
                 >
                   <span className="relative z-10">{tab.label}</span>
                   {activeTab === tab.id && (
-                    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#22d3ee] to-[#a855f7] rounded-full shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+                    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent to-[#a855f7] rounded-full shadow-[0_0_8px_rgba(37,99,235,0.5)]" />
                   )}
                 </a>
               ))}
             </nav>
             
             {/* Fade Right Overlay */}
-            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#030303] to-transparent pointer-events-none z-10 block lg:hidden" />
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-app-bg to-transparent pointer-events-none z-10 block lg:hidden" />
           </div>
 
           {/* Right: Actions */}
           <div className="flex-shrink-0 flex items-center gap-4">
-            <div className="flex items-center gap-3 bg-white/5 px-3 py-1.5 rounded-full border border-white/5 transition-colors">
+            <div className="flex items-center gap-3 bg-ink/5 px-3 py-1.5 rounded-full border border-ink/10 transition-colors">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               <div className="flex flex-col">
-                <span className="text-xs font-bold text-white/90">
+                <span className="text-xs font-bold text-ink/90">
                   ${balance !== null ? `${balance}` : '---'}
                 </span>
               </div>
@@ -399,7 +399,7 @@ export default function StandaloneShell() {
             <button
               onClick={() => setShowSettings(true)}
               title="Settings — API key, local models, preferences"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-white/10 bg-white/5 text-[13px] font-bold text-white/80 hover:text-white hover:bg-white/10 hover:border-white/20 transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-ink/15 bg-ink/5 text-[13px] font-bold text-ink/90 hover:text-ink hover:bg-ink/10 hover:border-ink/25 transition-colors"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="3" />
@@ -472,21 +472,21 @@ export default function StandaloneShell() {
           {notifications.map((notif) => (
             <div
               key={notif.id}
-              className="pointer-events-auto flex items-start gap-3 bg-[#0e0e10] border rounded-xl px-4 py-3 shadow-2xl shadow-black/60"
+              className="pointer-events-auto flex items-start gap-3 bg-surface border rounded-xl px-4 py-3 shadow-2xl shadow-ink/10"
               style={{
-                borderColor: notif.type === 'success' ? 'rgba(34,211,238,0.35)' : 'rgba(239,68,68,0.35)',
+                borderColor: notif.type === 'success' ? 'rgba(37,99,235,0.35)' : 'rgba(239,68,68,0.35)',
                 borderLeftWidth: '3px',
-                borderLeftColor: notif.type === 'success' ? '#22d3ee' : '#ef4444',
+                borderLeftColor: notif.type === 'success' ? '#2563eb' : '#ef4444',
                 animation: 'slideInRight 280ms cubic-bezier(0.16,1,0.3,1) forwards',
               }}
             >
               {/* Icon */}
               <div
                 className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-0.5"
-                style={{ background: notif.type === 'success' ? 'rgba(34,211,238,0.12)' : 'rgba(239,68,68,0.12)' }}
+                style={{ background: notif.type === 'success' ? 'rgba(37,99,235,0.12)' : 'rgba(239,68,68,0.12)' }}
               >
                 {notif.type === 'success' ? (
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
                 ) : (
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="3"><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
                 )}
@@ -494,21 +494,21 @@ export default function StandaloneShell() {
 
               {/* Body */}
               <div className="flex-1 min-w-0">
-                <p className="text-[12px] font-bold text-white/90 leading-tight">
+                <p className="text-[12px] font-bold text-ink/90 leading-tight">
                   {notif.label}
-                  <span className="font-normal text-white/50">
+                  <span className="font-normal text-ink/70">
                     {notif.type === 'success' ? ' · Generation complete' : ' · Generation failed'}
                   </span>
                 </p>
                 {notif.type === 'error' && notif.message && (
-                  <p className="text-[11px] text-red-400/80 mt-0.5 leading-snug truncate" title={notif.message}>
+                  <p className="text-[11px] text-red-600/80 mt-0.5 leading-snug truncate" title={notif.message}>
                     {notif.message}
                   </p>
                 )}
                 {notif.type === 'success' && (
                   <button
                     onClick={() => { handleTabChange(notif.tabId); dismissNotification(notif.id); }}
-                    className="mt-1.5 text-[11px] font-bold text-[#22d3ee] hover:underline"
+                    className="mt-1.5 text-[11px] font-bold text-accent hover:underline"
                   >
                     Open →
                   </button>
@@ -518,7 +518,7 @@ export default function StandaloneShell() {
               {/* Dismiss */}
               <button
                 onClick={() => dismissNotification(notif.id)}
-                className="flex-shrink-0 text-white/30 hover:text-white/70 transition-colors text-lg leading-none mt-0.5"
+                className="flex-shrink-0 text-ink/55 hover:text-ink/85 transition-colors text-lg leading-none mt-0.5"
                 aria-label="Dismiss"
               >
                 ×

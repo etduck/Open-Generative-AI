@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { generateImage, generateI2I, uploadFile } from "../muapi.js";
+import { generateImage, generateI2I, uploadFile } from "../api/index.js";
 import DrawModal from "./DrawModal.jsx";
 import {
   t2iModels,
@@ -734,8 +734,17 @@ function ModelDropdown({ models, selectedModel, onSelect, onClose }) {
                     </div>
                   )}
                   <div className="flex flex-col gap-0.5 min-w-0">
-                    <span className="text-xs font-bold text-white tracking-tight truncate">
+                    <span className="text-xs font-bold text-white tracking-tight truncate flex items-center gap-1.5">
                       {m.name}
+                      {m.apiProvider && m.apiProvider !== "muapi" && (
+                        <span className={`text-[8px] font-bold px-1.5 py-px rounded-full border ${
+                          m.apiProvider === "kie"
+                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/25"
+                            : "bg-orange-500/10 text-orange-400 border-orange-500/25"
+                        }`}>
+                          {m.apiProvider === "kie" ? "Kie.ai" : "Agnes AI"}
+                        </span>
+                      )}
                     </span>
                     {selectedProvider === "all" && m.provider_name && (
                       <span className="text-[9px] text-white/40">

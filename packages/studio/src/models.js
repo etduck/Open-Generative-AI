@@ -2315,6 +2315,69 @@ export const t2iModels = [
     },
     "provider": "minimax",
     "provider_name": "Minimax"
+  },
+  // ── Multi-provider models ──────────────────────────────────────────────────
+  // `apiProvider` routes generation to the vendor's adapter (default: muapi).
+  // `providerModelId` is the vendor's official model id — internal `id` stays
+  // stable and unique across providers.
+  {
+    "id": "kie-nano-banana",
+    "name": "Nano Banana",
+    "apiProvider": "kie",
+    "providerModelId": "google/nano-banana",
+    "capability": "imageGeneration",
+    "inputs": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "name": "prompt",
+        "description": "Text prompt describing the image (max 5000 characters)."
+      },
+      "aspect_ratio": {
+        "enum": ["1:1", "9:16", "16:9", "3:4", "4:3", "3:2", "2:3", "5:4", "4:5", "21:9"],
+        "title": "Aspect Ratio",
+        "name": "aspect_ratio",
+        "type": "string",
+        "description": "Aspect ratio of the output image.",
+        "default": "1:1"
+      }
+    },
+    "provider": "google",
+    "provider_name": "Google · Kie.ai"
+  },
+  {
+    "id": "agnes-image-2.1-flash",
+    "name": "Agnes Image 2.1 Flash",
+    "apiProvider": "agnes",
+    "providerModelId": "agnes-image-2.1-flash",
+    "capability": "imageGeneration",
+    "providerConfig": { "sizeMode": "tier" },
+    "inputs": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "name": "prompt",
+        "description": "Text prompt describing the image."
+      },
+      "aspect_ratio": {
+        "enum": ["1:1", "3:4", "4:3", "16:9", "9:16", "2:3", "3:2", "21:9"],
+        "title": "Aspect Ratio",
+        "name": "aspect_ratio",
+        "type": "string",
+        "description": "Aspect ratio of the output image.",
+        "default": "1:1"
+      },
+      "quality": {
+        "enum": ["1K", "2K", "3K", "4K"],
+        "title": "Size",
+        "name": "quality",
+        "type": "string",
+        "description": "Output size tier.",
+        "default": "1K"
+      }
+    },
+    "provider": "agnes",
+    "provider_name": "Agnes AI"
   }
 ];
 
@@ -4118,6 +4181,58 @@ export const t2vModels = [
     },
     "provider": "lightricks",
     "provider_name": "Lightricks"
+  },
+  // ── Multi-provider models (see apiProvider note in t2iModels) ──────────────
+  {
+    "id": "kie-kling-2.6-t2v",
+    "name": "Kling 2.6",
+    "apiProvider": "kie",
+    "providerModelId": "kling-2.6/text-to-video",
+    "capability": "videoGeneration",
+    "providerConfig": { "sound": false },
+    "inputs": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "name": "prompt",
+        "description": "The prompt to generate the video (max 1000 characters)."
+      },
+      "aspect_ratio": {
+        "enum": ["16:9", "9:16", "1:1"],
+        "title": "Aspect Ratio",
+        "name": "aspect_ratio",
+        "type": "string",
+        "description": "Aspect ratio of the output video.",
+        "default": "16:9"
+      },
+      "duration": {
+        "enum": [5, 10],
+        "title": "Duration",
+        "name": "duration",
+        "type": "int",
+        "description": "Video duration in seconds.",
+        "default": 5
+      }
+    },
+    "provider": "kling",
+    "provider_name": "Kling · Kie.ai"
+  },
+  {
+    "id": "agnes-video-v2.0",
+    "name": "Agnes Video 2.0",
+    "apiProvider": "agnes",
+    "providerModelId": "agnes-video-v2.0",
+    "capability": "videoGeneration",
+    "inputs": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "name": "prompt",
+        "description": "The prompt to generate the video."
+      }
+    },
+    "provider": "agnes",
+    "provider_name": "Agnes AI"
   }
 ];
 
@@ -6424,6 +6539,70 @@ export const i2iModels = [
     },
     "provider": "bytedance",
     "provider_name": "ByteDance"
+  },
+  // ── Multi-provider models (see apiProvider note in t2iModels) ──────────────
+  {
+    "id": "kie-nano-banana-edit",
+    "name": "Nano Banana Edit",
+    "apiProvider": "kie",
+    "providerModelId": "google/nano-banana-edit",
+    "capability": "imageEditing",
+    "imageField": "images_list",
+    "maxImages": 10,
+    "inputs": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "name": "prompt",
+        "description": "Editing instruction describing the desired result (max 5000 characters)."
+      },
+      "aspect_ratio": {
+        "enum": ["auto", "1:1", "9:16", "16:9", "3:4", "4:3", "3:2", "2:3", "5:4", "4:5", "21:9"],
+        "title": "Aspect Ratio",
+        "name": "aspect_ratio",
+        "type": "string",
+        "description": "Aspect ratio of the output image.",
+        "default": "auto"
+      }
+    },
+    "provider": "google",
+    "provider_name": "Google · Kie.ai"
+  },
+  {
+    "id": "agnes-image-2.1-flash-edit",
+    "name": "Agnes Image 2.1 Flash Edit",
+    "apiProvider": "agnes",
+    "providerModelId": "agnes-image-2.1-flash",
+    "capability": "imageEditing",
+    "imageField": "images_list",
+    "maxImages": 4,
+    "providerConfig": { "sizeMode": "tier" },
+    "inputs": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "name": "prompt",
+        "description": "Editing instruction describing the desired result."
+      },
+      "aspect_ratio": {
+        "enum": ["1:1", "3:4", "4:3", "16:9", "9:16", "2:3", "3:2", "21:9"],
+        "title": "Aspect Ratio",
+        "name": "aspect_ratio",
+        "type": "string",
+        "description": "Aspect ratio of the output image.",
+        "default": "1:1"
+      },
+      "quality": {
+        "enum": ["1K", "2K", "3K", "4K"],
+        "title": "Size",
+        "name": "quality",
+        "type": "string",
+        "description": "Output size tier.",
+        "default": "1K"
+      }
+    },
+    "provider": "agnes",
+    "provider_name": "Agnes AI"
   }
 ];
 
@@ -9774,6 +9953,52 @@ export const i2vModels = [
     },
     "provider": "bytedance",
     "provider_name": "ByteDance"
+  },
+  // ── Multi-provider models (see apiProvider note in t2iModels) ──────────────
+  {
+    "id": "kie-kling-2.6-i2v",
+    "name": "Kling 2.6",
+    "apiProvider": "kie",
+    "providerModelId": "kling-2.6/image-to-video",
+    "capability": "imageToVideo",
+    "imageField": "image_url",
+    "providerConfig": { "sound": false },
+    "inputs": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "name": "prompt",
+        "description": "The prompt describing the motion (max 1000 characters)."
+      },
+      "duration": {
+        "enum": [5, 10],
+        "title": "Duration",
+        "name": "duration",
+        "type": "int",
+        "description": "Video duration in seconds.",
+        "default": 5
+      }
+    },
+    "provider": "kling",
+    "provider_name": "Kling · Kie.ai"
+  },
+  {
+    "id": "agnes-video-v2.0-i2v",
+    "name": "Agnes Video 2.0",
+    "apiProvider": "agnes",
+    "providerModelId": "agnes-video-v2.0",
+    "capability": "imageToVideo",
+    "imageField": "image_url",
+    "inputs": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "name": "prompt",
+        "description": "The prompt describing the motion."
+      }
+    },
+    "provider": "agnes",
+    "provider_name": "Agnes AI"
   }
 ];
 

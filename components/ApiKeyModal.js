@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function ApiKeyModal({ onSave, onClose, overlay = false, title, subtitle }) {
+export default function ApiKeyModal({ onSave, onClose, onSkip, overlay = false, title, subtitle }) {
   const [key, setKey] = useState('');
   const [error, setError] = useState('');
 
@@ -78,6 +78,19 @@ export default function ApiKeyModal({ onSave, onClose, overlay = false, title, s
               Get one free →
             </a>
           </p>
+
+          {onSkip && (
+            <p className="text-center text-[12px] text-white/20">
+              Using Kie.ai or Agnes AI instead?{' '}
+              <button
+                type="button"
+                onClick={onSkip}
+                className="text-white/40 hover:text-[#22d3ee] transition-colors font-medium underline underline-offset-2"
+              >
+                Skip — configure providers in Settings
+              </button>
+            </p>
+          )}
         </form>
       </div>
     </div>

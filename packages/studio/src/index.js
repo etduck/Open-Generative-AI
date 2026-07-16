@@ -15,4 +15,28 @@ export { default as DesignAgentStudio } from './components/DesignAgentStudio';
 export { default as AppsStudio } from './components/AppsStudio';
 export { default as McpCliStudio } from './components/McpCliStudio';
 export { default as AiInfluencerStudio } from './components/AiInfluencerStudio';
+export { default as TextStudio } from './components/TextStudio';
 export * from './muapi';
+// Multi-provider API surface (registry, key storage, connection tests).
+// Named exports only to avoid clashing with the legacy muapi exports above.
+export {
+    PROVIDERS,
+    getProvider,
+    listProviders,
+    resolveModelProvider,
+    providerHasCapability,
+    isModelAvailable,
+    testProviderConnection,
+    getProviderKey,
+    setProviderKey,
+    clearProviderKey,
+    isProviderEnabled,
+    setProviderEnabled,
+    isProviderConfigured,
+    getProviderMeta,
+    setProviderMeta,
+    maskKey,
+    textModels,
+    getTextModelById,
+    chatCompletion,
+} from './api/index.js';

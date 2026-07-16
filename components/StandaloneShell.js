@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { ImageStudio, VideoStudio, ClippingStudio, VibeMotionStudio, LipSyncStudio, RecastStudio, CinemaStudio, AudioStudio, MarketingStudio, WorkflowStudio, AgentStudio, AppsStudio, AiInfluencerStudio, getUserBalance } from 'studio';
+import { ImageStudio, VideoStudio, ClippingStudio, VibeMotionStudio, LipSyncStudio, RecastStudio, CinemaStudio, AudioStudio, MarketingStudio, WorkflowStudio, AgentStudio, AppsStudio, AiInfluencerStudio, TextStudio, getUserBalance, isProviderConfigured } from 'studio';
 
 const DesignAgentStudio = dynamic(() => import('studio').then(mod => mod.DesignAgentStudio), {
   ssr: false,
@@ -11,10 +11,12 @@ const DesignAgentStudio = dynamic(() => import('studio').then(mod => mod.DesignA
 });
 import axios from 'axios';
 import ApiKeyModal from './ApiKeyModal';
+import ProviderSettingsModal from './ProviderSettingsModal';
 
 const TABS = [
   { id: 'image',   label: 'Image Studio' },
   { id: 'video',   label: 'Video Studio' },
+  { id: 'text',    label: 'Text Studio' },
   { id: 'audio',   label: 'Audio Studio' },
   { id: 'clipping', label: 'AI Clipping' },
   { id: 'vibe-motion', label: 'Vibe Motion' },
@@ -69,6 +71,8 @@ export default function StandaloneShell() {
 
   const [balance, setBalance] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [hasOtherProviderKey, setHasOtherProviderKey] = useState(false);
+  const [onboardingSkipped, setOnboardingSkipped] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
   const [showVadooBanner, setShowVadooBanner] = useState(() => {
@@ -175,6 +179,25 @@ export default function StandaloneShell() {
       // Sync cookie immediately on mount to establish identity for background requests
       document.cookie = `muapi_key=${stored}; path=/; max-age=31536000; SameSite=Lax`;
     }
+    setHasOtherProviderKey(isProviderConfigured('kie') || isProviderConfigured('agnes'));
+    setOnboardingSkipped(localStorage.getItem('og_onboarding_skipped') === '1');
+  }, [fetchBalance]);
+
+  // Re-sync MuAPI key state after edits in the provider settings modal, and
+  // track whether any non-MuAPI provider is configured (gates onboarding).
+  const handleProviderKeysChanged = useCallback((providerId) => {
+    setHasOtherProviderKey(isProviderConfigured('kie') || isProviderConfigured('agnes'));
+    if (providerId !== 'muapi') return;
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      setApiKey(stored);
+      fetchBalance(stored);
+      document.cookie = `muapi_key=${stored}; path=/; max-age=31536000; SameSite=Lax`;
+    } else {
+      setApiKey(null);
+      setBalance(null);
+      document.cookie = "muapi_key=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
   }, [fetchBalance]);
 
   const handleKeySave = useCallback((key) => {
@@ -183,13 +206,6 @@ export default function StandaloneShell() {
     fetchBalance(key);
     document.cookie = `muapi_key=${key}; path=/; max-age=31536000; SameSite=Lax`;
   }, [fetchBalance]);
-
-  const handleKeyChange = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
-    setApiKey(null);
-    setBalance(null);
-    document.cookie = "muapi_key=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-  }, []);
 
   // Inject API key into all outgoing Axios requests (prop-based approach)
   // We use an interceptor to be selective and NOT send the key to external domains like S3
@@ -266,8 +282,16 @@ export default function StandaloneShell() {
     </div>
   );
 
-  if (!apiKey) {
-    return <ApiKeyModal onSave={handleKeySave} />;
+  if (!apiKey && !hasOtherProviderKey && !onboardingSkipped) {
+    return (
+      <ApiKeyModal
+        onSave={handleKeySave}
+        onSkip={() => {
+          localStorage.setItem('og_onboarding_skipped', '1');
+          setOnboardingSkipped(true);
+        }}
+      />
+    );
   }
 
   return (
@@ -395,6 +419,9 @@ export default function StandaloneShell() {
         <div className={activeTab === 'video' ? "h-full w-full" : "hidden"}>
           <VideoStudio apiKey={apiKey} droppedFiles={droppedFiles} onFilesHandled={handleFilesHandled} onGenerationComplete={makeSuccessCallback('video')} onGenerationError={makeErrorCallback('video')} />
         </div>
+        <div className={activeTab === 'text' ? "h-full w-full" : "hidden"}>
+          <TextStudio onGenerationError={makeErrorCallback('text')} />
+        </div>
         <div className={activeTab === 'clipping' ? "h-full w-full" : "hidden"}>
           <ClippingStudio apiKey={apiKey} droppedFiles={droppedFiles} onFilesHandled={handleFilesHandled} onGenerationComplete={makeSuccessCallback('clipping')} onGenerationError={makeErrorCallback('clipping')} />
         </div>
@@ -509,42 +536,13 @@ export default function StandaloneShell() {
         }
       `}</style>
 
-      {/* Settings Modal */}
+      {/* Settings Modal — multi-provider API key management */}
       {showSettings && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in-up">
-          <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-8 w-full max-w-sm shadow-2xl">
-            <h2 className="text-white font-bold text-lg mb-2">Settings</h2>
-            <p className="text-white/40 text-[13px] mb-8">
-              Manage your AI studio preferences and authentication.
-            </p>
-            
-            <div className="space-y-4 mb-8">
-              <div className="bg-white/5 border border-white/[0.03] rounded-md p-4">
-                <label className="block text-xs font-bold text-white/30 mb-2">
-                   Active API Key
-                </label>
-                <div className="text-[13px] font-mono text-white/80">
-                  {apiKey.slice(0, 8)}••••••••••••••••
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={handleKeyChange}
-                className="flex-1 h-10 rounded-md bg-red-500/10 text-red-400 hover:bg-red-500/20 text-xs font-semibold transition-all"
-              >
-                Change Key
-              </button>
-              <button
-                onClick={() => setShowSettings(false)}
-                className="flex-1 h-10 rounded-md bg-white/5 text-white/80 hover:bg-white/10 text-xs font-semibold transition-all border border-white/5"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+        <ProviderSettingsModal
+          onClose={() => setShowSettings(false)}
+          balance={balance}
+          onKeysChanged={handleProviderKeysChanged}
+        />
       )}
     </div>
   );

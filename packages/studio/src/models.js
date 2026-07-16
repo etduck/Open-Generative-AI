@@ -4186,6 +4186,7 @@ export const t2vModels = [
   {
     "id": "kie-kling-2.6-t2v",
     "name": "Kling 2.6",
+    "family": "kling-kie",
     "apiProvider": "kie",
     "providerModelId": "kling-2.6/text-to-video",
     "capability": "videoGeneration",
@@ -4220,6 +4221,7 @@ export const t2vModels = [
   {
     "id": "agnes-video-v2.0",
     "name": "Agnes Video 2.0",
+    "family": "agnes-video",
     "apiProvider": "agnes",
     "providerModelId": "agnes-video-v2.0",
     "capability": "videoGeneration",
@@ -9958,6 +9960,7 @@ export const i2vModels = [
   {
     "id": "kie-kling-2.6-i2v",
     "name": "Kling 2.6",
+    "family": "kling-kie",
     "apiProvider": "kie",
     "providerModelId": "kling-2.6/image-to-video",
     "capability": "imageToVideo",
@@ -9985,6 +9988,7 @@ export const i2vModels = [
   {
     "id": "agnes-video-v2.0-i2v",
     "name": "Agnes Video 2.0",
+    "family": "agnes-video",
     "apiProvider": "agnes",
     "providerModelId": "agnes-video-v2.0",
     "capability": "imageToVideo",

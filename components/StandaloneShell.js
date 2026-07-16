@@ -75,10 +75,6 @@ export default function StandaloneShell() {
   const [onboardingSkipped, setOnboardingSkipped] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
-  const [showVadooBanner, setShowVadooBanner] = useState(() => {
-    if (typeof window !== 'undefined') return localStorage.getItem('vadoo_banner_dismissed') !== '1';
-    return true;
-  });
 
   // Drag and Drop State
   const [isDragging, setIsDragging] = useState(false);
@@ -316,30 +312,6 @@ export default function StandaloneShell() {
               <span className="text-sm text-ink/65">Images, videos, or audio files</span>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Vadoo promo banner */}
-      {showVadooBanner && (
-        <div className="flex-shrink-0 w-full bg-indigo-600 flex items-center justify-center px-4 py-2 gap-3 relative z-50">
-          <a
-            href="https://vadoo.tv"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[13px] font-bold text-ink hover:opacity-80 transition-opacity text-center"
-          >
-            Unrestricted AI Images &amp; Videos → Auto-Publish as YouTube Shorts &amp; TikToks, Earn ↗
-          </a>
-          <button
-            onClick={() => {
-              setShowVadooBanner(false);
-              localStorage.setItem('vadoo_banner_dismissed', '1');
-            }}
-            className="absolute right-3 text-ink/75 hover:text-ink transition-colors text-lg leading-none"
-            aria-label="Dismiss"
-          >
-            ✕
-          </button>
         </div>
       )}
 

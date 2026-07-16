@@ -734,10 +734,19 @@ export default function VideoStudio({
     }
     setImageUploading(true);
     setImageProgress(0);
+    // Anticipate the model this image will be used with, so the upload is
+    // routed through that model's provider (an Agnes/Kie model must not
+    // depend on MuAPI upload credits).
+    const anticipatedT2V = t2vModels.find((m) => m.id === selectedModel);
+    const uploadTargetModelId = imageMode
+      ? selectedModel
+      : (anticipatedT2V?.family
+          ? i2vModels.find((m) => m.family === anticipatedT2V.family)?.id
+          : null) || i2vModels[0].id;
     try {
       const url = await uploadFile(apiKey, file, (pct) => {
         setImageProgress(pct);
-      });
+      }, { modelId: uploadTargetModelId });
       setUploadedImageUrl(url);
       setUploadedVideoUrl(null);
       setUploadedVideoName(null);
@@ -861,10 +870,24 @@ export default function VideoStudio({
     setImageUploading(true);
     setImageProgress(0);
 
+    // Anticipate the model this image will be used with, so the upload is
+    // routed through that model's provider (an Agnes/Kie model must not
+    // depend on MuAPI upload credits).
+    const anticipatedT2V = t2vModels.find((m) => m.id === selectedModel);
+    const keepsCurrentModel =
+      imageMode ||
+      isMotionControlSelection(selectedModel, v2vMode) ||
+      !!anticipatedT2V?.inputs?.images_list;
+    const uploadTargetModelId = keepsCurrentModel
+      ? selectedModel
+      : (anticipatedT2V?.family
+          ? i2vModels.find((m) => m.family === anticipatedT2V.family)?.id
+          : null) || i2vModels[0].id;
+
     try {
       const url = await uploadFile(apiKey, file, (pct) => {
         setImageProgress(pct);
-      });
+      }, { modelId: uploadTargetModelId });
       setUploadedImageUrl(url);
 
       // Motion-control v2v: image is a second input, not a mode switch
@@ -970,7 +993,7 @@ export default function VideoStudio({
     try {
       const url = await uploadFile(apiKey, file, (pct) => {
         setEndImageProgress(pct);
-      });
+      }, { modelId: selectedModel });
       setUploadedEndImageUrl(url);
     } catch (err) {
       alert(`End frame upload failed: ${err.message}`);

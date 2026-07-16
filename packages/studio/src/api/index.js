@@ -72,25 +72,96 @@ export async function generateI2V(apiKey, params) {
 
 // ── File upload dispatch ──────────────────────────────────────────────────────
 
-/**
- * Upload a file and get back a public URL usable as model input.
- * Prefers MuAPI's uploader (existing behavior) when a MuAPI key is present,
- * falls back to Kie.ai's base64 upload otherwise. Adapters decide how each
- * provider consumes the resulting URL — UI code never needs to know.
- */
-export async function uploadFile(apiKey, file, onProgress) {
-    if (apiKey && isProviderEnabled('muapi')) {
-        return muapiClient.uploadFile(apiKey, file, onProgress);
-    }
-    if (isProviderConfigured('kie')) {
-        const kieKey = requireProviderKey('kie');
-        return PROVIDERS.kie.adapter.uploadFile(kieKey, file, onProgress);
-    }
-    throw new ProviderError({
-        provider: 'muapi',
-        code: 'config',
-        message: 'File uploads need a MuAPI or Kie.ai API key. Add one in Settings → API Providers.',
+/** Resolve a model id across every capability list to its API provider. */
+function findAnyModelProvider(modelId) {
+    if (!modelId) return null;
+    const model =
+        getModelById(modelId) ||
+        getI2IModelById(modelId) ||
+        getVideoModelById(modelId) ||
+        getI2VModelById(modelId);
+    return model ? resolveModelProvider(model) : null;
+}
+
+const DATA_URI_MAX_BYTES = 8 * 1024 * 1024;
+
+function fileToDataUri(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
     });
+}
+
+/**
+ * Upload a file and get back a URL usable as model input.
+ *
+ * The attempt order is provider-aware (pass the target model via
+ * `options.modelId`): a Kie model prefers Kie's uploader, an Agnes model can
+ * fall back to an inline data URI (officially supported by Agnes' image
+ * endpoints) so it never depends on another provider's credit balance.
+ * Every available uploader is tried in turn — a failure (e.g. MuAPI
+ * "insufficient credits") falls through to the next option instead of
+ * aborting the whole upload.
+ *
+ * @param {string|null} apiKey  MuAPI key (legacy prop; only used for MuAPI)
+ * @param {File|Blob} file
+ * @param {(pct: number) => void} [onProgress]
+ * @param {{modelId?: string}} [options]  Target model for provider-aware routing
+ */
+export async function uploadFile(apiKey, file, onProgress, options = {}) {
+    const target = findAnyModelProvider(options.modelId);
+    const muapiAvailable = !!apiKey && isProviderEnabled('muapi');
+    const kieAvailable = isProviderConfigured('kie');
+
+    const tryMuapi = () => muapiClient.uploadFile(apiKey, file, onProgress);
+    const tryKie = () => PROVIDERS.kie.adapter.uploadFile(requireProviderKey('kie'), file, onProgress);
+    const tryDataUri = async () => {
+        // Only images make sense inline, and only at reasonable sizes.
+        if (!file.type || !file.type.startsWith('image/')) {
+            throw new ProviderError({ provider: 'agnes', code: 'invalid_request', message: 'Only images can be sent inline; videos need an upload provider.' });
+        }
+        if (file.size > DATA_URI_MAX_BYTES) {
+            throw new ProviderError({ provider: 'agnes', code: 'invalid_request', message: 'Image is too large to send inline (max 8MB). Add a MuAPI or Kie.ai key with balance for hosted uploads.' });
+        }
+        const uri = await fileToDataUri(file);
+        if (onProgress) onProgress(100);
+        return uri;
+    };
+
+    const chain = [];
+    if (target === 'kie') {
+        if (kieAvailable) chain.push(tryKie);
+        if (muapiAvailable) chain.push(tryMuapi);
+    } else if (target === 'agnes') {
+        // Hosted URLs first (they work everywhere), inline data URI as the
+        // provider-native fallback that needs no other account balance.
+        if (muapiAvailable) chain.push(tryMuapi);
+        if (kieAvailable) chain.push(tryKie);
+        chain.push(tryDataUri);
+    } else {
+        if (muapiAvailable) chain.push(tryMuapi);
+        if (kieAvailable) chain.push(tryKie);
+    }
+
+    if (chain.length === 0) {
+        throw new ProviderError({
+            provider: target || 'muapi',
+            code: 'config',
+            message: 'File uploads need a MuAPI or Kie.ai API key. Add one in Settings → API Providers.',
+        });
+    }
+
+    let lastError = null;
+    for (const attempt of chain) {
+        try {
+            return await attempt();
+        } catch (err) {
+            lastError = err;
+        }
+    }
+    throw normalizeError(target || 'muapi', lastError);
 }
 
 // ── Text / chat ───────────────────────────────────────────────────────────────

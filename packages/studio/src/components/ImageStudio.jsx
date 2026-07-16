@@ -16,7 +16,20 @@ import {
   getEffectsForI2IModel,
   getDefaultEffectForI2IModel,
   getI2IModelById,
+  getModelById,
 } from "../models.js";
+
+// Pick the i2i model an upload will target: the current model in image mode,
+// otherwise an editing model from the same API provider as the selected t2i
+// model (so e.g. Agnes uploads never depend on MuAPI upload credits).
+function pickI2IModelForUpload(imageMode, selectedModelId) {
+  if (imageMode) return getI2IModelById(selectedModelId) || i2iModels[0];
+  const currentProvider = getModelById(selectedModelId)?.apiProvider || "muapi";
+  return (
+    i2iModels.find((m) => (m.apiProvider || "muapi") === currentProvider) ||
+    i2iModels[0]
+  );
+}
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -39,7 +52,7 @@ async function downloadImage(url, filename) {
 
 // ─── UploadButton (inline picker) ───────────────────────────────────────────
 
-function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], label = null }) {
+function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], label = null, uploadModelId = null }) {
   const [panelOpen, setPanelOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedEntries, setSelectedEntries] = useState([]); // [{url, thumbnail}]
@@ -144,7 +157,7 @@ function UploadButton({ apiKey, maxImages, onSelect, onClear, initialUrls = [], 
               setUploadHistory((prev) =>
                 prev.map((h) => (h.id === id ? { ...h, progress: pct } : h)),
               );
-            });
+            }, { modelId: uploadModelId });
 
             // Update history with real URL and Mark as 100%
             setUploadHistory((prev) =>
@@ -961,10 +974,11 @@ export default function ImageStudio({
     try {
       const toUpload =
         maxImages === 1 ? files.slice(0, 1) : files.slice(0, maxImages);
+      const dropTargetModel = pickI2IModelForUpload(imageMode, selectedModelId);
       const urls = await Promise.all(
         toUpload.map(async (file) => {
           try {
-            return await uploadFile(apiKey, file);
+            return await uploadFile(apiKey, file, undefined, { modelId: dropTargetModel.id });
           } catch (err) {
             console.error(
               "[ImageStudio] Drop upload failed for",
@@ -1026,7 +1040,9 @@ export default function ImageStudio({
       setUploadedImageUrls(newUrls);
 
       if (!imageMode) {
-        const firstI2I = i2iModels[0];
+        // Prefer an editing model from the same provider as the current t2i
+        // model so uploads and generation stay on the provider the user chose.
+        const firstI2I = pickI2IModelForUpload(false, selectedModelId);
         const ars = getAspectRatiosForI2IModel(firstI2I.id);
         const resolutions = getResolutionsForI2IModel(firstI2I.id);
         const effects = getEffectsForI2IModel(firstI2I.id);
@@ -1039,7 +1055,7 @@ export default function ImageStudio({
         setMaxImages(getMaxImagesForI2IModel(firstI2I.id));
       }
     },
-    [imageMode],
+    [imageMode, selectedModelId],
   );
 
   const handleUploadClear = useCallback(() => {
@@ -1367,6 +1383,7 @@ export default function ImageStudio({
                   onSelect={handleUploadSelect}
                   onClear={handleUploadClear}
                   initialUrls={uploadedImageUrls}
+                  uploadModelId={pickI2IModelForUpload(imageMode, selectedModelId).id}
                 />
               )}
 
@@ -1379,6 +1396,7 @@ export default function ImageStudio({
                   onClear={() => setSwapImageUrl(null)}
                   initialUrls={swapImageUrl ? [swapImageUrl] : []}
                   label="Swap Face"
+                  uploadModelId={selectedModelId}
                 />
               )}
             </div>

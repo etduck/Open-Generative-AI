@@ -36,3 +36,6 @@ out/
 .env
 .env.*
 !.env.example
+
+# auto-deploy runtime state (server-side)
+.deploy/

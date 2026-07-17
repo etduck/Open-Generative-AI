@@ -31,8 +31,13 @@ fi
 
 if ! systemctl cat "$SERVICE_NAME" >/dev/null 2>&1; then
     echo "WARNING: systemd service '$SERVICE_NAME' not found — installing anyway." >&2
-    echo "         Find the right name with: systemctl list-units --type=service | grep -iE 'mufa|next|node'" >&2
+    echo "         Find the right name with: systemctl list-units --type=service | grep -iE 'mufa|generative|next|node'" >&2
 fi
+
+# Root-maintained checkout: pre-authorize the repo path so git never refuses
+# with "detected dubious ownership".
+git config --system --add safe.directory "$APP_DIR" 2>/dev/null \
+    || git config --global --add safe.directory "$APP_DIR" 2>/dev/null || true
 
 cat > /etc/systemd/system/mufa-autodeploy.service <<EOF
 [Unit]
